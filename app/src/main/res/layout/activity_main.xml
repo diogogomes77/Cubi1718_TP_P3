@@ -4,15 +4,113 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="a21260825.dgomes.cubi1718_tp_p3.MainActivity">
+    tools:context="a21260825.dgomes.cubi1718_tp_p3.MainActivity"
+    android:gravity="center"
+    android:layout_gravity="center">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="495dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="true"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+            <RadioButton
+                android:id="@+id/rbAndar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Andar" />
+
+            <RadioButton
+                android:id="@+id/btCorrer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Correr" />
+
+            <RadioButton
+                android:id="@+id/rbDescer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Descer" />
+
+            <RadioButton
+                android:id="@+id/rbSubir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Subir" />
+
+            <RadioButton
+                android:id="@+id/rbOutra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Outra" />
+
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btComecarRecolha"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:text="Começar Recolha" />
+
+        <Button
+            android:id="@+id/btPararRecolha"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:text="Parar Recolha" />
+
+        <Button
+            android:id="@+id/btTransferirDados"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:text="Transferir Dados" />
+
+        <TextView
+            android:id="@+id/tvXyz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="X... Y... Z..." />
+
+        <TextView
+            android:id="@+id/tvGps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="GPS ..." />
+
+        <CheckBox
+            android:id="@+id/cbAutomatico"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Modo Automático" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="..." />
+
+    </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>
