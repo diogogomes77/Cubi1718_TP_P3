@@ -18,7 +18,6 @@ public abstract class CubiSensor {
     protected SensorManager mSensorManager;
     protected SensorEventListener sensorEventListener;
 
-
     public void iniciar() {
         mSensorManager.registerListener(sensorEventListener, cubiSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
@@ -29,5 +28,12 @@ public abstract class CubiSensor {
 
     public void setTv(TextView tv) {
         this.tv = tv;
+    }
+
+    @Override
+    public String toString() {
+        if (cubiSensor==null)
+            return this.getClass().getSimpleName() + " (null)";
+        return cubiSensor.getName() + " (" + cubiSensor.getType() + ")";
     }
 }

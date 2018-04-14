@@ -64,4 +64,6 @@ public class Acelerometro extends CubiSensor {
         }
         return instance;
     }
+
+
 }

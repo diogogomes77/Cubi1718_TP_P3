@@ -1,6 +1,7 @@
 package a21260825.dgomes.cubi1718_tp_p3.utils;
 
 import android.content.Context;
+import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -62,6 +63,9 @@ public class Recolha {
         alt = new double[5];*/
 
         mSensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
+
+        listSensors(mSensorManager);
+
         addSensor(Gyroscopio.getInstance(mSensorManager));
         addSensor(Acelerometro.getInstance(mSensorManager));
         addSensor(Luminometro.getInstance(mSensorManager));
@@ -73,16 +77,22 @@ public class Recolha {
 
         //lumi = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
     }
+    private void listSensors(SensorManager mSensorManager){
+        List<Sensor> deviceSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
+        activity.addLog("Sensores disponiveis:\n");
+        for(int i=0; i<deviceSensors.size();i++) {
+            activity.addLog("\t"+ deviceSensors.get(i).getName() + "("
+                    + deviceSensors.get(i).getType() + ")\n");
+        }
+    }
 
     private void addSensor(CubiSensor sensor){
         TextView tv = new TextView(activity);
         activity.getSensorTvs().addView(tv);
         sensor.setTv(tv);
         cubiSensores.add(sensor);
-        activity.addLog(sensor.getClass().getSimpleName() + " adicionado\n");
+        activity.addLog(sensor.toString() + " adicionado\n");
     }
-
-
 
     private void startLocationListener() {
 
@@ -119,14 +129,14 @@ public class Recolha {
     public void iniciar() {
         for (CubiSensor sensor :cubiSensores) {
             sensor.iniciar();
-            activity.addLog(sensor.getClass().getSimpleName() + " iniciado\n");
+            activity.addLog(sensor.toString() + " iniciado\n");
         }
     }
 
     public void terminar() {
         for (CubiSensor sensor :cubiSensores) {
             sensor.terminar();
-            activity.addLog(sensor.getClass().getSimpleName() + " terminado\n");
+            activity.addLog(sensor.toString() + " terminado\n");
         }
     }
 }
