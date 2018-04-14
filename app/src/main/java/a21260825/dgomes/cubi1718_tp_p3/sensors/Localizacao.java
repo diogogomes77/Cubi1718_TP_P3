@@ -2,61 +2,77 @@ package a21260825.dgomes.cubi1718_tp_p3.sensors;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.widget.TextView;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 /**
  * Created by diogo on 14-04-2018.
  */
 
-public class Localizacao extends CubiSensor{
-    private FusedLocationProviderClient mFusedLocationClient;
+public class Localizacao extends CubiSensor {
+    private static final int TWO_MINUTES = 1000 * 60 * 2;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
     private static Localizacao instance;
+
     private Activity activity;
 
 
-    protected Localizacao(Activity activity, final TextView tv) {
-        this.activity=activity;
-        if (ActivityCompat.checkSelfPermission(this.activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this.activity);
+    protected Localizacao(Activity activity) {
+        this.activity = activity;
+        locationManager = (LocationManager)
+                activity.getSystemService(Context.LOCATION_SERVICE);
+        // Define a listener that responds to location updates
+        locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                tv.setText(location.getLatitude()+","+location.getLongitude()
+                        +","+location.getAltitude());
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            public void onProviderEnabled(String provider) {
+            }
+
+            public void onProviderDisabled(String provider) {
+            }
+        };
+
     }
 
-    public static Localizacao getInstance(Activity activity, TextView tv) {
+    public static Localizacao getInstance(Activity activity) {
         if(instance == null) {
-            instance = new Localizacao(activity,tv);
+            instance = new Localizacao(activity);
         }
         return instance;
     }
 
     @Override
     public void iniciar() {
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
+        //decidir qual a precisão necessária
+        // Register the listener with the Location Manager to receive location updates
+        //      String locationProvider = LocationManager.NETWORK_PROVIDER;
+        // Or, use GPS location data:
+        String locationProvider = LocationManager.GPS_PROVIDER;
+        //Quando efectivamente começar a detectar
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
         }
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this.activity, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            tv.setText("Latitude: " + location.getLatitude());
-                            tv.append("\nLongitude: " + location.getLongitude());
-                            tv.append("\nAltitude: " + location.getAltitude());
-                        }
-                    }
-                });
+        locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
+
     }
 
     @Override
     public void terminar() {
-        //mSensorManager.unregisterListener(sensorEventListener);
+        locationManager.removeUpdates(locationListener);
     }
 }

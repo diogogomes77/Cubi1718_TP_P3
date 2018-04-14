@@ -13,6 +13,8 @@ import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.Acelerometro;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.CubiSensor;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.Gyroscopio;
+import a21260825.dgomes.cubi1718_tp_p3.sensors.Localizacao;
+import a21260825.dgomes.cubi1718_tp_p3.sensors.LocalizacaoFused;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.Luminometro;
 
 /**
@@ -32,7 +34,6 @@ public class Recolha {
     private LocationListener locationListener;
 
     private SensorManager mSensorManager;
-    private CubiSensor gyro,acel,lumi,local;
     private List<CubiSensor> cubiSensores;
 
     private TextView tvXyz;
@@ -64,7 +65,8 @@ public class Recolha {
         addSensor(Gyroscopio.getInstance(mSensorManager));
         addSensor(Acelerometro.getInstance(mSensorManager));
         addSensor(Luminometro.getInstance(mSensorManager));
-        //cubiSensores.add(Localizacao.getInstance(this.activity,tvXyz));
+        addSensor(LocalizacaoFused.getInstance(this.activity));
+        addSensor(Localizacao.getInstance(this.activity));
 
 
         //locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
