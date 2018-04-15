@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private Recolha recolha;
     private Ficheiro ficheiro;
     private Button btRecolha;
-    private TextView tvLog,tvXyz;
+    private TextView tvLog,tvFicheiro;
     private boolean recolhaIniciada = false;
     private ScrollView mScrollView;
     private LinearLayout sensorTvs;
@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         tvLog = (TextView) findViewById(R.id.tvLog);
+        tvFicheiro = (TextView) findViewById(R.id.tvFicheiro);
         mScrollView = (ScrollView) findViewById(R.id.SCROLLER_ID);
         sensorTvs = (LinearLayout) findViewById(R.id.sensorTvs);
         //tvLog.setMovementMethod(new ScrollingMovementMethod());
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        ficheiro = Ficheiro.getInstance();
+        ficheiro = Ficheiro.getInstance(tvLog);
         permissoes = Permissoes.getInstance(this,tvLog);
         recolha = Recolha.getInstance(this, ficheiro);
 
@@ -78,9 +79,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public TextView getTvXyz() {
-        return tvXyz;
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -105,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
             tvLog.append("criarPasta = true\n");
             recolha.preparar();
             btRecolha.setEnabled(true);
+            tvFicheiro.setText(ficheiro.getPath());
         }else{
             tvLog.append("criarPasta = false\n");
             btRecolha.setEnabled(false);

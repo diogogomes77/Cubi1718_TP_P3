@@ -13,6 +13,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.HashMap;
+
+import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
+
 /**
  * Created by diogo on 14-04-2018.
  */
@@ -28,6 +32,8 @@ public class Localizacao extends CubiSensor {
 
     protected Localizacao(Activity activity) {
         this.activity = activity;
+        valores = new HashMap<String,String>();
+        registo = Registo.getInstance();
         locationManager = (LocationManager)
                 activity.getSystemService(Context.LOCATION_SERVICE);
         // Define a listener that responds to location updates
@@ -35,6 +41,10 @@ public class Localizacao extends CubiSensor {
             public void onLocationChanged(Location location) {
                 tv.setText(location.getLatitude()+","+location.getLongitude()
                         +","+location.getAltitude());
+                valores.put("Latitude",Double.toString(location.getLatitude()));
+                valores.put("Longitude",Double.toString(location.getLongitude()));
+                valores.put("Altitude",Double.toString(location.getAltitude()));
+                registo.addValores(valores);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {

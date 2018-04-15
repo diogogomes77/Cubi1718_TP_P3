@@ -5,6 +5,10 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.util.HashMap;
+
+import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
+
 /**
  * Created by diogo on 14-04-2018.
  */
@@ -17,7 +21,8 @@ public class Gyroscopio extends CubiSensor {
 
     protected Gyroscopio(SensorManager mSensorManager) {
         this.mSensorManager = mSensorManager;
-
+        valores = new HashMap<String,String>();
+        registo = Registo.getInstance();
         cubiSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
         sensorEventListener = new SensorEventListener() {
@@ -37,8 +42,13 @@ public class Gyroscopio extends CubiSensor {
                     xGyro = event.values[0];
                     yGyro = event.values[1];
                     zGyro = event.values[2];
-                    result = "Giroscopio X: " + xGyro + " Y: " + yGyro + " Z: " + zGyro;
+                    result = "Giroscopio X: " + Float.toString(xGyro) + " Y: " + Float.toString(yGyro) + " Z: " + Float.toString(zGyro);
                     tv.setText(result);
+                    valores.put("xGyro",Float.toString(xGyro));
+                    valores.put("yGyro",Float.toString(yGyro));
+                    valores.put("zGyro",Float.toString(zGyro));
+                    registo.addValores(valores);
+
                     //Log.d("Gyro",result);
                 }
                 timestamp = event.timestamp;

@@ -10,6 +10,10 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.HashMap;
+
+import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
+
 /**
  * Created by diogo on 14-04-2018.
  */
@@ -22,6 +26,8 @@ public class LocalizacaoFused extends CubiSensor{
 
     protected LocalizacaoFused(Activity activity) {
         this.activity=activity;
+        valores = new HashMap<String,String>();
+        registo = Registo.getInstance();
         if (ActivityCompat.checkSelfPermission(this.activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -49,6 +55,10 @@ public class LocalizacaoFused extends CubiSensor{
                             tv.setText("Latitude: " + location.getLatitude());
                             tv.append("\nLongitude: " + location.getLongitude());
                             tv.append("\nAltitude: " + location.getAltitude());
+                            valores.put("Latitude_F",Double.toString(location.getLatitude()));
+                            valores.put("Longitude_F",Double.toString(location.getLongitude()));
+                            valores.put("Altitude_F",Double.toString(location.getAltitude()));
+                            registo.addValores(valores);
                         }
                     }
                 });

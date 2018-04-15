@@ -8,6 +8,10 @@ import android.icu.math.BigDecimal;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+import java.util.HashMap;
+
+import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
+
 /**
  * Created by diogo on 14-04-2018.
  */
@@ -20,7 +24,8 @@ public class Acelerometro extends CubiSensor {
 
     protected Acelerometro(SensorManager mSensorManager) {
         this.mSensorManager = mSensorManager;
-
+        registo = Registo.getInstance();
+        valores = new HashMap<>();
         cubiSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         gravity = new float[]{0, 0, 0};
         sensorEventListener = new SensorEventListener() {
@@ -42,6 +47,10 @@ public class Acelerometro extends CubiSensor {
                     zAcc = event.values[2] - gravity[2];
                     result = "Acc X: " + round(xAcc) + "\t\t\tY: " + round(yAcc) + "\t\t\tZ: " + round(zAcc);
                     tv.setText(result);
+                    valores.put("xAcc",Float.toString(xAcc));
+                    valores.put("yAcc",Float.toString(yAcc));
+                    valores.put("zAcc",Float.toString(zAcc));
+                    registo.addValores(valores);
                     //Log.d("Acel",result);
                 }
                 timestamp = event.timestamp;
@@ -64,6 +73,5 @@ public class Acelerometro extends CubiSensor {
         }
         return instance;
     }
-
 
 }

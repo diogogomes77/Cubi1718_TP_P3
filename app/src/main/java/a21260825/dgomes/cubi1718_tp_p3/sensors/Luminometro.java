@@ -6,6 +6,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
+import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
+
 /**
  * Created by diogo on 14-04-2018.
  */
@@ -16,6 +20,8 @@ public class Luminometro extends CubiSensor {
 
     protected Luminometro(SensorManager mSensorManager) {
         this.mSensorManager = mSensorManager;
+        registo = Registo.getInstance();
+        valores = new HashMap<String,String>();
         cubiSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         sensorEventListener = new SensorEventListener() {
             @Override
@@ -31,6 +37,8 @@ public class Luminometro extends CubiSensor {
                     lastUpdate = curTime;
                     luminosidade = event.values[0];
                     tv.setText("Luminosidade: " + luminosidade);
+                    valores.put("lumi",Float.toString(luminosidade));
+                    registo.addValores(valores);
                 }
                 timestamp = event.timestamp;
             }
