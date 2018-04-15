@@ -7,6 +7,7 @@ package a21260825.dgomes.cubi1718_tp_p3.utils;
 public final class Config {
     public static final int MY_PERMMISSIONS_ALL = 111;
     public static final String PASTA_FICHEIRO = "/Cubi1718";
+    public static final String PASTA_REMOTA = "a21260825";
     public static final String FICHEIRO = "cubi21260825";
     public static final String EXTENCAO = ".csv";
     public static final String ANDAR = "Andar";
@@ -14,4 +15,10 @@ public final class Config {
     public static final String DESCER = "Descer";
     public static final String SUBIR = "Subir";
     public static final String OUTRA = "Outra";
+
+    public static final String HOST = "urbysense.dei.uc.pt";
+
+    public static final String USER = "cubistudent";
+
+    public static final String PASSWORD = "mis_cubi_2018";
 }

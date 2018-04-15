@@ -26,6 +26,7 @@ public class Ficheiro {
     private File ficheiro;
     private BufferedWriter bw;
     private PrintWriter saveRecolha;
+    private boolean transferido = true;
 
     protected Ficheiro(TextView tv) {
         this.tv = tv;
@@ -39,12 +40,16 @@ public class Ficheiro {
         return instance;
     }
 
+    public File getFicheiro() {
+        return ficheiro;
+    }
+
     private String timestamp(){
         Long tsLong = System.currentTimeMillis()/1000;
         return tsLong.toString();
     }
     public boolean startSave(){
-        if (pastaCriada) {
+        if (pastaCriada && transferido) {
             ficheiro = new File(pasta, Config.FICHEIRO+"_" + timestamp() +Config.EXTENCAO);
             if (saveFicheiro(ficheiro)){
                 tv.append("Ficheiro a registar\n");
@@ -54,10 +59,15 @@ public class Ficheiro {
                 return false;
             }
         }else{
-            tv.append("Pasta nao criada ainda\n");
+            tv.append("Pasta nao criada ou ficheiro nao transferido\n");
             return false;
         }
     }
+
+    public void setTransferido(boolean transferido) {
+        this.transferido = transferido;
+    }
+
     public boolean saveValores(Registo registo){
         if (saving){
             /*if (ficheiro.length() == 0) {

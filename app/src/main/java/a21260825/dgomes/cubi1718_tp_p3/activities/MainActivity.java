@@ -1,3 +1,4 @@
+
 package a21260825.dgomes.cubi1718_tp_p3.activities;
 
 import android.content.pm.PackageManager;
@@ -16,19 +17,21 @@ import a21260825.dgomes.cubi1718_tp_p3.utils.Recolha;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Ficheiro;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Permissoes;
+import a21260825.dgomes.cubi1718_tp_p3.utils.Transferencia;
 
 public class MainActivity extends AppCompatActivity {
 
     private Permissoes permissoes;
     private Recolha recolha;
     private Ficheiro ficheiro;
-    private Button btRecolha;
+    private Button btRecolha, btTransferirDados;
     private TextView tvLog,tvFicheiro;
     private boolean recolhaIniciada = false;
     private ScrollView mScrollView;
     private LinearLayout sensorTvs;
     private RadioGroup atividades;
     private String atividade;
+    private Transferencia transferencia;
     public LinearLayout getSensorTvs() {
         return sensorTvs;
     }
@@ -94,15 +97,9 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Escolha uma atividade!", Toast.LENGTH_LONG).show();
                 }else {
                     if (recolhaIniciada) {
-                        tvLog.append("Recolha terminada\n");
-                        recolhaIniciada = false;
-                        btRecolha.setText("Iniciar Recolha");
-                        recolha.terminar();
+                        terminarRecolha();
                     } else {
-                        tvLog.append("Recolha iniciada\n");
-                        recolhaIniciada = true;
-                        btRecolha.setText("Terminar Recolha");
-                        recolha.iniciar();
+                        iniciarRecolha();
                     }
                     mScrollView.fullScroll(View.FOCUS_DOWN);
                 }
@@ -111,8 +108,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
+        btTransferirDados = (Button) findViewById(R.id.btTransferirDados);
+        btTransferirDados.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (recolhaIniciada) {
+                    terminarRecolha();
+                }
+                //transferencia = Transferencia.getInstance(ficheiro.getFicheiro());
+                tvLog.append("Iniciada a transferencia de ficheiro\n");
+                new Transferencia(ficheiro).execute();
 
+            }
+        });
+
+    }
+    private void iniciarRecolha(){
+        tvLog.append("Recolha iniciada\n");
+        recolhaIniciada = true;
+        btRecolha.setText("Terminar Recolha");
+        recolha.iniciar();
+    }
+    private void terminarRecolha(){
+        tvLog.append("Recolha terminada\n");
+        recolhaIniciada = false;
+        btRecolha.setText("Iniciar Recolha");
+        recolha.terminar();
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
