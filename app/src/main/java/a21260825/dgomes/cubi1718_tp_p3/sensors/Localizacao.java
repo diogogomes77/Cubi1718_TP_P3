@@ -33,6 +33,9 @@ public class Localizacao extends CubiSensor {
     protected Localizacao(Activity activity) {
         this.activity = activity;
         valores = new HashMap<String,String>();
+        valores.put("Latitude","");
+        valores.put("Longitude","");
+        valores.put("Altitude","");
         registo = Registo.getInstance();
         locationManager = (LocationManager)
                 activity.getSystemService(Context.LOCATION_SERVICE);

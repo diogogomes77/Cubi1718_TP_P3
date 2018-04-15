@@ -22,6 +22,7 @@ public class Luminometro extends CubiSensor {
         this.mSensorManager = mSensorManager;
         registo = Registo.getInstance();
         valores = new HashMap<String,String>();
+        valores.put("lumi","");
         cubiSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         sensorEventListener = new SensorEventListener() {
             @Override

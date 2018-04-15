@@ -22,6 +22,9 @@ public class Gyroscopio extends CubiSensor {
     protected Gyroscopio(SensorManager mSensorManager) {
         this.mSensorManager = mSensorManager;
         valores = new HashMap<String,String>();
+        valores.put("xGyro","");
+        valores.put("yGyro","");
+        valores.put("zGyro","");
         registo = Registo.getInstance();
         cubiSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 

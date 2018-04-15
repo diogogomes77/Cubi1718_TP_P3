@@ -29,6 +29,9 @@ public class Acelerometro extends CubiSensor {
         this.mSensorManager = mSensorManager;
         registo = Registo.getInstance();
         valores = new HashMap<String,String>();
+        valores.put("xAcc","");
+        valores.put("yAcc","");
+        valores.put("zAcc","");
         cubiSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         gravity = new float[]{0, 0, 0};
         sensorEventListener = new SensorEventListener() {

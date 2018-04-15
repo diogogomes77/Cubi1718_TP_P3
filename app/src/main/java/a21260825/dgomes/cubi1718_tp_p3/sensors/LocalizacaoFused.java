@@ -27,6 +27,9 @@ public class LocalizacaoFused extends CubiSensor{
     protected LocalizacaoFused(Activity activity) {
         this.activity=activity;
         valores = new HashMap<String,String>();
+        valores.put("Latitude_F","");
+        valores.put("Longitude_F","");
+        valores.put("Altitude_F","");
         registo = Registo.getInstance();
         if (ActivityCompat.checkSelfPermission(this.activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
