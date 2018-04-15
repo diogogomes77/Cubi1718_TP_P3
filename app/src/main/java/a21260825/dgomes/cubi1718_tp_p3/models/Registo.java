@@ -1,6 +1,9 @@
 
 package a21260825.dgomes.cubi1718_tp_p3.models;
 
+import android.util.Log;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -20,7 +23,9 @@ public class Registo {
     private int cardinalValores = 0;
     private int contador = 0;
     private Ficheiro ficheiro;
-    private String atividade = "atividade";
+    private String atividade;
+    private long lastUpdate;
+    private boolean novo = true;
 
     protected Registo(List<CubiSensor> cubiSensores, Ficheiro ficheiro) {
         this.cubiSensores = cubiSensores;
@@ -42,6 +47,8 @@ public class Registo {
     }
 
     private void carregaValores(){
+        Log.d("Registo","carregaValores");
+        novo=true;
         for (CubiSensor sensor: cubiSensores) {
             HashMap valores =  sensor.getValores();
             Iterator it = valores.entrySet().iterator();
@@ -52,24 +59,39 @@ public class Registo {
                 it.remove();
             }
         }
+        Log.d("cardinalValores",Integer.toString(cardinalValores));
+    }
+
+    public void setAtividade(String atividade) {
+        this.atividade = atividade;
     }
 
     public void addValores(HashMap<String,String> valores){
+        Log.d("Registo","addValores");
         if (contador==cardinalValores){
             carregaValores();
         }else {
+            long curTime = System.currentTimeMillis();
             Iterator it = valores.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry valor = (Map.Entry)it.next();
                 String key = (String)valor.getKey();
                 String value = (String)valor.getValue();
-                if (valoresRegisto.get(key) == null){
+                Log.d(key,value);
+                //if (valoresRegisto.get(key) == null){
+                    //Log.d("Registo","null");
                     valoresRegisto.put(key,value);
                     contador--;
-                    if (contador==0){
-                        terminaRegisto();
-                    }
+                if ((curTime - lastUpdate) > 125){
+                    terminaRegisto();
                 }
+
+                 //   if (contador==0){
+                 //       terminaRegisto();
+                 //   }
+                //}else {
+                    //Log.d("Registo",valoresRegisto.get(key));
+               // }
                 it.remove();
             }
         }
@@ -81,32 +103,64 @@ public class Registo {
     }
 
     private void terminaRegisto(){
-        valoresRegisto.clear();
+        lastUpdate = System.currentTimeMillis();
+        Log.d("Registo","terminaRegisto");
+        //valoresRegisto.clear();
         ficheiro.saveValores(this);
-        iniciaRegisto();
+        //iniciaRegisto();
     }
     private String timestamp(){
-        Long tsLong = System.currentTimeMillis()/1000;
+        Long tsLong = System.currentTimeMillis();
         return tsLong.toString();
     }
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        result.append(atividade);
-        result.append(",");
-        Iterator it = valoresRegisto.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry valor = (Map.Entry)it.next();
-            //String key = (String)valor.getKey();
-            String value = (String)valor.getValue();
-            result.append(value);
+        if (novo){
+            return header();
+        }else {
+            StringBuilder result = new StringBuilder();
+            result.append(atividade);
             result.append(",");
-            it.remove();
+            for (String key: keys) {
+                result.append(valoresRegisto.get(key));
+                result.append(",");
+            }
+            /*
+            Iterator it = valoresRegisto.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry valor = (Map.Entry) it.next();
+                //String key = (String)valor.getKey();
+                String value = (String) valor.getValue();
+                result.append(value);
+                result.append(",");
+                it.remove();
+            }*/
+            result.append(timestamp());
+            return result.toString();
         }
-        result.append(timestamp());
-        return result.toString();
     }
 
 
+    private List<String> keys;
+
+    private String header() {
+        novo = false;
+        StringBuilder result = new StringBuilder();
+        result.append("atividade");
+        result.append(",");
+        Iterator it = valoresRegisto.entrySet().iterator();
+        keys = new ArrayList<>();
+        while (it.hasNext()) {
+            Map.Entry valor = (Map.Entry)it.next();
+            String key = (String)valor.getKey();
+            //String value = (String)valor.getValue();
+            result.append(key);
+            result.append(",");
+            keys.add(key);
+            it.remove();
+        }
+        result.append("timestamp");
+        return result.toString();
+    }
 }

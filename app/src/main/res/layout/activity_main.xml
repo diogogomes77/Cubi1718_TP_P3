@@ -55,6 +55,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
                     <RadioGroup
+                        android:id="@+id/atividades"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:baselineAligned="true"
@@ -69,7 +70,7 @@
                             android:text="Andar" />
 
                         <RadioButton
-                            android:id="@+id/btCorrer"
+                            android:id="@+id/rbCorrer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"

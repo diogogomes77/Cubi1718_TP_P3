@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import a21260825.dgomes.cubi1718_tp_p3.R;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Recolha;
@@ -25,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean recolhaIniciada = false;
     private ScrollView mScrollView;
     private LinearLayout sensorTvs;
-
+    private RadioGroup atividades;
+    private String atividade;
     public LinearLayout getSensorTvs() {
         return sensorTvs;
     }
@@ -48,6 +51,32 @@ public class MainActivity extends AppCompatActivity {
         permissoes = Permissoes.getInstance(this,tvLog);
         recolha = Recolha.getInstance(this, ficheiro);
 
+        atividades = (RadioGroup) findViewById(R.id.atividades);
+
+        atividades.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                ;
+                switch(checkedId){
+                    case R.id.rbAndar:
+                        atividade = Config.ANDAR;
+                        break;
+                    case R.id.rbCorrer:
+                        atividade = Config.CORRER;
+                        break;
+                    case R.id.rbDescer:
+                        atividade = Config.DESCER;
+                        break;
+                    case R.id.rbSubir:
+                        atividade = Config.SUBIR;
+                        break;
+                    case R.id.rbOutra:
+                        atividade = Config.OUTRA;
+                        break;
+                }
+                recolha.getRegisto().setAtividade(atividade);
+            }
+        });
 
         btRecolha = (Button) findViewById(R.id.btRecolha);
 
@@ -61,18 +90,23 @@ public class MainActivity extends AppCompatActivity {
 
         btRecolha.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (recolhaIniciada) {
-                    tvLog.append("Recolha terminada\n");
-                    recolhaIniciada = false;
-                    btRecolha.setText("Iniciar Recolha");
-                    recolha.terminar();
-                } else {
-                    tvLog.append("Recolha iniciada\n");
-                    recolhaIniciada = true;
-                    btRecolha.setText("Terminar Recolha");
-                    recolha.iniciar();
+                if (atividade==null){
+                    Toast.makeText(MainActivity.this, "Escolha uma atividade!", Toast.LENGTH_LONG).show();
+                }else {
+                    if (recolhaIniciada) {
+                        tvLog.append("Recolha terminada\n");
+                        recolhaIniciada = false;
+                        btRecolha.setText("Iniciar Recolha");
+                        recolha.terminar();
+                    } else {
+                        tvLog.append("Recolha iniciada\n");
+                        recolhaIniciada = true;
+                        btRecolha.setText("Terminar Recolha");
+                        recolha.iniciar();
+                    }
+                    mScrollView.fullScroll(View.FOCUS_DOWN);
                 }
-                mScrollView.fullScroll(View.FOCUS_DOWN);
+
 
             }
         });

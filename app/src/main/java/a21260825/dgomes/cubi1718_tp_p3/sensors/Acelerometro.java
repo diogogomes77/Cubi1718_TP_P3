@@ -7,8 +7,11 @@ import android.hardware.SensorManager;
 import android.icu.math.BigDecimal;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
 
@@ -25,7 +28,7 @@ public class Acelerometro extends CubiSensor {
     protected Acelerometro(SensorManager mSensorManager) {
         this.mSensorManager = mSensorManager;
         registo = Registo.getInstance();
-        valores = new HashMap<>();
+        valores = new HashMap<String,String>();
         cubiSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         gravity = new float[]{0, 0, 0};
         sensorEventListener = new SensorEventListener() {
@@ -50,7 +53,18 @@ public class Acelerometro extends CubiSensor {
                     valores.put("xAcc",Float.toString(xAcc));
                     valores.put("yAcc",Float.toString(yAcc));
                     valores.put("zAcc",Float.toString(zAcc));
+                    /*
+                    Iterator it = valores.entrySet().iterator();
+                    Log.d("Acelerometro","valores");
+                    while (it.hasNext()) {
+                        Map.Entry valor = (Map.Entry)it.next();
+                        String key = (String)valor.getKey();
+                        String value = (String)valor.getValue();
+                        Log.d(key,value);
+                        it.remove();
+                    }*/
                     registo.addValores(valores);
+                    //valores.clear();
                     //Log.d("Acel",result);
                 }
                 timestamp = event.timestamp;

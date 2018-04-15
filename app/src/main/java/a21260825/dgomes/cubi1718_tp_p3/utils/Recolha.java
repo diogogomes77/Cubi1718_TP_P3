@@ -79,6 +79,10 @@ public class Recolha {
         }
     }
 
+    public Registo getRegisto() {
+        return registo;
+    }
+
     private void addSensor(CubiSensor sensor){
         TextView tv = new TextView(activity);
         activity.getSensorTvs().addView(tv);

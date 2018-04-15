@@ -60,6 +60,9 @@ public class Ficheiro {
     }
     public boolean saveValores(Registo registo){
         if (saving){
+            /*if (ficheiro.length() == 0) {
+                saveRecolha.println(registo.header());
+            }*/
             saveRecolha.println(registo.toString());
             return true;
         }
@@ -72,10 +75,9 @@ public class Ficheiro {
             saving = true;
             bw = new BufferedWriter(fw);
             saveRecolha = new PrintWriter(bw);
-            if (ficheiro.length() == 0) {
-                saveRecolha.println("header");
-                //saveRecolha.println(reg.csvHeader());
-            }
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
             return false;
