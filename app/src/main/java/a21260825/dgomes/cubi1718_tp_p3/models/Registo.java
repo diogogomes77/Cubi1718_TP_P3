@@ -48,7 +48,7 @@ public class Registo {
 
     private void carregaValores(){
         //Log.d("Registo","carregaValores");
-        novo=true;
+
         for (CubiSensor sensor: cubiSensores) {
             HashMap valores =  sensor.getValores();
             Iterator it = valores.entrySet().iterator();
@@ -107,6 +107,7 @@ public class Registo {
         //Log.d("Registo","terminaRegisto");
         //valoresRegisto.clear();
         ficheiro.saveValores(this);
+
         //iniciaRegisto();
     }
     private String timestamp(){

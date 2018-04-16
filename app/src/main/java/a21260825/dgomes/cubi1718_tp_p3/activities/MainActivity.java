@@ -163,22 +163,6 @@ public class MainActivity extends AppCompatActivity {
         addLog(log);
         new Transferencia(ficheiro).execute();
 
-        /*int count = 0;
-        for (File f: list){
-            if (f.isFile()){
-                String log = "Transferir ficheiro " + f.getName() + "\n";
-                ficheiro.setFicheiro(f);
-                addLog(log);
-                Log.d("transferir",log);
-                new Transferencia(ficheiro).execute();
-                count++;
-                contarFicheirosNovos();
-            }
-
-        }
-        addLog(count + "ficheiros transferidos \n");
-        */
-
     }
     private void setAtividades1(){
         atividades1.setOnCheckedChangeListener(null);

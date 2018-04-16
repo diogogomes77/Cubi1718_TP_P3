@@ -94,19 +94,22 @@ public class Recolha {
     }
 
     public void iniciar() {
-        for (CubiSensor sensor :cubiSensores) {
-            ficheiro.startSave();
-            sensor.iniciar();
-            activity.addLog(sensor.toString() + " iniciado\n");
+        if(ficheiro.startSave()){
+            for (CubiSensor sensor :cubiSensores) {
+                sensor.iniciar();
+                activity.addLog(sensor.toString() + " iniciado\n");
+            }
         }
+
     }
 
     public void terminar() {
         for (CubiSensor sensor :cubiSensores) {
             sensor.terminar();
-            ficheiro.stopSaving();
+
             activity.addLog(sensor.toString() + " terminado\n");
         }
+        ficheiro.stopSaving();
     }
 
     public void pausar() {

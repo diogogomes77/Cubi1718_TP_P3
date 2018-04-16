@@ -102,8 +102,9 @@ public class Ficheiro {
 
     }
     public boolean stopSaving(){
+
         if(saving){
-            saving = false;
+           
             try {
                 bw.close();
                 saving = false;
