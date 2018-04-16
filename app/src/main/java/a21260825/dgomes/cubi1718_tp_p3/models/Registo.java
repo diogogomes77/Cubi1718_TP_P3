@@ -47,7 +47,7 @@ public class Registo {
     }
 
     private void carregaValores(){
-        Log.d("Registo","carregaValores");
+        //Log.d("Registo","carregaValores");
         novo=true;
         for (CubiSensor sensor: cubiSensores) {
             HashMap valores =  sensor.getValores();
@@ -59,7 +59,7 @@ public class Registo {
                 it.remove();
             }
         }
-        Log.d("cardinalValores",Integer.toString(cardinalValores));
+        //Log.d("cardinalValores",Integer.toString(cardinalValores));
     }
 
     public void setAtividade(String atividade) {
@@ -67,7 +67,7 @@ public class Registo {
     }
 
     public void addValores(HashMap<String,String> valores){
-        Log.d("Registo","addValores");
+        //Log.d("Registo","addValores");
         if (contador==cardinalValores){
             carregaValores();
         }else {
@@ -77,7 +77,7 @@ public class Registo {
                 Map.Entry valor = (Map.Entry)it.next();
                 String key = (String)valor.getKey();
                 String value = (String)valor.getValue();
-                Log.d(key,value);
+                //Log.d(key,value);
                 //if (valoresRegisto.get(key) == null){
                     //Log.d("Registo","null");
                     valoresRegisto.put(key,value);
@@ -104,7 +104,7 @@ public class Registo {
 
     private void terminaRegisto(){
         lastUpdate = System.currentTimeMillis();
-        Log.d("Registo","terminaRegisto");
+        //Log.d("Registo","terminaRegisto");
         //valoresRegisto.clear();
         ficheiro.saveValores(this);
         //iniciaRegisto();
@@ -147,7 +147,7 @@ public class Registo {
     private String header() {
         novo = false;
         StringBuilder result = new StringBuilder();
-        result.append("atividade");
+        result.append("activity");
         result.append(",");
         Iterator it = valoresRegisto.entrySet().iterator();
         keys = new ArrayList<>();

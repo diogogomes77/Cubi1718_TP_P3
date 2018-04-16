@@ -17,10 +17,6 @@
         android:gravity="center"
         android:layout_gravity="center">
 
-
-
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -31,9 +27,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical">
-
-
-
                     <CheckBox
                         android:id="@+id/cbAutomatico"
                         android:layout_width="wrap_content"
@@ -41,63 +34,116 @@
                         android:layout_weight="1"
                         android:text="Modo Automático" />
 
+                    <Chronometer
+                        android:id="@+id/chrono"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
                     <TextView
-                        android:id="@+id/tvFicheiro"
+                        android:id="@+id/tvFilesNovos"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Ficheiro" />
+                        android:text="ficheiros novos" />
+
+
 
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <RadioGroup
-                        android:id="@+id/atividades"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:baselineAligned="true"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:layout_gravity="center">
-                        <RadioButton
-                            android:id="@+id/rbAndar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Andar" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="left">
+                        <RadioGroup
+                            android:id="@+id/atividades1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="true"
+                            android:textAlignment="center"
+                            android:gravity="left"
+                            android:layout_gravity="center">
+
+                            <RadioButton
+                                android:id="@+id/rbAndar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Andar" />
+
+                            <RadioButton
+                                android:id="@+id/rbDescer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Descer" />
+
+                            <RadioButton
+                                android:id="@+id/rbSubir"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Subir" />
+
+
+                            <RadioButton
+                                android:id="@+id/rbSentar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Sentar" />
+                            <RadioButton
+                                android:id="@+id/rbSaltar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Saltar" />
+                        </RadioGroup>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="left">
+                        <RadioGroup
+                            android:id="@+id/atividades2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="true"
+                            android:textAlignment="center"
+                            android:gravity="left"
+                            android:layout_gravity="center">
                         <RadioButton
                             android:id="@+id/rbCorrer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Correr" />
-
                         <RadioButton
-                            android:id="@+id/rbDescer"
+                            android:id="@+id/rbConduzir"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Descer" />
+                            android:text="Conduzir" />
 
                         <RadioButton
-                            android:id="@+id/rbSubir"
+                            android:id="@+id/rbPatinarEstrada"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Subir" />
-
+                            android:text="Skate Estrada" />
                         <RadioButton
-                            android:id="@+id/rbOutra"
+                            android:id="@+id/rbPatinarPark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Outra" />
-                    </RadioGroup>
-                </LinearLayout>
+                            android:text="Skate Rampas" />
+                        </RadioGroup>
+                    </LinearLayout>
+
             </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -108,21 +154,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:text="Começar Recolha" />
+                android:text="Inicio" />
+
+            <ToggleButton
+                android:id="@+id/ttRecolhaPausa"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:textOff="Pausa"
+                android:textOn="Continua" />
+
             <Button
                 android:id="@+id/btTransferirDados"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:text="Transferir Dados" />
+                android:text="Transferir" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/sensorTvs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="top">
 
+            <TextView
+                android:id="@+id/tvFicheiro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ficheiro" />
         </LinearLayout>
 
 

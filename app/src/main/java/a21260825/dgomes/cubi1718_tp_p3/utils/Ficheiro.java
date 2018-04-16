@@ -1,14 +1,19 @@
 package a21260825.dgomes.cubi1718_tp_p3.utils;
 
 import android.os.Environment;
-import android.widget.TextView;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
 
 /**
@@ -18,7 +23,7 @@ import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
 public class Ficheiro {
 
     private static Ficheiro instance;
-    private TextView tv;
+    private MainActivity activity;
     private String path;
     private boolean pastaCriada = false;
     private boolean saving = false;
@@ -28,14 +33,14 @@ public class Ficheiro {
     private PrintWriter saveRecolha;
     private boolean transferido = true;
 
-    protected Ficheiro(TextView tv) {
-        this.tv = tv;
-        path = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + Config.PASTA_FICHEIRO;
+    protected Ficheiro(MainActivity activity) {
+        this.activity = activity;
+        path = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + Config.PASTA_FICHEIRO_LOCAL;
     }
 
-    public static Ficheiro getInstance(TextView tv){
+    public static Ficheiro getInstance(MainActivity activity){
         if(instance == null) {
-            instance = new Ficheiro(tv);
+            instance = new Ficheiro(activity);
         }
         return instance;
     }
@@ -52,14 +57,14 @@ public class Ficheiro {
         if (pastaCriada && transferido) {
             ficheiro = new File(pasta, Config.FICHEIRO+"_" + timestamp() +Config.EXTENCAO);
             if (saveFicheiro(ficheiro)){
-                tv.append("Ficheiro a registar\n");
+                addLog("Ficheiro a registar\n");
                 return true;
             }else {
-                tv.append("Ficheiro problema\n");
+                addLog("Ficheiro problema\n");
                 return false;
             }
         }else{
-            tv.append("Pasta nao criada ou ficheiro nao transferido\n");
+            addLog("Pasta nao criada ou ficheiro nao transferido\n");
             return false;
         }
     }
@@ -85,9 +90,6 @@ public class Ficheiro {
             saving = true;
             bw = new BufferedWriter(fw);
             saveRecolha = new PrintWriter(bw);
-
-
-
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -99,13 +101,12 @@ public class Ficheiro {
         if(saving){
             saving = false;
             try {
-                // bw.flush();
                 bw.close();
                 saving = false;
-                tv.append("Registo em ficheiro interrompido\n");
+                addLog("Registo em ficheiro interrompido\n");
             } catch (IOException e) {
                 e.printStackTrace();
-                tv.append("Problema na interrupcao de registo em ficheiro\n");
+                addLog("Problema na interrupcao de registo em ficheiro\n");
             }
             return true;
         }else {
@@ -115,17 +116,90 @@ public class Ficheiro {
     public boolean criarPasta() {
         pasta = new File(path);
         if (!pasta.exists() && !pasta.mkdirs()) {
-            tv.append("Erro a criar pasta\n");
+            addLog("Erro a criar pasta\n");
             pastaCriada = false;
             return false;
         } else {
-            tv.append(("Ficheiro: " + path + "\n"));
+            addLog(("Ficheiro: " + path + "\n"));
             pastaCriada = true;
             return true;
         }
     }
 
     public String getPath() {
-        return "Ficheiro: " + path + "\n";
+        return "Ficheiro em: " + path + "\n";
+    }
+
+    public int contar() {
+        File[] list = pasta.listFiles();
+        int count = 0;
+        for (File f: list){
+            if (f.isFile())
+                count++;
+        }
+        return count;
+    }
+
+    public File getPasta() {
+        return pasta;
+    }
+    
+    public void addLog(String log){
+        activity.addLog(log);
+    }
+
+    public void arquivarFicheiro(){
+        if (transferido){
+            moveFile(pasta.getPath()+"/",ficheiro.getName(),path+Config.PASTA_ARQUIVO_LOCAL);
+            
+        }
+    }
+    private void moveFile(String inputPath, String inputFile, String outputPath) {
+
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+
+            //create output directory if it doesn't exist
+            File dir = new File (outputPath);
+            if (!dir.exists())
+            {
+                dir.mkdirs();
+            }
+
+
+            in = new FileInputStream(inputPath + inputFile);
+            out = new FileOutputStream(outputPath + inputFile);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            in = null;
+
+            // write the output file
+            out.flush();
+            out.close();
+            out = null;
+
+            // delete the original file
+            new File(inputPath + inputFile).delete();
+
+            addLog("Ficheiro arquivado.\n");
+        }
+
+        catch (FileNotFoundException fnfe1) {
+            addLog(fnfe1.getMessage()+"\n");
+        }
+        catch (Exception e) {
+            addLog(e.getMessage()+"\n");
+        }
+
+    }
+
+    public void contarFicheirosNovos(){
+        activity.contarFicheirosNovos();
     }
 }

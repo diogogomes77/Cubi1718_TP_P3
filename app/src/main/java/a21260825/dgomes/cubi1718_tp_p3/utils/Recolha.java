@@ -106,4 +106,18 @@ public class Recolha {
             activity.addLog(sensor.toString() + " terminado\n");
         }
     }
+
+    public void pausar() {
+        for (CubiSensor sensor :cubiSensores) {
+            sensor.terminar();
+            activity.addLog(sensor.toString() + " pausado\n");
+        }
+    }
+
+    public void continuar() {
+        for (CubiSensor sensor :cubiSensores) {
+            sensor.iniciar();
+            activity.addLog(sensor.toString() + " continuado\n");
+        }
+    }
 }

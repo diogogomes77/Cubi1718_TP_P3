@@ -30,6 +30,14 @@ public class Transferencia extends AsyncTask<Void, Integer, String> {
     public Transferencia(Ficheiro ficheiro) {
         this.ficheiro=ficheiro;
         this.file = ficheiro.getFicheiro();
+
+        /*File[] list = ficheiro.getPasta().listFiles();
+        int count = 0;
+        for (File f: list){
+            count++;
+        }
+        return count;
+*/
     }
 
     public static Transferencia getInstance(Ficheiro ficheiro){
@@ -71,14 +79,14 @@ public class Transferencia extends AsyncTask<Void, Integer, String> {
                     channel.disconnect();
                     session.disconnect();
                     transferenciaConcluida = true;
-                    return "Transferido";
+                    return Config.TRANSFERIDO;
                 } catch (JSchException e) {
-                    System.out.println(e.getMessage().toString());
+                    ficheiro.addLog(e.getMessage().toString());
                     e.printStackTrace();
                     transferenciaConcluida = false;
                     return e.toString();
                 } catch (SftpException e) {
-                    System.out.println(e.getMessage().toString());
+                    ficheiro.addLog(e.getMessage().toString());
                     e.printStackTrace();
                     transferenciaConcluida = false;
                     return e.toString();
@@ -89,18 +97,26 @@ public class Transferencia extends AsyncTask<Void, Integer, String> {
     }
     @Override
     protected void onPostExecute(String result) {
-        if (result.equals("Transferido")){
-            ficheiro.setTransferido(true);
-            PrintWriter pw = null;
+        if (result!=null) {
+            if (result.equals(Config.TRANSFERIDO)) {
+                ficheiro.setTransferido(true);
+                ficheiro.arquivarFicheiro();
+            /*PrintWriter pw = null;
             try {
                 pw = new PrintWriter(file);
             } catch (FileNotFoundException e) {
-                // TODO
+
             }
-            pw.close();
+            pw.close();*/
+            }
+            ficheiro.addLog(result + "\n");
+
+            Log.d("PostExecuted", result);
+        }else{
+            ficheiro.addLog("Transferencia null\n");
         }
-
-
-        Log.d("PostExecuted",result);
+        ficheiro.contarFicheirosNovos();
     }
+
+
 }

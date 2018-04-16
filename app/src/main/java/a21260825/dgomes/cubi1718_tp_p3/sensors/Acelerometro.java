@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
+import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 
 /**
  * Created by diogo on 14-04-2018.
@@ -29,9 +30,9 @@ public class Acelerometro extends CubiSensor {
         this.mSensorManager = mSensorManager;
         registo = Registo.getInstance();
         valores = new HashMap<String,String>();
-        valores.put("xAcc","");
-        valores.put("yAcc","");
-        valores.put("zAcc","");
+        valores.put(Config.xAcc,"");
+        valores.put(Config.yAcc,"");
+        valores.put(Config.zAcc,"");
         cubiSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         gravity = new float[]{0, 0, 0};
         sensorEventListener = new SensorEventListener() {
@@ -53,9 +54,9 @@ public class Acelerometro extends CubiSensor {
                     zAcc = event.values[2] - gravity[2];
                     result = "Acc X: " + round(xAcc) + "\t\t\tY: " + round(yAcc) + "\t\t\tZ: " + round(zAcc);
                     tv.setText(result);
-                    valores.put("xAcc",Float.toString(xAcc));
-                    valores.put("yAcc",Float.toString(yAcc));
-                    valores.put("zAcc",Float.toString(zAcc));
+                    valores.put(Config.xAcc,Float.toString(xAcc));
+                    valores.put(Config.yAcc,Float.toString(yAcc));
+                    valores.put(Config.zAcc,Float.toString(zAcc));
                     /*
                     Iterator it = valores.entrySet().iterator();
                     Log.d("Acelerometro","valores");
