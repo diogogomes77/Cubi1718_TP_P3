@@ -36,9 +36,11 @@ public final class Config {
     public static final String zAcc = "z_acc";
     public static final  String Lum = "light";
     public static final String TRANSFERIDO = "Transferência concluida";
+    public static final String NAO_TRANSFERIDO = "Nao transferido";
 
     public static final String MAG = "mag";
     public static final String MAG_X = "mag_x";
     public static final String MAG_Y = "mag_y";
     public static final String MAG_Z = "mag_z";
+
 }

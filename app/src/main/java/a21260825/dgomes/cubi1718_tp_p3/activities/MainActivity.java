@@ -1,10 +1,13 @@
 
 package a21260825.dgomes.cubi1718_tp_p3.activities;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,6 +19,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import java.io.File;
 
 import a21260825.dgomes.cubi1718_tp_p3.R;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Recolha;
@@ -38,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup atividades1,atividades2;
     private String atividade;
     private Transferencia transferencia;
-    private int ficheirosNovos;
+    private int ficheirosNovos=0;
     private Chronometer simpleChronometer;
     private long timeWhenStopped = 0;
     private boolean recolhaPausada = false;
@@ -72,7 +77,32 @@ public class MainActivity extends AppCompatActivity {
         simpleChronometer.setFormat("Crono: %s");
         atividades1 = (RadioGroup) findViewById(R.id.atividades1);
         atividades2 = (RadioGroup) findViewById(R.id.atividades2);
+        btRecolha = (Button) findViewById(R.id.btRecolha);
+        ttRecolhaPausa = (ToggleButton) findViewById(R.id.ttRecolhaPausa);
+        btTransferirDados = (Button) findViewById(R.id.btTransferirDados);
+        btTransferirDados.setEnabled(false);
+        if (permissoes.temPermissoes()){
+            addLog("temPermissoes = true\n");
+            ativarBotaoRecolha();
+            contarFicheirosNovos();
+        } else {
+            addLog("temPermissoes = false\n");
+            btRecolha.setEnabled(false);
+        }
 
+
+        ttRecolhaPausa.setEnabled(false);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (ficheirosNovos>0){
+                btTransferirDados.setEnabled(true);
+            }
+        }
+
+
+        setButtonListenners();
+    }
+    private void setButtonListenners(){
         atividades1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -90,18 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 recolha.getRegisto().setAtividade(atividade);
             }
         });
-
-        btRecolha = (Button) findViewById(R.id.btRecolha);
-
-        if (permissoes.temPermissoes()){
-            addLog("temPermissoes = true\n");
-            ativarBotaoRecolha();
-            contarFicheirosNovos();
-        } else {
-            addLog("temPermissoes = false\n");
-            btRecolha.setEnabled(false);
-        }
-
         btRecolha.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (atividade==null){
@@ -116,8 +134,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        ttRecolhaPausa = (ToggleButton) findViewById(R.id.ttRecolhaPausa);
-        ttRecolhaPausa.setEnabled(false);
         ttRecolhaPausa.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -127,23 +143,41 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        btTransferirDados = (Button) findViewById(R.id.btTransferirDados);
-        btTransferirDados.setEnabled(false);
         btTransferirDados.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (recolhaIniciada) {
                     terminarRecolha();
                 }
-                addLog("Iniciada a transferencia de ficheiro\n");
-                new Transferencia(ficheiro).execute();
+
+                transferirFicheirosNovos();
 
                 btTransferirDados.setEnabled(false);
 
             }
         });
+    }
+    private void transferirFicheirosNovos(){
+        File[] list = ficheiro.getPasta().listFiles();
+        ficheiro.addFicheirosTransferencia(list);
+        String log = "Transferir ficheiros" + list.length + "\n";
+        addLog(log);
+        new Transferencia(ficheiro).execute();
 
+        /*int count = 0;
+        for (File f: list){
+            if (f.isFile()){
+                String log = "Transferir ficheiro " + f.getName() + "\n";
+                ficheiro.setFicheiro(f);
+                addLog(log);
+                Log.d("transferir",log);
+                new Transferencia(ficheiro).execute();
+                count++;
+                contarFicheirosNovos();
+            }
 
+        }
+        addLog(count + "ficheiros transferidos \n");
+        */
 
     }
     private void setAtividades1(){
@@ -257,7 +291,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void contarFicheirosNovos(){
         ficheirosNovos=ficheiro.contar();
-        tvFilesNovos.setText("Ficheiros novos: " + ficheirosNovos);;
+        tvFilesNovos.setText("Ficheiros novos: " + ficheirosNovos);
+        btTransferirDados.setEnabled(true);
     }
 
     @Override
@@ -269,7 +304,6 @@ public class MainActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     addLog("temPermissoes = true\n");
                     ativarBotaoRecolha();
-                    contarFicheirosNovos();
                 } else {
                     addLog("temPermissoes = false\n");
                 }

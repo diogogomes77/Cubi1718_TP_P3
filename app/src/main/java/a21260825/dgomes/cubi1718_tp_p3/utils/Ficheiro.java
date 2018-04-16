@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
@@ -32,10 +34,12 @@ public class Ficheiro {
     private BufferedWriter bw;
     private PrintWriter saveRecolha;
     private boolean transferido = true;
+    private File[] ficheirosTransferencia;
 
     protected Ficheiro(MainActivity activity) {
         this.activity = activity;
         path = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + Config.PASTA_FICHEIRO_LOCAL;
+
     }
 
     public static Ficheiro getInstance(MainActivity activity){
@@ -143,8 +147,8 @@ public class Ficheiro {
     public File getPasta() {
         return pasta;
     }
-    
-    public void addLog(String log){
+
+    public void addLog(String log) {
         activity.addLog(log);
     }
 
@@ -201,5 +205,17 @@ public class Ficheiro {
 
     public void contarFicheirosNovos(){
         activity.contarFicheirosNovos();
+    }
+
+    public void setFicheiro(File ficheiro) {
+        this.ficheiro = ficheiro;
+    }
+
+    public void addFicheirosTransferencia(File[] list) {
+        this.ficheirosTransferencia=list;
+    }
+
+    public File[] getFicheirosTransferencia() {
+        return ficheirosTransferencia;
     }
 }
