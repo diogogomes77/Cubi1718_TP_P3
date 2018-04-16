@@ -40,7 +40,7 @@ public class Acelerometro extends CubiSensor {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSensorChanged(SensorEvent event) {
-                if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+                if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
                     final float alpha = 0.8f;
                     long curTime = System.currentTimeMillis();
                     gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
