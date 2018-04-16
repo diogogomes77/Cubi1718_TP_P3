@@ -116,31 +116,37 @@
                             android:textAlignment="center"
                             android:gravity="left"
                             android:layout_gravity="center">
-                        <RadioButton
-                            android:id="@+id/rbCorrer"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Correr" />
-                        <RadioButton
-                            android:id="@+id/rbConduzir"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Conduzir" />
+                            <RadioButton
+                                android:id="@+id/rbAgachar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Agachar" />
+                            <RadioButton
+                                android:id="@+id/rbCorrer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Correr" />
+                            <RadioButton
+                                android:id="@+id/rbConduzir"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Conduzir" />
 
-                        <RadioButton
-                            android:id="@+id/rbPatinarEstrada"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Skate Estrada" />
-                        <RadioButton
-                            android:id="@+id/rbPatinarPark"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Skate Rampas" />
+                            <RadioButton
+                                android:id="@+id/rbPatinarEstrada"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Skate Estrada" />
+                            <RadioButton
+                                android:id="@+id/rbPatinarPark"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Skate Rampas" />
                         </RadioGroup>
                     </LinearLayout>
 
@@ -172,18 +178,25 @@
                 android:text="Transferir" />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/sensorTvs"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="top">
-
             <TextView
                 android:id="@+id/tvFicheiro"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ficheiro" />
+        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/sensorTvs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="top">
+
+
         </LinearLayout>
 
 

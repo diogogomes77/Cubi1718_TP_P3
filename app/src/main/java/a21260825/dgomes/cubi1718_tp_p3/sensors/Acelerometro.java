@@ -40,13 +40,12 @@ public class Acelerometro extends CubiSensor {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSensorChanged(SensorEvent event) {
-                final float alpha = 0.8f;
-                long curTime = System.currentTimeMillis();
-                gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
-                gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
-                gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
-                //if ((curTime - lastUpdate) > 1000) {
-                if (timestamp != 0) {
+                if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+                    final float alpha = 0.8f;
+                    long curTime = System.currentTimeMillis();
+                    gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
+                    gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
+                    gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
                     long diffTime = (curTime - lastUpdate);
                     lastUpdate = curTime;
                     xAcc = event.values[0] - gravity[0];
@@ -57,23 +56,9 @@ public class Acelerometro extends CubiSensor {
                     valores.put(Config.xAcc,Float.toString(xAcc));
                     valores.put(Config.yAcc,Float.toString(yAcc));
                     valores.put(Config.zAcc,Float.toString(zAcc));
-                    /*
-                    Iterator it = valores.entrySet().iterator();
-                    Log.d("Acelerometro","valores");
-                    while (it.hasNext()) {
-                        Map.Entry valor = (Map.Entry)it.next();
-                        String key = (String)valor.getKey();
-                        String value = (String)valor.getValue();
-                        Log.d(key,value);
-                        it.remove();
-                    }*/
                     registo.addValores(valores);
-                    //valores.clear();
-                    //Log.d("Acel",result);
                 }
-                timestamp = event.timestamp;
             }
-
             @Override
             public void onAccuracyChanged(Sensor arg0, int arg1) {
             }

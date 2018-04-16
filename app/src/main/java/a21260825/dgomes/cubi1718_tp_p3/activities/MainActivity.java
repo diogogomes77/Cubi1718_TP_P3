@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         if (permissoes.temPermissoes()){
             addLog("temPermissoes = true\n");
             ativarBotaoRecolha();
+            contarFicheirosNovos();
         } else {
             addLog("temPermissoes = false\n");
             btRecolha.setEnabled(false);
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        contarFicheirosNovos();
+
 
     }
     private void setAtividades1(){
@@ -197,6 +198,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.rbSaltar:
                 atividade = Config.JUMPING;
+                break;
+            case R.id.rbAgachar:
+                atividade = Config.SQUATTING;
                 break;
             case R.id.rbSentar:
                 atividade = Config.SITTING;
@@ -265,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     addLog("temPermissoes = true\n");
                     ativarBotaoRecolha();
+                    contarFicheirosNovos();
                 } else {
                     addLog("temPermissoes = false\n");
                 }

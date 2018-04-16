@@ -18,6 +18,7 @@ import a21260825.dgomes.cubi1718_tp_p3.sensors.Gyroscopio;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.Localizacao;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.LocalizacaoFused;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.Luminometro;
+import a21260825.dgomes.cubi1718_tp_p3.sensors.Magnetometro;
 
 /**
  * Created by diogo on 14-04-2018.
@@ -63,11 +64,12 @@ public class Recolha {
 
         listSensors(mSensorManager);
 
-        //addSensor(Gyroscopio.getInstance(mSensorManager));
+        addSensor(Gyroscopio.getInstance(mSensorManager));
         addSensor(Acelerometro.getInstance(mSensorManager));
         addSensor(Luminometro.getInstance(mSensorManager));
         //addSensor(LocalizacaoFused.getInstance(this.activity));
         addSensor(Localizacao.getInstance(this.activity));
+        addSensor(Magnetometro.getInstance(mSensorManager));
 
     }
     private void listSensors(SensorManager mSensorManager){

@@ -32,17 +32,12 @@ public class Luminometro extends CubiSensor {
 
             @Override
             public void onSensorChanged(SensorEvent event) {
-                long curTime = System.currentTimeMillis();
-                //if ((curTime - lastUpdateLumi) > 1000) {
-                if (timestamp != 0) {
-                    long diffTime = (curTime - lastUpdate);
-                    lastUpdate = curTime;
-                    luminosidade = event.values[0];
-                    tv.setText("Luminosidade: " + luminosidade);
-                    valores.put(Config.Lum,Float.toString(luminosidade));
-                    registo.addValores(valores);
+                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                        luminosidade = event.values[0];
+                        tv.setText("Luminosidade: " + luminosidade);
+                        valores.put(Config.Lum, Float.toString(luminosidade));
+                        registo.addValores(valores);
                 }
-                timestamp = event.timestamp;
             }
         };
     }

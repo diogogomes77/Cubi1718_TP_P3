@@ -22,6 +22,7 @@ public final class Config {
     public static final String SKATING_FLAT = "FLAT_SKATING";
     public static final String SKATING_PARK = "PARK_SKATING";
     public static final String JUMPING = "JUMPING";
+    public static final String SQUATTING = "SQUATTING";
 
     public static final String HOST = "urbysense.dei.uc.pt";
     public static final String USER = "cubistudent";
@@ -36,4 +37,8 @@ public final class Config {
     public static final  String Lum = "light";
     public static final String TRANSFERIDO = "Transferência concluida";
 
+    public static final String MAG = "mag";
+    public static final String MAG_X = "mag_x";
+    public static final String MAG_Y = "mag_y";
+    public static final String MAG_Z = "mag_z";
 }
