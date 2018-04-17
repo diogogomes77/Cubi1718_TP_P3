@@ -110,6 +110,7 @@ public class Registo {
 
         //iniciaRegisto();
     }
+
     private String timestamp(){
         Long tsLong = System.currentTimeMillis();
         return tsLong.toString();
@@ -142,6 +143,9 @@ public class Registo {
         }
     }
 
+    public void setNovo() {
+        this.novo = true;
+    }
 
     private List<String> keys;
 

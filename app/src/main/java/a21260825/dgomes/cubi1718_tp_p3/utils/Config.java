@@ -43,4 +43,5 @@ public final class Config {
     public static final String MAG_Y = "mag_y";
     public static final String MAG_Z = "mag_z";
 
+    public static final String BATERIA = "Battery";
 }

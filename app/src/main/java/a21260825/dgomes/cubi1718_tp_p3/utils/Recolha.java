@@ -13,6 +13,7 @@ import java.util.List;
 import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.Acelerometro;
+import a21260825.dgomes.cubi1718_tp_p3.sensors.Bateria;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.CubiSensor;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.Gyroscopio;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.Localizacao;
@@ -70,6 +71,7 @@ public class Recolha {
         //addSensor(LocalizacaoFused.getInstance(this.activity));
         addSensor(Localizacao.getInstance(this.activity));
         addSensor(Magnetometro.getInstance(mSensorManager));
+        addSensor(Bateria.getInstance(this.activity));
 
     }
     private void listSensors(SensorManager mSensorManager){
@@ -106,7 +108,6 @@ public class Recolha {
     public void terminar() {
         for (CubiSensor sensor :cubiSensores) {
             sensor.terminar();
-
             activity.addLog(sensor.toString() + " terminado\n");
         }
         ficheiro.stopSaving();

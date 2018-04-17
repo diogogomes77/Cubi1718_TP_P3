@@ -35,6 +35,7 @@ public class Ficheiro {
     private PrintWriter saveRecolha;
     private boolean transferido = true;
     private File[] ficheirosTransferencia;
+    private boolean novo = true;
 
     protected Ficheiro(MainActivity activity) {
         this.activity = activity;
@@ -61,6 +62,7 @@ public class Ficheiro {
         if (pastaCriada && transferido) {
             ficheiro = new File(pasta, Config.FICHEIRO+"_" + timestamp() +Config.EXTENCAO);
             if (saveFicheiro(ficheiro)){
+                novo = true;
                 addLog("Ficheiro a registar\n");
                 return true;
             }else {
@@ -79,10 +81,9 @@ public class Ficheiro {
 
     public boolean saveValores(Registo registo){
         if (saving){
-            /*if (ficheiro.length() == 0) {
-                saveRecolha.println(registo.header());
-            }*/
+            if (novo) registo.setNovo();
             saveRecolha.println(registo.toString());
+            novo = false;
             return true;
         }
         return false;
@@ -104,11 +105,12 @@ public class Ficheiro {
     public boolean stopSaving(){
 
         if(saving){
-           
+
             try {
                 bw.close();
                 saving = false;
                 addLog("Registo em ficheiro interrompido\n");
+                novo = true;
             } catch (IOException e) {
                 e.printStackTrace();
                 addLog("Problema na interrupcao de registo em ficheiro\n");
