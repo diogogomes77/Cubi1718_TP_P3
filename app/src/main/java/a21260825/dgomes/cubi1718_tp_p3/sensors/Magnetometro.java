@@ -11,7 +11,7 @@ import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 
 /**
- * Created by diogo on 14-04-2018.
+ * Created by diogo on 15-04-2018.
  */
 
 public class Magnetometro extends CubiSensor {

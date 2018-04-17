@@ -21,7 +21,7 @@ import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 
 /**
- * Created by diogo on 14-04-2018.
+ * Created by diogo on 17-04-2018.
  */
 
 public class Bateria extends CubiSensor {
@@ -89,5 +89,5 @@ public class Bateria extends CubiSensor {
         activity.unregisterReceiver(this.mBatInfoReceiver);
     }
 
-    
+
 }
