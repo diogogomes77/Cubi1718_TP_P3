@@ -141,12 +141,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Skate Estrada" />
+
                             <RadioButton
                                 android:id="@+id/rbPatinarPark"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Skate Rampas" />
+                                android:text="Skate Ramp" />
                         </RadioGroup>
                     </LinearLayout>
 

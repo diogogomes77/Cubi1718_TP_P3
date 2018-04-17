@@ -112,7 +112,8 @@ public class Localizacao extends CubiSensor {
 
     }
     private void atualizaLocalizacao(Location location){
-        tv.setText("Local: " + location.getLatitude()+","+location.getLongitude()
+        escolheLocationProvider();
+        tv.setText("Local ("+ this.locationProvider +"): " + location.getLatitude()+","+location.getLongitude()
                 +","+location.getAltitude());
         valores.put(Config.LATITUDE,Double.toString(location.getLatitude()));
         valores.put(Config.LONGITUDE,Double.toString(location.getLongitude()));
