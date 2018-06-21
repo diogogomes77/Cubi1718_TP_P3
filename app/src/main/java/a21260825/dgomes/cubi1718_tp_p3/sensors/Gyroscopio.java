@@ -4,8 +4,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
 
@@ -21,7 +23,7 @@ public class Gyroscopio extends CubiSensor {
 
     protected Gyroscopio(SensorManager mSensorManager) {
         this.mSensorManager = mSensorManager;
-        valores = new HashMap<String,String>();
+        valores = new TreeMap<String,String>();
         valores.put("xGyro","");
         valores.put("yGyro","");
         valores.put("zGyro","");
@@ -32,7 +34,30 @@ public class Gyroscopio extends CubiSensor {
 
             private String result;
             @Override
-            public void onAccuracyChanged(Sensor arg0, int arg1) {
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+                if (sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+                    String result="";
+                    switch (accuracy) {
+                        case 0:
+                            result=("Unreliable");
+
+                            break;
+                        case 1:
+                            result=("Low Accuracy");
+
+                            break;
+                        case 2:
+                            result=("Medium Accuracy");
+
+
+                            break;
+                        case 3:
+                            result=("High Accuracy");
+
+                            break;
+                    }
+                    Log.d("Gyroscopio",result);
+                }
             }
 
             @Override

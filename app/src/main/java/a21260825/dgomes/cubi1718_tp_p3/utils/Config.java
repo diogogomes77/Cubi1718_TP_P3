@@ -12,17 +12,16 @@ public final class Config {
     public static final String FICHEIRO = "cubi21260825";
     public static final String EXTENCAO = ".csv";
 
-    public static final String WALKING = "WALKING";
-    public static final String RUNNING = "RUNNING";
-    public static final String GO_DOWNSTAIRS = "GO_DOWNSTAIRS";
-    public static final String GO_UPSTAIRS = "GO_UPSTAIRS";
-    public static final String BIKING = "BIKING";
-    public static final String SITTING = "SITTING";
-    public static final String DRIVING = "DRIVING";
-    public static final String SKATING_FLAT = "FLAT_SKATING";
-    public static final String SKATING_PARK = "PARK_SKATING";
-    public static final String JUMPING = "JUMPING";
-    public static final String SQUATTING = "SQUATTING";
+    public static final String ACT1 = "ACT1"; // abanar horizontal longo
+    public static final String ACT2 = "ACT2"; // abanar vertical longo
+    public static final String ACT3 = "ACT3"; // girar horizontal
+    public static final String ACT4 = "ACT4"; // girar vertical
+    public static final String ACT5 = "ACT5"; // abanar horizontal curto
+    public static final String ACT6 = "ACT6"; // abanar vertical curto
+    public static final String ACT7 = "ACT7";
+    public static final String ACT8 = "ACT8";
+    public static final String ACT9 = "ACT9";
+    public static final String ACT10 = "ACT10";
 
     public static final String HOST = "urbysense.dei.uc.pt";
     public static final String USER = "cubistudent";

@@ -12,6 +12,7 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
@@ -29,7 +30,7 @@ public class Acelerometro extends CubiSensor {
     protected Acelerometro(SensorManager mSensorManager) {
         this.mSensorManager = mSensorManager;
         registo = Registo.getInstance();
-        valores = new HashMap<String,String>();
+        valores = new TreeMap<String,String>();
         valores.put(Config.xAcc,"");
         valores.put(Config.yAcc,"");
         valores.put(Config.zAcc,"");

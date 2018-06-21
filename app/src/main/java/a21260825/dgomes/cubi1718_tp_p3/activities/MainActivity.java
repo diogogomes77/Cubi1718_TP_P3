@@ -7,13 +7,13 @@ import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean recolhaPausada = false;
     private CheckBox autoMode;
 
+    private RadioButton rbAct1,rbAct2,rbAct3,rbAct4,rbAct5,rbAct6,rbAct7,rbAct8,rbAct9,rbAct10;
     public LinearLayout getSensorTvs() {
         return sensorTvs;
     }
@@ -99,8 +100,30 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
+        setActividadesLabels();
         setButtonListenners();
+    }
+    private void setActividadesLabels(){
+        rbAct1 = findViewById(R.id.rbAct1);
+        rbAct1.setText(Config.ACT1);
+        rbAct2 = findViewById(R.id.rbAct2);
+        rbAct2.setText(Config.ACT2);
+        rbAct3 = findViewById(R.id.rbAct3);
+        rbAct3.setText(Config.ACT3);
+        rbAct4 = findViewById(R.id.rbAct4);
+        rbAct4.setText(Config.ACT4);
+        rbAct5 = findViewById(R.id.rbAct5);
+        rbAct5.setText(Config.ACT5);
+        rbAct6 = findViewById(R.id.rbAct6);
+        rbAct6.setText(Config.ACT6);
+        rbAct7 = findViewById(R.id.rbAct7);
+        rbAct7.setText(Config.ACT7);
+        rbAct8 = findViewById(R.id.rbAct8);
+        rbAct8.setText(Config.ACT8);
+        rbAct9 = findViewById(R.id.rbAct9);
+        rbAct9.setText(Config.ACT9);
+        rbAct10 = findViewById(R.id.rbAct10);
+        rbAct10.setText(Config.ACT10);
     }
     private void setButtonListenners(){
         atividades1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
@@ -191,42 +214,45 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private String escolherAtividade(int checkedId) {
-        String atividade;
+        RadioButton rb = (RadioButton) findViewById(checkedId);
+        String atividade = rb.getText().toString();
+
+        /*
         switch(checkedId){
-            case R.id.rbAndar:
-                atividade = Config.WALKING;
+            case R.id.rbAct1:
+                atividade = Config.ACT1;
                 break;
-            case R.id.rbCorrer:
-                atividade = Config.RUNNING;
+            case R.id.rbAct2:
+                atividade = Config.ACT2;
                 break;
-            case R.id.rbDescer:
-                atividade = Config.GO_DOWNSTAIRS;
+            case R.id.rbAct3:
+                atividade = Config.ACT3;
                 break;
-            case R.id.rbSubir:
-                atividade = Config.GO_UPSTAIRS;
+            case R.id.rbAct4:
+                atividade = Config.ACT4;
                 break;
-            case R.id.rbConduzir:
-                atividade = Config.DRIVING;
+            case R.id.rbAct5:
+                atividade = Config.ACT5;
                 break;
-            case R.id.rbPatinarEstrada:
-                atividade = Config.SKATING_FLAT;
+            case R.id.rbAct6:
+                atividade = Config.ACT6;
                 break;
-            case R.id.rbPatinarPark:
-                atividade = Config.SKATING_PARK;
+            case R.id.rbAct7:
+                atividade = Config.ACT7;
                 break;
-            case R.id.rbSaltar:
-                atividade = Config.JUMPING;
+            case R.id.rbAct8:
+                atividade = Config.ACT8;
                 break;
-            case R.id.rbAgachar:
-                atividade = Config.SQUATTING;
+            case R.id.rbAct9:
+                atividade = Config.ACT9;
                 break;
-            case R.id.rbSentar:
-                atividade = Config.SITTING;
+            case R.id.rbAct10:
+                atividade = Config.ACT10;
                 break;
             default:
                 atividade = null;
                 break;
-        }
+        }*/
 
         addLog("Atividade: " + atividade+"\n");
         return atividade;

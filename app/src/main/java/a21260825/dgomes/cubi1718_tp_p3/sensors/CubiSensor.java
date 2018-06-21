@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
@@ -23,7 +25,7 @@ public abstract class CubiSensor {
     protected TextView tv;
     protected Registo registo;
 
-    protected HashMap<String,String> valores;
+    protected TreeMap<String,String> valores;
 
     protected SensorManager mSensorManager;
     protected SensorEventListener sensorEventListener;
@@ -32,14 +34,14 @@ public abstract class CubiSensor {
         mSensorManager.registerListener(
                 sensorEventListener,
                 cubiSensor,
-                SensorManager.SENSOR_DELAY_NORMAL);
+                SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     public void terminar() {
         mSensorManager.unregisterListener(sensorEventListener);
     }
 
-    public HashMap<String, String> getValores() {
+    public TreeMap<String, String> getValores() {
         return valores;
     }
 

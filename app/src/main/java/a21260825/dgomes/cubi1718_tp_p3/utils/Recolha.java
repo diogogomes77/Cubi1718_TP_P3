@@ -68,10 +68,10 @@ public class Recolha {
         //addSensor(LocalizacaoFused.getInstance(this.activity));
         //addSensor(Gyroscopio.getInstance(mSensorManager));
         addSensor(Acelerometro.getInstance(mSensorManager));
-        addSensor(Luminometro.getInstance(mSensorManager));
-        addSensor(Localizacao.getInstance(this.activity));
+        //addSensor(Luminometro.getInstance(mSensorManager));
+       // addSensor(Localizacao.getInstance(this.activity));
         addSensor(Magnetometro.getInstance(mSensorManager));
-        addSensor(Bateria.getInstance(this.activity));
+      //  addSensor(Bateria.getInstance(this.activity));
 
     }
     private void listSensors(SensorManager mSensorManager){

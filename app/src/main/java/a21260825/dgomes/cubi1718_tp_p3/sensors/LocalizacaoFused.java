@@ -11,6 +11,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
 
@@ -26,7 +27,7 @@ public class LocalizacaoFused extends CubiSensor{
 
     protected LocalizacaoFused(Activity activity) {
         this.activity=activity;
-        valores = new HashMap<String,String>();
+        valores = new TreeMap<String,String>();
         valores.put("Latitude_F","");
         valores.put("Longitude_F","");
         valores.put("Altitude_F","");

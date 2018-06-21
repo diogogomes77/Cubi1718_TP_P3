@@ -67,21 +67,21 @@
                             android:layout_gravity="center">
 
                             <RadioButton
-                                android:id="@+id/rbAndar"
+                                android:id="@+id/rbAct1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Andar" />
 
                             <RadioButton
-                                android:id="@+id/rbDescer"
+                                android:id="@+id/rbAct3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Descer" />
 
                             <RadioButton
-                                android:id="@+id/rbSubir"
+                                android:id="@+id/rbAct4"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -89,13 +89,13 @@
 
 
                             <RadioButton
-                                android:id="@+id/rbSentar"
+                                android:id="@+id/rbAct10"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Sentar" />
                             <RadioButton
-                                android:id="@+id/rbSaltar"
+                                android:id="@+id/rbAct8"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -117,33 +117,33 @@
                             android:gravity="left"
                             android:layout_gravity="center">
                             <RadioButton
-                                android:id="@+id/rbAgachar"
+                                android:id="@+id/rbAct9"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Agachar" />
                             <RadioButton
-                                android:id="@+id/rbCorrer"
+                                android:id="@+id/rbAct2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Correr" />
                             <RadioButton
-                                android:id="@+id/rbConduzir"
+                                android:id="@+id/rbAct5"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Conduzir" />
 
                             <RadioButton
-                                android:id="@+id/rbPatinarEstrada"
+                                android:id="@+id/rbAct6"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Skate Estrada" />
 
                             <RadioButton
-                                android:id="@+id/rbPatinarPark"
+                                android:id="@+id/rbAct7"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
