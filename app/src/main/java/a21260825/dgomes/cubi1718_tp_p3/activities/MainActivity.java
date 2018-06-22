@@ -23,11 +23,13 @@ import android.widget.ToggleButton;
 import java.io.File;
 
 import a21260825.dgomes.cubi1718_tp_p3.R;
+import a21260825.dgomes.cubi1718_tp_p3.analise.Analyser;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Recolha;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Ficheiro;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Permissoes;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Transferencia;
+import arsystem.ARSystem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout sensorTvs;
     private RadioGroup atividades1,atividades2;
     private String atividade;
+    private String modo;
     private Transferencia transferencia;
     private int ficheirosNovos=0;
     private Chronometer simpleChronometer;
@@ -49,7 +52,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean recolhaPausada = false;
     private CheckBox autoMode;
 
+
     private RadioButton rbAct1,rbAct2,rbAct3,rbAct4,rbAct5,rbAct6,rbAct7,rbAct8,rbAct9,rbAct10;
+    private RadioGroup mode;
+    private RadioButton modeLearn,modeAuto,modeSave;
+
     public LinearLayout getSensorTvs() {
         return sensorTvs;
     }
@@ -59,8 +66,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        autoMode = (CheckBox) findViewById(R.id.cbAutomatico);
-        autoMode.setEnabled(false);
+
         tvLog = (TextView) findViewById(R.id.tvLog);
         tvFicheiro = (TextView) findViewById(R.id.tvFicheiro);
 
@@ -78,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         simpleChronometer.setFormat("Crono: %s");
         atividades1 = (RadioGroup) findViewById(R.id.atividades1);
         atividades2 = (RadioGroup) findViewById(R.id.atividades2);
+        mode = (RadioGroup) findViewById(R.id.mode);
         btRecolha = (Button) findViewById(R.id.btRecolha);
         ttRecolhaPausa = (ToggleButton) findViewById(R.id.ttRecolhaPausa);
         btTransferirDados = (Button) findViewById(R.id.btTransferirDados);
@@ -102,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
 
         setActividadesLabels();
         setButtonListenners();
+
+
     }
     private void setActividadesLabels(){
         rbAct1 = findViewById(R.id.rbAct1);
@@ -124,6 +133,13 @@ public class MainActivity extends AppCompatActivity {
         rbAct9.setText(Config.ACT9);
         rbAct10 = findViewById(R.id.rbAct10);
         rbAct10.setText(Config.ACT10);
+
+        modeLearn = findViewById(R.id.modeLearn);
+        modeLearn.setText(Config.TRAIN);
+        modeAuto = findViewById(R.id.modeAuto);
+        modeAuto.setText(Config.AUTO);
+        modeSave = findViewById(R.id.modeSave);
+        modeSave.setText(Config.SAVE);
     }
     private void setButtonListenners(){
         atividades1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
@@ -134,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
                 recolha.getRegisto().setAtividade(atividade);
             }
         });
-
         atividades2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -143,11 +158,19 @@ public class MainActivity extends AppCompatActivity {
                 recolha.getRegisto().setAtividade(atividade);
             }
         });
+        mode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                modo = escolherModo(checkedId);
+            }
+        });
         btRecolha.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (atividade==null){
                     Toast.makeText(MainActivity.this, "Escolha uma atividade!", Toast.LENGTH_LONG).show();
-                }else {
+                }else if (modo==null){
+                    Toast.makeText(MainActivity.this, "Escolha um modo!", Toast.LENGTH_LONG).show();
+                } else {
                     if (recolhaIniciada) {
                         terminarRecolha();
                     } else {
@@ -213,47 +236,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private void setMode(){
+        mode.setOnCheckedChangeListener(null);
+        mode.clearCheck();
+        mode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                modo = escolherModo(checkedId);
+                recolha.getRegisto().setAtividade(atividade);
+            }
+        });
+    }
+    private String escolherModo(int checkedId) {
+        RadioButton rb = (RadioButton) findViewById(checkedId);
+        String modo = rb.getText().toString();
+        addLog("Modo: " + modo +"\n");
+        return modo;
+    }
     private String escolherAtividade(int checkedId) {
         RadioButton rb = (RadioButton) findViewById(checkedId);
         String atividade = rb.getText().toString();
-
-        /*
-        switch(checkedId){
-            case R.id.rbAct1:
-                atividade = Config.ACT1;
-                break;
-            case R.id.rbAct2:
-                atividade = Config.ACT2;
-                break;
-            case R.id.rbAct3:
-                atividade = Config.ACT3;
-                break;
-            case R.id.rbAct4:
-                atividade = Config.ACT4;
-                break;
-            case R.id.rbAct5:
-                atividade = Config.ACT5;
-                break;
-            case R.id.rbAct6:
-                atividade = Config.ACT6;
-                break;
-            case R.id.rbAct7:
-                atividade = Config.ACT7;
-                break;
-            case R.id.rbAct8:
-                atividade = Config.ACT8;
-                break;
-            case R.id.rbAct9:
-                atividade = Config.ACT9;
-                break;
-            case R.id.rbAct10:
-                atividade = Config.ACT10;
-                break;
-            default:
-                atividade = null;
-                break;
-        }*/
-
         addLog("Atividade: " + atividade+"\n");
         return atividade;
     }
@@ -265,10 +268,13 @@ public class MainActivity extends AppCompatActivity {
         btRecolha.setText("Stop");
         ttRecolhaPausa.setEnabled(true);
         btTransferirDados.setEnabled(true);
-        recolha.iniciar();
+        recolha.iniciar(modo);
         simpleChronometer.setBase(SystemClock.elapsedRealtime());
         simpleChronometer.start();
         contarFicheirosNovos();
+
+        // iniciar treino
+
     }
 
     private void terminarRecolha(){

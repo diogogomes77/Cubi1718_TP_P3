@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="495dp"
+        android:layout_height="560dp"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp"
@@ -24,15 +24,39 @@
                 android:orientation="horizontal">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
-                    <CheckBox
-                        android:id="@+id/cbAutomatico"
+                    <RadioGroup
+                        android:id="@+id/mode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="true"
+                        android:textAlignment="center"
+                        android:gravity="left"
+                        android:layout_gravity="center">
+
+                    <RadioButton
+                        android:id="@+id/modeLearn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Modo Automático" />
+                        android:text="Learn" />
+
+                    <RadioButton
+                        android:id="@+id/modeSave"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Save" />
+
+                    <RadioButton
+                        android:id="@+id/modeAuto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Auto" />
+                    </RadioGroup>
 
                     <Chronometer
                         android:id="@+id/chrono"

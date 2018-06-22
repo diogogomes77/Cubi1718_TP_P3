@@ -11,8 +11,10 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import a21260825.dgomes.cubi1718_tp_p3.analise.Analyser;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.CubiSensor;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Ficheiro;
+import arsystem.ARSystem;
 
 /**
  * Created by diogo on 14-04-2018.
@@ -30,12 +32,14 @@ public class Registo {
     private boolean novo = true;
     private List<TreeMap<String,String>> registos64;
     private List<String> keys;
+    private ARSystem ars;
 
     protected Registo(List<CubiSensor> cubiSensores, Ficheiro ficheiro) {
         this.cubiSensores = cubiSensores;
         this.ficheiro = ficheiro;
         valoresRegisto = new TreeMap<>();
         registos64 = new ArrayList<>();
+        this.ars = Analyser.getInstance().getArs();
     }
 
     public static Registo getInstance(List<CubiSensor> cubiSensores, Ficheiro ficheiro){
@@ -61,9 +65,10 @@ public class Registo {
                 Map.Entry valor = (Map.Entry)it.next();
                 String key = (String)valor.getKey();
                 String value = (String)valor.getValue();
-
+                //if (value!=null && value!="") {
                     cardinalValores++;
-                    valoresRegisto.put(key,value);
+                    valoresRegisto.put(key, value);
+                //}
                     it.remove();
 
             }
@@ -88,12 +93,42 @@ public class Registo {
                 if (value==null || value ==""){
                     Log.d(key,value);
                 }
-                Log.d("addValores", key + "=" + value);
+                //Log.d("addValores", key + "=" + value);
                 valoresRegisto.put(key,value);
                 contador--;
                 //if ((curTime - lastUpdate) > 5){
                 terminaRegisto();
             }
+            //while (true) { //add your own logic instead
+                if (ars.isFull() && ars.getMode()==ARSystem.MODE_TRAINING) {
+                    ars.extractFeatures(atividade);
+                    //Log.d("data window", "ars.isFull()");
+                }else {
+                    if (valoresRegisto.get("acc_x") != null && valoresRegisto.get("acc_y") != null && valoresRegisto.get("acc_z") != null) {
+                        //Log.d("data window", "acc");
+                        //String accc = valoresRegisto.get("acc_x") + " - " + valoresRegisto.get("acc_y") + " - " + valoresRegisto.get("acc_z");
+                        //Log.d("data window", accc);
+                        //String magg = valoresRegisto.get("mag_x") + " - " + valoresRegisto.get("mag_y") + " - " + valoresRegisto.get("mag_z");
+                        //Log.d("data window", magg);
+                        if (valoresRegisto.get("mag_x") != null && valoresRegisto.get("mag_y") != null && valoresRegisto.get("mag_z") != null){
+                            //Log.d("data window", "mag_x,y,z");
+                            if (valoresRegisto.get("mag_mag") != null){
+                                //Log.d("data window", "mag");
+                                Float acc_x = Float.parseFloat(valoresRegisto.get("acc_x"));
+                                Float acc_y = Float.parseFloat(valoresRegisto.get("acc_y"));
+                                Float acc_z = Float.parseFloat(valoresRegisto.get("acc_z"));
+                               // if (acc_x!=0.0 && acc_y!=0.0 && acc_z!=0.0)
+                                    ars.addData(0,acc_x , acc_y, acc_z); //add data from acc
+                                Float mag_mag = Float.parseFloat(valoresRegisto.get("mag_mag"));
+                                Float mag_x = Float.parseFloat(valoresRegisto.get("mag_x"));
+                                Float mag_y = Float.parseFloat(valoresRegisto.get("mag_y"));
+                                Float mag_z = Float.parseFloat(valoresRegisto.get("mag_z"));
+                               // if (mag_x!=0.0 && mag_y!=0.0 && mag_z!=0.0 && mag_mag!=0.0)
+                                    ars.addData(1, mag_mag,mag_x, mag_y, mag_z); //add data from mag
+                            }
+                        }
+                    }
+                }
             /*
             Iterator it = valores.entrySet().iterator();
             while (it.hasNext()) {
@@ -193,5 +228,9 @@ public class Registo {
         }*/
         result.append("timestamp");
         return result.toString();
+    }
+
+    public String getAtividade() {
+        return atividade;
     }
 }

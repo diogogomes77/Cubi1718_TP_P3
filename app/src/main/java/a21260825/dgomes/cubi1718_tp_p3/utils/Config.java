@@ -12,12 +12,12 @@ public final class Config {
     public static final String FICHEIRO = "cubi21260825";
     public static final String EXTENCAO = ".csv";
 
-    public static final String ACT1 = "ACT1"; // abanar horizontal longo
-    public static final String ACT2 = "ACT2"; // abanar vertical longo
-    public static final String ACT3 = "ACT3"; // girar horizontal
-    public static final String ACT4 = "ACT4"; // girar vertical
-    public static final String ACT5 = "ACT5"; // abanar horizontal curto
-    public static final String ACT6 = "ACT6"; // abanar vertical curto
+    public static final String ACT1 = "LshakeH"; // abanar horizontal longo
+    public static final String ACT2 = "LshakeV"; // abanar vertical longo
+    public static final String ACT3 = "TwistH"; // girar horizontal
+    public static final String ACT4 = "TwistV"; // girar vertical
+    public static final String ACT5 = "SshakeH"; // abanar horizontal curto
+    public static final String ACT6 = "SshakeV"; // abanar vertical curto
     public static final String ACT7 = "ACT7";
     public static final String ACT8 = "ACT8";
     public static final String ACT9 = "ACT9";
@@ -30,17 +30,22 @@ public final class Config {
     public static final String LATITUDE = "lat";
     public static final String LONGITUDE = "lng";
     public static final String ALTITUDE = "alt";
-    public static final String xAcc = "x_acc";
-    public static final String yAcc = "y_acc";
-    public static final String zAcc = "z_acc";
+    public static final String xAcc = "acc_x";
+    public static final String yAcc = "acc_y";
+    public static final String zAcc = "acc_z";
     public static final  String Lum = "light";
     public static final String TRANSFERIDO = "Transferência concluida";
     public static final String NAO_TRANSFERIDO = "Nao transferido";
 
-    public static final String MAG = "mag";
+    public static final String MAG = "mag_mag";
     public static final String MAG_X = "mag_x";
     public static final String MAG_Y = "mag_y";
     public static final String MAG_Z = "mag_z";
 
     public static final String BATERIA = "Battery";
+
+    public static final String TRAIN = "TRAIN";
+    public static final String SAVE = "SAVE";
+    public static final String AUTO = "AUTO";
+
 }

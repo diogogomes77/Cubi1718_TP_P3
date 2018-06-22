@@ -68,12 +68,12 @@ public class Magnetometro extends CubiSensor {
                     float magX = event.values[0];
                     float magY = event.values[1];
                     float magZ = event.values[2];
-                 //   double magnitude = Math.sqrt((magX * magX) + (magY * magY) + (magZ * magZ));
+                    float magnitude = (float) Math.sqrt((magX * magX) + (magY * magY) + (magZ * magZ));
                     valores.put(Config.MAG_X,Float.toString(magX));
                     valores.put(Config.MAG_Y,Float.toString(magY));
                     valores.put(Config.MAG_Z,Float.toString(magZ));
-                  //  valores.put(Config.MAG,Double.toString(magnitude));
-                    result = "Magnetic X: " + Float.toString(magX) + " Y: " + Float.toString(magY) + " Z: " + Float.toString(magZ);
+                    valores.put(Config.MAG,Float.toString(magnitude));
+                    result = "Magnetic mag:" + Float.toString(magnitude) + " X: " + Float.toString(magX) + " Y: " + Float.toString(magY) + " Z: " + Float.toString(magZ);
                     tv.setText(result);
                     registo.addValores(valores);
                 }
