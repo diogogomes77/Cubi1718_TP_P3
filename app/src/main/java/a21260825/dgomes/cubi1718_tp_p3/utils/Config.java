@@ -48,7 +48,9 @@ public final class Config {
     public static final String SAVE = "SAVE";
     public static final String AUTO = "AUTO";
 
-    public static final int PREPROC_COUNTER = 16;
+    public static final int PREPROC_COUNTER = 64;
     public static final String FICHEIRO_PREPROC = FICHEIRO + "_preproc";
     public static final long TRAINNING_TIME = 10000; // 10 segundos
+
+    public static final int REGISTO_INTERVALO = 50; // milliseconds
 }

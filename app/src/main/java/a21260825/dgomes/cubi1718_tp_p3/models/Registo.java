@@ -56,9 +56,18 @@ public class Registo {
     }
 
     private void preProcInit(){
+        Log.d("Registo","preProcInit");
         valoresRegistoPreProc.clear();
         listRegistosPreProc.clear();
         preProcCounter = Config.PREPROC_COUNTER;
+    }
+    private void resetPreProcs(){
+        Log.d("Registo","resetPreProcs");
+        PreProc preProc;
+        for (String key: keys) {
+            preProc = forPreProc.get(key);
+            preProc.resetValues();
+        }
     }
     public static Registo getInstance(List<CubiSensor> cubiSensores, Ficheiro ficheiro){
         if (instance == null){
@@ -96,23 +105,20 @@ public class Registo {
     }
 
     private void addPreProc(){
-        Boolean ok=false;
+
         for (String key: keys) {
             Float value = valoresRegisto.get(key);
-                valoresRegistoPreProc.put(key,value);
-                ok=true;
+            valoresRegistoPreProc.put(key,value);
         }
-        if (ok){
-            listRegistosPreProc.add(valoresRegistoPreProc);
-            preProcCounter--;
-        }
+
+        listRegistosPreProc.add(valoresRegistoPreProc);
+        preProcCounter--;
 
         if (preProcCounter ==0){
             preProcCalculate(); // <-- problem aqui
             preProcInit();
         }
     }
-
     private void preProcCalculate(){
        // Log.d("preProcCalculate", "start");
        // Log.d("preProcCalculate", "listRegistosPreProc: " + listRegistosPreProc.size());
@@ -120,26 +126,18 @@ public class Registo {
            // Log.d("listRegistosPreProc", "registo: " + registo);
             for (Map.Entry<String, Float> entry : registo.entrySet()) {
                 String key = entry.getKey();
-
                 //Log.d("registo", key+": "+value);
-
                 if (!forPreProc.containsKey(key)){
                     forPreProc.put(key,new PreProc());
                     Log.d("forPreProc", "put: " + key);
                 }
-
-                    PreProc preProc = forPreProc.get(key);
-
-                    preProc.addValue(entry.getValue());
+                PreProc preProc = forPreProc.get(key);
+                preProc.addValue(entry.getValue());
                 //Log.d("preProc", "key:" + key + " addValue: " + Double.toString(entry.getValue()));
-
-
             }
         }
-
-
         ficheiro.saveValoresPreProc(this);
-
+        resetPreProcs();
     }
     public String toStringPreProc(){
         if (novoPreProc){
@@ -155,45 +153,91 @@ public class Registo {
             String mean = "mean_";
             String median = "median_";
             String sd ="sd_";
+            String fft ="fft_";
             String del ="";
+            List<String> remain = new ArrayList<>();
+            remain.add(mean);
+            remain.add(median);
+            remain.add(sd);
+            remain.add(fft);
             preProcValue = 0.0;
             for (String key: keysPreProc) {
                 // Log.d("toStringPreProc", "key: " + key);
 
                 if(key.contains(mean)){
                     del = mean;
+                    //remain.remove(del);
                     String cleanKey = key.replace(del,"");
                     preProc = forPreProc.get(cleanKey);
+                    if(preProc==null){
+                        Log.d("toStringPreProc", "preProc: null key:"+ cleanKey);
+                    }
                     if (checkPreProc(preProc,cleanKey))
                         preProcValue = preProc.mean();
+                    else Log.d("checkPreProc", "false");
                     //preProcValue = 22.22;
                 }
                 else if(key.contains(median)){
                     del = median;
+                    //remain.remove(del);
                     String cleanKey = key.replace(del,"");
                     preProc = forPreProc.get(cleanKey);
+                    if(preProc==null){
+                        Log.d("toStringPreProc", "preProc: null key:"+ cleanKey);
+                    }
                     if (checkPreProc(preProc,cleanKey))
                         preProcValue = preProc.median();
+                    else Log.d("checkPreProc", "false");
                     //preProcValue = 22.22;
                 }
                 else if(key.contains(sd)){
+
                     del = sd;
+                    //remain.remove(del);
                     String cleanKey = key.replace(del,"");
+                    Log.d("sd", cleanKey);
                     preProc = forPreProc.get(cleanKey);
+                    if(preProc==null){
+                        Log.d("toStringPreProc", "preProc: null key:"+ cleanKey);
+                    }
                     if (checkPreProc(preProc,cleanKey))
                         preProcValue = preProc.sd();
+                    else Log.d("checkPreProc", "false");
+                    //preProcValue = 22.22;
+                }
+                else if(key.contains(fft)){
+                    del = fft;
+                    //remain.remove(del);
+                    String cleanKey = key.replace(del,"");
+                    preProc = forPreProc.get(cleanKey);
+                    if(preProc==null){
+                        Log.d("toStringPreProc", "preProc: null key:"+ cleanKey);
+                    }
+                    if (checkPreProc(preProc,cleanKey))
+                        preProcValue = preProc.fft();
+                    else Log.d("checkPreProc", "false");
                     //preProcValue = 22.22;
                 }else{
-                    preProcValue = 0.0;
+                    preProcValue = 10000.0;
                 }
+
                 if(preProc==null){
                     Log.d("toStringPreProc", "preProc: null key:"+ key);
-                }else{
-                    preProc.resetValues();
                 }
+                /*else{
+                    if (remain.size()==0){
+                        preProc.resetValues();
+                        Log.d("preProc", "resetValues");
+                    }else{
+                        Log.d("preProc", "remain.size()="+Integer.toString(remain.size()));
+                    }
+
+                }*/
                 //preProcValue = 22.22;
-                resultPreProc.append(Double.toString(preProcValue));
+                String value = Double.toString(preProcValue);
+                resultPreProc.append(value);
                 resultPreProc.append(",");
+               // Log.d("preProcValue: ", key + ": " + value);
             }
 
             resultPreProc.append(timestamp());
@@ -203,8 +247,8 @@ public class Registo {
 
     private Boolean checkPreProc(PreProc preProc, String key){
         int preProcSize = preProc.getValues().size();
-        if (preProcSize!=Config.PREPROC_COUNTER){
-            //Log.d("checkPreProc", key + ": " + Integer.toString(preProcSize) + " !=Config.PREPROC_COUNTER " + Integer.toString(Config.PREPROC_COUNTER));
+        if (preProcSize<Config.PREPROC_COUNTER){
+            Log.d("checkPreProc", key + ": " + Integer.toString(preProcSize) + " <Config.PREPROC_COUNTER " + Integer.toString(Config.PREPROC_COUNTER));
             return false;
         }else {
             //Log.d("checkPreProc", key + ": " + Integer.toString(preProcSize));
@@ -222,7 +266,7 @@ public class Registo {
         extras.add("mean");
         extras.add("median");
         extras.add("sd");
-        // extras.add("_fft");
+        extras.add("fft");
         for(String extra : extras){
             Log.d("extras","added: " + extra);
         }
@@ -256,17 +300,17 @@ public class Registo {
         if (contador==cardinalValores){
             carregaValores();
         }else {
-            //long curTime = System.currentTimeMillis();
-            for(Map.Entry<String,Float> valor : valores.entrySet()) {
-                String key = (String)valor.getKey();
-                Float value = (float)valor.getValue();
+            long curTime = System.currentTimeMillis();
+            long passed = curTime - lastUpdate;
+            if (passed > Config.REGISTO_INTERVALO){
+                for(Map.Entry<String,Float> valor : valores.entrySet()) {
+                    String key = (String)valor.getKey();
+                    Float value = (float)valor.getValue();
                     valoresRegisto.put(key,value);
                     contador--;
-
-                //Log.d("addValores", key + "=" + Float.toString(value));
-
-                //if ((curTime - lastUpdate) > 5){
-                terminaRegisto();
+                    //Log.d("addValores", key + "=" + Float.toString(value));
+                    terminaRegisto();
+                }
             }
           //  wekaAdd(valores);
 
