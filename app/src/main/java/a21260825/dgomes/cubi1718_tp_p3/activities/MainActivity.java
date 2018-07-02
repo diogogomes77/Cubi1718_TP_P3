@@ -3,6 +3,9 @@ package a21260825.dgomes.cubi1718_tp_p3.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +24,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import a21260825.dgomes.cubi1718_tp_p3.R;
 import a21260825.dgomes.cubi1718_tp_p3.analise.Analyser;
@@ -268,12 +273,43 @@ public class MainActivity extends AppCompatActivity {
         btRecolha.setText("Stop");
         ttRecolhaPausa.setEnabled(true);
         btTransferirDados.setEnabled(true);
-        recolha.iniciar(modo);
-        simpleChronometer.setBase(SystemClock.elapsedRealtime());
-        simpleChronometer.start();
+
+
         contarFicheirosNovos();
 
-        // iniciar treino
+        /*
+        ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+
+        try {
+            toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+            Thread.sleep(500);
+            toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+            Thread.sleep(500);
+            toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 500);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+*/
+
+
+        simpleChronometer.setBase(SystemClock.elapsedRealtime());
+        simpleChronometer.start();
+
+        recolha.iniciar(modo);
+
+        /*
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+
+                terminarRecolha();
+            }
+        }, Config.TRAINNING_TIME);
+*/
 
     }
 

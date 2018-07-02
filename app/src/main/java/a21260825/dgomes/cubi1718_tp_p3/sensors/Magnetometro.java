@@ -22,11 +22,11 @@ public class Magnetometro extends CubiSensor {
 
     protected Magnetometro(SensorManager mSensorManager) {
         this.mSensorManager = mSensorManager;
-        valores = new TreeMap<String,String>();
-        valores.put(Config.MAG_X,"");
-        valores.put(Config.MAG_Y,"");
-        valores.put(Config.MAG_Z,"");
-       // valores.put(Config.MAG,"");
+       // valores = new TreeMap<String,String>();
+        valores.put(Config.MAG_X,0.0f);
+        valores.put(Config.MAG_Y,0.0f);
+        valores.put(Config.MAG_Z,0.0f);
+        valores.put(Config.MAG,0.0f);
 
         registo = Registo.getInstance();
         cubiSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
@@ -68,14 +68,23 @@ public class Magnetometro extends CubiSensor {
                     float magX = event.values[0];
                     float magY = event.values[1];
                     float magZ = event.values[2];
-                    float magnitude = (float) Math.sqrt((magX * magX) + (magY * magY) + (magZ * magZ));
-                    valores.put(Config.MAG_X,Float.toString(magX));
-                    valores.put(Config.MAG_Y,Float.toString(magY));
-                    valores.put(Config.MAG_Z,Float.toString(magZ));
-                    valores.put(Config.MAG,Float.toString(magnitude));
-                    result = "Magnetic mag:" + Float.toString(magnitude) + " X: " + Float.toString(magX) + " Y: " + Float.toString(magY) + " Z: " + Float.toString(magZ);
-                    tv.setText(result);
-                    registo.addValores(valores);
+
+                        float magnitude = (float) Math.sqrt((magX * magX) + (magY * magY) + (magZ * magZ));
+                        /*
+                        valores.put(Config.MAG_X,Float.toString(magX));
+                        valores.put(Config.MAG_Y,Float.toString(magY));
+                        valores.put(Config.MAG_Z,Float.toString(magZ));
+                        valores.put(Config.MAG,Float.toString(magnitude));
+                        */
+                        valores.put(Config.MAG_X,magX);
+                        valores.put(Config.MAG_Y,magY);
+                        valores.put(Config.MAG_Z,magZ);
+                        valores.put(Config.MAG,magnitude);
+                        result = "Magnetic mag:" + Float.toString(magnitude) + " X: " + Float.toString(magX) + " Y: " + Float.toString(magY) + " Z: " + Float.toString(magZ);
+                        tv.setText(result);
+                        registo.addValores(valores);
+
+
                 }
             }
         };

@@ -23,10 +23,10 @@ public class Gyroscopio extends CubiSensor {
 
     protected Gyroscopio(SensorManager mSensorManager) {
         this.mSensorManager = mSensorManager;
-        valores = new TreeMap<String,String>();
+        /*valores = new TreeMap<String,String>();
         valores.put("xGyro","");
         valores.put("yGyro","");
-        valores.put("zGyro","");
+        valores.put("zGyro","");*/
         registo = Registo.getInstance();
         cubiSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
@@ -68,9 +68,9 @@ public class Gyroscopio extends CubiSensor {
                     zGyro = event.values[2];
                     result = "Giroscopio X: " + Float.toString(xGyro) + " Y: " + Float.toString(yGyro) + " Z: " + Float.toString(zGyro);
                     tv.setText(result);
-                    valores.put("xGyro",Float.toString(xGyro));
-                    valores.put("yGyro",Float.toString(yGyro));
-                    valores.put("zGyro",Float.toString(zGyro));
+                    valores.put("xGyro",xGyro);
+                    valores.put("yGyro",yGyro);
+                    valores.put("zGyro",zGyro);
                     registo.addValores(valores);
                 }
             }

@@ -1,6 +1,7 @@
 package a21260825.dgomes.cubi1718_tp_p3.utils;
 
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,6 +15,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
@@ -33,9 +36,14 @@ public class Ficheiro {
     private File ficheiro;
     private BufferedWriter bw;
     private PrintWriter saveRecolha;
+    private PrintWriter savePreProc;
     private boolean transferido = true;
     private File[] ficheirosTransferencia;
     private boolean novo = true;
+    private boolean novoPreProc;
+    private File ficheiroPreProc;
+    private BufferedWriter bwPreProc;
+    private boolean savingPreProc;
 
     protected Ficheiro(MainActivity activity) {
         this.activity = activity;
@@ -64,15 +72,39 @@ public class Ficheiro {
             if (saveFicheiro(ficheiro)){
                 novo = true;
                 addLog("Ficheiro a registar\n");
-                return true;
+
+                ficheiroPreProc = new File(pasta, Config.FICHEIRO_PREPROC+"_" + timestamp() +Config.EXTENCAO);
+                if (saveFicheiroPreProc(ficheiroPreProc)){
+                    novoPreProc = true;
+                    addLog("FicheiroPreProc a registar\n");
+                    return true;
+                }else {
+                    addLog("FicheiroPreProc problema\n");
+                    return false;
+                }
+                
             }else {
                 addLog("Ficheiro problema\n");
                 return false;
             }
+            
         }else{
             addLog("Pasta nao criada ou ficheiro nao transferido\n");
             return false;
         }
+    }
+
+    private boolean saveFicheiroPreProc(File ficheiroPreProc) {
+        try {
+            FileWriter fw = new FileWriter(ficheiroPreProc, true);
+            savingPreProc = true;
+            bwPreProc = new BufferedWriter(fw);
+            savePreProc = new PrintWriter(bwPreProc);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public void setTransferido(boolean transferido) {
@@ -89,6 +121,19 @@ public class Ficheiro {
         return false;
     }
 
+    public boolean saveValoresPreProc(Registo registo) {
+        if (savingPreProc){
+            if (novoPreProc) registo.setNovoPreProc();
+            savePreProc.println(registo.toStringPreProc());
+           // Log.d("saveValoresPreProc",Boolean.toString(novoPreProc));
+            //savePreProc.println(registo.toString());
+            novoPreProc = false;
+            return true;
+        }
+        return false;
+    }
+
+
     private boolean saveFicheiro(File ficheiro){
         try {
             FileWriter fw = new FileWriter(ficheiro, true);
@@ -100,12 +145,12 @@ public class Ficheiro {
             return false;
         }
         return true;
-
     }
+    
     public boolean stopSaving(){
-
+        boolean ok = false;
+        boolean ok2 = false;
         if(saving){
-
             try {
                 bw.close();
                 saving = false;
@@ -115,10 +160,30 @@ public class Ficheiro {
                 e.printStackTrace();
                 addLog("Problema na interrupcao de registo em ficheiro\n");
             }
-            return true;
-        }else {
-            return false;
+            try {
+                bwPreProc.close();
+                savingPreProc = false;
+                addLog("Registo em ficheiro preproc interrompido\n");
+                novoPreProc = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                addLog("Problema na interrupcao de registo preproc em ficheiro\n");
+            }
+            ok= true;
         }
+        if(savingPreProc){
+            try {
+                bwPreProc.close();
+                savingPreProc = false;
+                addLog("Registo em ficheiro interrompido\n");
+                novoPreProc = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                addLog("Problema na interrupcao de registo em ficheiro\n");
+            }
+            ok2 = true;
+        }
+        return ok && ok2;
     }
     public boolean criarPasta() {
         pasta = new File(path);
@@ -221,4 +286,6 @@ public class Ficheiro {
     public File[] getFicheirosTransferencia() {
         return ficheirosTransferencia;
     }
+
+
 }

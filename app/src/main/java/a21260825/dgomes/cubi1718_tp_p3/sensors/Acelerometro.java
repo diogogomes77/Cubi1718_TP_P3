@@ -30,10 +30,15 @@ public class Acelerometro extends CubiSensor {
     protected Acelerometro(SensorManager mSensorManager) {
         this.mSensorManager = mSensorManager;
         registo = Registo.getInstance();
-        valores = new TreeMap<String,String>();
+        //valores = new TreeMap<String,Float>();
+        /*
         valores.put(Config.xAcc,"");
         valores.put(Config.yAcc,"");
         valores.put(Config.zAcc,"");
+        */
+        valores.put(Config.xAcc,0.0f);
+        valores.put(Config.yAcc,0.0f);
+        valores.put(Config.zAcc,0.0f);
         cubiSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         gravity = new float[]{0, 0, 0};
         sensorEventListener = new SensorEventListener() {
@@ -54,9 +59,15 @@ public class Acelerometro extends CubiSensor {
                     zAcc = event.values[2] - gravity[2];
                     result = "Acc X: " + round(xAcc) + "\t\t\tY: " + round(yAcc) + "\t\t\tZ: " + round(zAcc);
                     tv.setText(result);
+                    /*
                     valores.put(Config.xAcc,Float.toString(xAcc));
                     valores.put(Config.yAcc,Float.toString(yAcc));
                     valores.put(Config.zAcc,Float.toString(zAcc));
+                    */
+                    valores.put(Config.xAcc,xAcc);
+                    valores.put(Config.yAcc,yAcc);
+                    valores.put(Config.zAcc,zAcc);
+
                     registo.addValores(valores);
                 }
             }

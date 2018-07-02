@@ -44,7 +44,7 @@ public class Localizacao extends CubiSensor {
         this.activity = activity;
         registo = Registo.getInstance();
 
-        valores = new TreeMap<String, String>();
+       // valores = new TreeMap<String, String>();
 
         locationManager = (LocationManager)
                 activity.getSystemService(Context.LOCATION_SERVICE);
@@ -107,18 +107,18 @@ public class Localizacao extends CubiSensor {
     }
     private void preparaLocalizacao(){
 
-        valores.put(Config.LATITUDE,"");
-        valores.put(Config.LONGITUDE,"");
-        valores.put(Config.ALTITUDE,"");
+        valores.put(Config.LATITUDE,0.0f);
+        valores.put(Config.LONGITUDE,0.0f);
+        valores.put(Config.ALTITUDE,0.0f);
 
     }
     private void atualizaLocalizacao(Location location){
         escolheLocationProvider();
         tv.setText("Local ("+ this.locationProvider +"): " + location.getLatitude()+","+location.getLongitude()
                 +","+location.getAltitude());
-        valores.put(Config.LATITUDE,Double.toString(location.getLatitude()));
-        valores.put(Config.LONGITUDE,Double.toString(location.getLongitude()));
-        valores.put(Config.ALTITUDE,Double.toString(location.getAltitude()));
+        valores.put(Config.LATITUDE,(float) location.getLatitude());
+        valores.put(Config.LONGITUDE,(float) location.getLongitude());
+        valores.put(Config.ALTITUDE,(float) location.getAltitude());
         registo.addValores(valores);
     }
 

@@ -23,8 +23,8 @@ public class Luminometro extends CubiSensor {
     protected Luminometro(SensorManager mSensorManager) {
         this.mSensorManager = mSensorManager;
         registo = Registo.getInstance();
-        valores = new TreeMap<String,String>();
-        valores.put(Config.Lum,"");
+        //valores = new TreeMap<String,String>();
+        valores.put(Config.Lum,0.0f);
         cubiSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         sensorEventListener = new SensorEventListener() {
             @Override
@@ -36,7 +36,7 @@ public class Luminometro extends CubiSensor {
                 if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
                         luminosidade = event.values[0];
                         tv.setText("Luminosidade: " + luminosidade);
-                        valores.put(Config.Lum, Float.toString(luminosidade));
+                        valores.put(Config.Lum, luminosidade);
                         registo.addValores(valores);
                 }
             }

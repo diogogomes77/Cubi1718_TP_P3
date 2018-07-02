@@ -25,7 +25,7 @@ public abstract class CubiSensor {
     protected TextView tv;
     protected Registo registo;
 
-    protected TreeMap<String,String> valores;
+    protected TreeMap<String,Float> valores = new TreeMap<>();
 
     protected SensorManager mSensorManager;
     protected SensorEventListener sensorEventListener;
@@ -41,7 +41,7 @@ public abstract class CubiSensor {
         mSensorManager.unregisterListener(sensorEventListener);
     }
 
-    public TreeMap<String, String> getValores() {
+    public TreeMap<String, Float> getValores() {
         return valores;
     }
 

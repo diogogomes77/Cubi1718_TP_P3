@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.util.Log;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class Recolha {
         this.ficheiro = ficheiro;
         cubiSensores = new ArrayList<>();
         registo = Registo.getInstance(cubiSensores,ficheiro);
+        registo.setActivity(activity);
 
         ars=Analyser.getInstance().getArs();
     }
@@ -115,6 +117,7 @@ public class Recolha {
     private void modeTrain(){
 
         ars.setMode(ARSystem.MODE_TRAINING);
+
         for (CubiSensor sensor :cubiSensores) {
             sensor.iniciar();
             activity.addLog(sensor.toString() + " treino iniciado\n");
@@ -160,6 +163,8 @@ public class Recolha {
                     activity.addLog(sensor.toString() + " treino terminado\n");
                 }
                 ars.trainClassifier();
+                Log.d("terminar","ars.toString()");
+                System.out.println(ars.toString());
                 break;
             case Config.SAVE:
                 for (CubiSensor sensor :cubiSensores) {
@@ -176,12 +181,17 @@ public class Recolha {
                 if (ars.isFull()){
                     String label = ars.classify(); //
                     activity.addLog(" ---> Classification: " + label + "\n");
+                    //String last_label = ars.getLastClassifiedLabel();
+                    //Log.d("last_label",last_label);
                 }else{
                     activity.addLog(" ---> Classification: " + "not full yet...\n");
-                }
 
+                }
+                Log.d("terminar","ars.toString()");
+                System.out.println(ars.toString());
                 break;
         }
+
     }
 
     public void pausar() {

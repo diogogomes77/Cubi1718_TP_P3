@@ -48,11 +48,11 @@ public class Bateria extends CubiSensor {
         this.activity = activity;
         registo = Registo.getInstance();
 
-        valores = new TreeMap<String, String>();
+        //valores = new TreeMap<String, String>();
 
 
 
-        valores.put(Config.BATERIA,"");
+        valores.put(Config.BATERIA,0.0f);
         /*
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         batteryStatus = activity.registerReceiver(null, ifilter);
@@ -62,7 +62,7 @@ public class Bateria extends CubiSensor {
             @Override
             public void onReceive(Context arg0, Intent intent) {
                 int level = intent.getIntExtra("level", 0);
-                valores.put(Config.BATERIA,String.valueOf(level));
+                valores.put(Config.BATERIA,(float) level);
                 tv.setText("Batery: " + String.valueOf(level) + "%");
                 registo.addValores(valores);
             }
