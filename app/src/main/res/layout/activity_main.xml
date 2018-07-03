@@ -10,31 +10,33 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="560dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp"
-        android:gravity="center"
-        android:layout_gravity="center">
+        tools:layout_editor_absoluteY="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="horizontal">
-                <LinearLayout
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/mode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <RadioGroup
-                        android:id="@+id/mode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:baselineAligned="true"
-                        android:textAlignment="center"
-                        android:gravity="left"
-                        android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    android:baselineAligned="true"
+                    android:gravity="left"
+                    android:textAlignment="center">
 
                     <RadioButton
                         android:id="@+id/modeLearn"
@@ -56,130 +58,138 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Auto" />
-                    </RadioGroup>
+                </RadioGroup>
 
-                    <Chronometer
-                        android:id="@+id/chrono"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                <Chronometer
+                    android:id="@+id/chrono"
+                    android:layout_width="95dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
-                    <TextView
-                        android:id="@+id/tvFilesNovos"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="ficheiros novos" />
+                <TextView
+                    android:id="@+id/tvFilesNovos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="ficheiros novos" />
 
-
-
-                </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="left">
-                        <RadioGroup
-                            android:id="@+id/atividades1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:baselineAligned="true"
-                            android:textAlignment="center"
-                            android:gravity="left"
-                            android:layout_gravity="center">
-
-                            <RadioButton
-                                android:id="@+id/rbAct1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Andar" />
-
-                            <RadioButton
-                                android:id="@+id/rbAct3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Descer" />
-
-                            <RadioButton
-                                android:id="@+id/rbAct4"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Subir" />
-
-
-                            <RadioButton
-                                android:id="@+id/rbAct10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Sentar" />
-                            <RadioButton
-                                android:id="@+id/rbAct8"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Saltar" />
-                        </RadioGroup>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="left">
-                        <RadioGroup
-                            android:id="@+id/atividades2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:baselineAligned="true"
-                            android:textAlignment="center"
-                            android:gravity="left"
-                            android:layout_gravity="center">
-                            <RadioButton
-                                android:id="@+id/rbAct9"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Agachar" />
-                            <RadioButton
-                                android:id="@+id/rbAct2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Correr" />
-                            <RadioButton
-                                android:id="@+id/rbAct5"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Conduzir" />
-
-                            <RadioButton
-                                android:id="@+id/rbAct6"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Skate Estrada" />
-
-                            <RadioButton
-                                android:id="@+id/rbAct7"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Skate Ramp" />
-                        </RadioGroup>
-                    </LinearLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/atividades1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:baselineAligned="true"
+                    android:gravity="left"
+                    android:textAlignment="center">
+
+                    <RadioButton
+                        android:id="@+id/rbAct1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Andar" />
+
+                    <RadioButton
+                        android:id="@+id/rbAct3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Descer" />
+
+                    <RadioButton
+                        android:id="@+id/rbAct4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Subir" />
+
+
+                    <RadioButton
+                        android:id="@+id/rbAct10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Sentar" />
+
+                    <RadioButton
+                        android:id="@+id/rbAct8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Saltar" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/atividades2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:baselineAligned="true"
+                    android:gravity="left"
+                    android:textAlignment="center">
+
+                    <RadioButton
+                        android:id="@+id/rbAct9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Agachar" />
+
+                    <RadioButton
+                        android:id="@+id/rbAct2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Correr" />
+
+                    <RadioButton
+                        android:id="@+id/rbAct5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Conduzir" />
+
+                    <RadioButton
+                        android:id="@+id/rbAct6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Skate Estrada" />
+
+                    <RadioButton
+                        android:id="@+id/rbAct7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Skate Ramp" />
+                </RadioGroup>
+            </LinearLayout>
+
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal">
+
             <Button
                 android:id="@+id/btRecolha"
                 android:layout_width="match_parent"
@@ -202,49 +212,54 @@
                 android:layout_weight="1"
                 android:text="Transferir" />
         </LinearLayout>
+
+
+
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:orientation="vertical"
-            android:gravity="top">
+            android:layout_height="30dp"
+            android:gravity="top"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/tvFicheiro"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Ficheiro" />
         </LinearLayout>
+
         <LinearLayout
-                android:id="@+id/sensorTvs"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="top">
+            android:id="@+id/sensorTvs"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:orientation="vertical">
 
         </LinearLayout>
 
-
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="250dp"
             android:orientation="vertical">
 
             <ScrollView
                 android:id="@+id/SCROLLER_ID"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="vertical"
-                android:fillViewport="true">
-
+                android:fillViewport="true"
+                android:scrollbars="vertical">
                 <TextView
                     android:id="@+id/tvLog"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1.0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
+                    android:layout_weight="1.0"
                     android:text="..." />
             </ScrollView>
+
+
 
         </LinearLayout>
 
