@@ -52,5 +52,5 @@ public final class Config {
     public static final String FICHEIRO_PREPROC = FICHEIRO + "_preproc";
     public static final long TRAINNING_TIME = 10000; // 10 segundos
 
-    public static final int REGISTO_INTERVALO = 50; // milliseconds
+    public static final int REGISTO_INTERVALO = 5; // milliseconds
 }

@@ -114,7 +114,12 @@ public class Registo {
         }
         int index = Config.PREPROC_COUNTER-preProcCounter;
         //TreeMap<String,Double> registo = new TreeMap<>();
-        listRegistosPreProc.put(index,valoresRegistoPreProc);
+        TreeMap<String, Double> valorNovo = new TreeMap<>();
+        for (Map.Entry<String,Double> valor : valoresRegistoPreProc.entrySet()) {
+            valorNovo.put(valor.getKey(),valor.getValue());
+        }
+        listRegistosPreProc.put(index,valorNovo);
+        //listRegistosPreProc.put(index,valoresRegistoPreProc);
         preProcCounter--;
         if (preProcCounter ==0){
             preProcCalculate(); // <-- problem aqui
@@ -122,17 +127,17 @@ public class Registo {
         }
     }
     private void preProcCalculate(){
-        Log.d("preProcCalculate", "start");
+       // Log.d("preProcCalculate", "start");
         Log.d("preProcCalculate", "listRegistosPreProc: " + listRegistosPreProc.size());
         for (Map.Entry<Integer,TreeMap<String,Double>> registo : listRegistosPreProc.entrySet()) {
             int c = registo.getKey();
             TreeMap<String,Double> reg = registo.getValue();
-            Log.d("listRegistosPreProc", "registo: " + Integer.toString(c));
+            Log.d("listRegistosPreProc", "registo: " + Integer.toString(c));// + " reg:" + reg.toString());
             for (Map.Entry<String, Double> entry : reg.entrySet()) {
                 String key = entry.getKey();
 
                 if (!forPreProc.containsKey(key)){
-                    forPreProc.put(key,new PreProc());
+                    forPreProc.put(key,new PreProc());// cria o PreProc para começar a encher de dados
                     Log.d("forPreProc", "put: " + key);
                 }
                 PreProc preProc = forPreProc.get(key);
@@ -199,7 +204,7 @@ public class Registo {
                     del = sd;
                     //remain.remove(del);
                     String cleanKey = key.replace(del,"");
-                    Log.d("sd", cleanKey);
+                    //Log.d("sd", cleanKey);
                     preProc = forPreProc.get(cleanKey);
                     if(preProc==null){
                         Log.d("toStringPreProc", "preProc: null key:"+ cleanKey);
@@ -390,7 +395,7 @@ public class Registo {
     */
     private void terminaRegisto(){
         lastUpdate = System.currentTimeMillis();
-        Log.d("Registo","terminaRegisto");
+        //Log.d("Registo","terminaRegisto");
         //valoresRegisto.clear();
         for(String key :keys){
             keysRemain.add(key);

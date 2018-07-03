@@ -66,7 +66,7 @@ public class PreProc {
         for(Double i : values){
             res += Double.toString(i)+", ";
         }
-        Log.d("sd","values= "+res);
+       // Log.d("sd","values= "+res);
         return result;
     }
 
