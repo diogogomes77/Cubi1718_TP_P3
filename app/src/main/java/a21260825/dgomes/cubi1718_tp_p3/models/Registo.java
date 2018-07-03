@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.analise.Analyser;
@@ -31,11 +32,11 @@ public class Registo {
     private String atividade;
     private long lastUpdate;
     private boolean novo = true;
-    private TreeMap<String,Float> valoresRegistoPreProc;
-    private List<TreeMap<String,Float>> listRegistosPreProc;
+    private TreeMap<String,Double> valoresRegistoPreProc;
+    private TreeMap<Integer,TreeMap<String,Double>> listRegistosPreProc;
     private int preProcCounter;
 
-    private List<String> keys;
+    private List<String> keys,keysRemain;
     private ARSystem ars;
     private MainActivity activity;
     private boolean novoPreProc= true;
@@ -50,7 +51,7 @@ public class Registo {
         valoresRegisto = new TreeMap<>();
         valoresRegistoPreProc = new TreeMap<>();
         this.ars = Analyser.getInstance().getArs();
-        listRegistosPreProc = new ArrayList<>();
+        listRegistosPreProc = new TreeMap<>();
         resultPreProc = new StringBuilder();
         result = new StringBuilder();
     }
@@ -82,23 +83,23 @@ public class Registo {
         return null;
     }
 
-    private void carregaValores(){
+    private void carregaValoresIniciais(){
         //Log.d("Registo","carregaValores");
-
+        keys = new ArrayList<>();
+        keysRemain = new ArrayList<>();
         for (CubiSensor sensor: cubiSensores) {
-            TreeMap valores =  sensor.getValores();
-            Iterator it = valores.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry valor = (Map.Entry)it.next();
-                String key = (String)valor.getKey();
-                Float value = (float)valor.getValue();
-                //if (value!=null && value!="") {
-                    cardinalValores++;
-                    valoresRegisto.put(key, value);
-                //}
-                    it.remove();
 
+            TreeMap<String, Float> valores =  sensor.getValores();
+            for (Map.Entry<String, Float> entry : valores.entrySet()) {
+                String key = entry.getKey();
+                Float value = entry.getValue();
+                keys.add(key);
+                keysRemain.add(key);
+                cardinalValores++;
+                valoresRegisto.put(key, value);
+                Log.d("valoresRegisto", "key:" + key + " put: " + Double.toString(value));
             }
+            contador = cardinalValores;
         }
         preProcInit();
         //Log.d("cardinalValores",Integer.toString(cardinalValores));
@@ -107,33 +108,36 @@ public class Registo {
     private void addPreProc(){
 
         for (String key: keys) {
-            Float value = valoresRegisto.get(key);
+            double value = valoresRegisto.get(key);
             valoresRegistoPreProc.put(key,value);
+           // Log.d("valoresRegistoPreProc", "key:" + key + " put: " + Double.toString(value));
         }
-
-        listRegistosPreProc.add(valoresRegistoPreProc);
+        int index = Config.PREPROC_COUNTER-preProcCounter;
+        //TreeMap<String,Double> registo = new TreeMap<>();
+        listRegistosPreProc.put(index,valoresRegistoPreProc);
         preProcCounter--;
-
         if (preProcCounter ==0){
             preProcCalculate(); // <-- problem aqui
             preProcInit();
         }
     }
     private void preProcCalculate(){
-       // Log.d("preProcCalculate", "start");
-       // Log.d("preProcCalculate", "listRegistosPreProc: " + listRegistosPreProc.size());
-        for (TreeMap<String,Float> registo : listRegistosPreProc) {
-           // Log.d("listRegistosPreProc", "registo: " + registo);
-            for (Map.Entry<String, Float> entry : registo.entrySet()) {
+        Log.d("preProcCalculate", "start");
+        Log.d("preProcCalculate", "listRegistosPreProc: " + listRegistosPreProc.size());
+        for (Map.Entry<Integer,TreeMap<String,Double>> registo : listRegistosPreProc.entrySet()) {
+            int c = registo.getKey();
+            TreeMap<String,Double> reg = registo.getValue();
+            Log.d("listRegistosPreProc", "registo: " + Integer.toString(c));
+            for (Map.Entry<String, Double> entry : reg.entrySet()) {
                 String key = entry.getKey();
-                //Log.d("registo", key+": "+value);
+
                 if (!forPreProc.containsKey(key)){
                     forPreProc.put(key,new PreProc());
                     Log.d("forPreProc", "put: " + key);
                 }
                 PreProc preProc = forPreProc.get(key);
                 preProc.addValue(entry.getValue());
-                //Log.d("preProc", "key:" + key + " addValue: " + Double.toString(entry.getValue()));
+                Log.d("preProc", "key:" + key + " addValue: " + Double.toString(entry.getValue()));
             }
         }
         ficheiro.saveValoresPreProc(this);
@@ -297,20 +301,25 @@ public class Registo {
 
     public void addValores(TreeMap<String,Float> valores){
         //Log.d("Registo","addValores");
-        if (contador==cardinalValores){
-            carregaValores();
+        if (0==cardinalValores){
+            carregaValoresIniciais();
         }else {
             long curTime = System.currentTimeMillis();
             long passed = curTime - lastUpdate;
             if (passed > Config.REGISTO_INTERVALO){
                 for(Map.Entry<String,Float> valor : valores.entrySet()) {
-                    String key = (String)valor.getKey();
-                    Float value = (float)valor.getValue();
+                    String key = valor.getKey();
+                    Float value = valor.getValue();
                     valoresRegisto.put(key,value);
-                    contador--;
-                    //Log.d("addValores", key + "=" + Float.toString(value));
-                    terminaRegisto();
+                    keysRemain.remove(key);
+                    //  Log.d("valoresRegisto", "cardinal:" +Integer.toString(cardinalValores) + " keysRemain.size:"+Integer.toString(keysRemain.size())+" " +key + " put: " + Float.toString(value));
+
+                    if (keysRemain.size()==0){
+                        terminaRegisto();
+                    }
                 }
+
+
             }
           //  wekaAdd(valores);
 
@@ -381,8 +390,11 @@ public class Registo {
     */
     private void terminaRegisto(){
         lastUpdate = System.currentTimeMillis();
-        //Log.d("Registo","terminaRegisto");
+        Log.d("Registo","terminaRegisto");
         //valoresRegisto.clear();
+        for(String key :keys){
+            keysRemain.add(key);
+        }
         ficheiro.saveValores(this);
 
         addPreProc();
@@ -425,12 +437,12 @@ public class Registo {
         result.append("activity");
         result.append(",");
         //Iterator it = valoresRegisto.entrySet().iterator();
-        keys = new ArrayList<>();
+
         for(Map.Entry<String,Float> entry : valoresRegisto.entrySet()) {
             String key = entry.getKey();
             result.append(key);
             result.append(",");
-            keys.add(key);
+
         }/*
         while (it.hasNext()) {
             Map.Entry valor = (Map.Entry)it.next();
