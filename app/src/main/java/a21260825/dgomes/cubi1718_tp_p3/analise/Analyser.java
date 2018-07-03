@@ -2,6 +2,7 @@ package a21260825.dgomes.cubi1718_tp_p3.analise;
 
 import android.util.Log;
 
+import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 import arsystem.ARSubSystemBuilder;
 import arsystem.ARSystem;
 import arsystem.ARSystemBuilder;
@@ -130,11 +131,12 @@ public class Analyser {
                  // etc ...
                 .classifier(new WekaClassifier(new RandomForest()))
                 //.classifier(new WekaClassifier(new J48()))
-                .classificationLabels("LshakeH", "LshakeV", "TwistH", "TwistV", "SshakeH", "SshakeV")
+                .classificationLabels(Config.ACT1, Config.ACT2, Config.ACT3, Config.ACT4, Config.ACT5,
+                        Config.ACT6,Config.ACT7,Config.ACT8,Config.ACT9,Config.ACT10)
                 //.subSystem(subSystemBuilder1)
                 //.subSystem(subSystemBuilder2)
                 //.subLabelDelimiter("_")
-                .reuseSameInstance(true)
+                .reuseSameInstance(false)
                 .createSystem();
        System.out.println(ars.toString());
        //Log.d("init",ars.toString());

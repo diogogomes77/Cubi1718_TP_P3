@@ -323,11 +323,8 @@ public class Registo {
                         terminaRegisto();
                     }
                 }
-
-
+                wekaAdd(valores);
             }
-          //  wekaAdd(valores);
-
 
         }
     }
@@ -356,37 +353,28 @@ public class Registo {
 
         }else {
             // if (ars.getMode() == ARSystem.MODE_TRAINING) {
-            if (valoresRegisto.get("acc_x") != null && valoresRegisto.get("acc_y") != null && valoresRegisto.get("acc_z") != null) {
-                if (valoresRegisto.get("mag_x") != null && valoresRegisto.get("mag_y") != null && valoresRegisto.get("mag_z") != null) {
-                    if (valoresRegisto.get("mag_mag") != null) {
-                                /*
-                                Float acc_x = Float.parseFloat(valoresRegisto.get("acc_x"));
-                                Float acc_y = Float.parseFloat(valoresRegisto.get("acc_y"));
-                                Float acc_z = Float.parseFloat(valoresRegisto.get("acc_z"));
-                                */
-                        Float acc_x = valoresRegisto.get("acc_x");
-                        Float acc_y = valoresRegisto.get("acc_y");
-                        Float acc_z = valoresRegisto.get("acc_z");
-                        ars.addData(0, acc_x, acc_y, acc_z); //add data from acc
-                                /*
-                                Float mag_mag = Float.parseFloat(valoresRegisto.get("mag_mag"));
-                                Float mag_x = Float.parseFloat(valoresRegisto.get("mag_x"));
-                                Float mag_y = Float.parseFloat(valoresRegisto.get("mag_y"));
-                                Float mag_z = Float.parseFloat(valoresRegisto.get("mag_z"));
-                                */
-                        Float mag_mag = valoresRegisto.get("mag_mag");
-                        Float mag_x = valoresRegisto.get("mag_x");
-                        Float mag_y = valoresRegisto.get("mag_y");
-                        Float mag_z = valoresRegisto.get("mag_z");
-                        ars.addData(1, mag_mag, mag_x, mag_y, mag_z); //add data from mag
-                    }
-                }
-            }
+            double acc_x,acc_y,acc_z,mag_mag,mag_x,mag_y,mag_z;
+            acc_x = valoresRegisto.get("acc_x");
+            acc_y = valoresRegisto.get("acc_y");
+            acc_z = valoresRegisto.get("acc_z");
+            mag_mag = valoresRegisto.get("mag_mag");
+            mag_x = valoresRegisto.get("mag_x");
+            mag_y = valoresRegisto.get("mag_y");
+            mag_z = valoresRegisto.get("mag_z");
+            String data = getData(acc_x)+getData(acc_y)+getData(acc_z);
+            Log.d("ars.addData", data);
+            data = getData(mag_mag)+getData(mag_x)+getData(mag_y)+getData(mag_z);
+            Log.d("ars.addData", data);
+            ars.addData(0, acc_x, acc_y, acc_z); //add data from acc
+            ars.addData(1, mag_mag, mag_x, mag_y, mag_z); //add data from mag
+            Log.d("instances", Integer.toString(ars.getFeaturesInstanceList().size()));
             //   }
         }
     }
 
-
+    private String getData(double data){
+        return ", " + Double.toString(data);
+    }
     /*
         private void iniciaRegisto(){
             carregaValores();
@@ -402,8 +390,8 @@ public class Registo {
         }
         ficheiro.saveValores(this);
 
-        addPreProc();
-        //iniciaRegisto();
+       // addPreProc();
+        //iniciaRegisto()
     }
 
     private String timestamp(){

@@ -15,13 +15,13 @@ public final class Config {
     public static final String ACT1 = "LshakeH"; // abanar horizontal longo
     public static final String ACT2 = "LshakeV"; // abanar vertical longo
     public static final String ACT3 = "TwistH"; // girar horizontal
-    public static final String ACT4 = "TwistV"; // girar vertical
+    public static final String ACT4 = "Sit"; // girar vertical
     public static final String ACT5 = "SshakeH"; // abanar horizontal curto
     public static final String ACT6 = "SshakeV"; // abanar vertical curto
-    public static final String ACT7 = "ACT7";
-    public static final String ACT8 = "ACT8";
-    public static final String ACT9 = "ACT9";
-    public static final String ACT10 = "ACT10";
+    public static final String ACT7 = "Walk";
+    public static final String ACT8 = "PushP";
+    public static final String ACT9 = "GirarE";
+    public static final String ACT10 = "GirarD";
 
     public static final String HOST = "urbysense.dei.uc.pt";
     public static final String USER = "cubistudent";

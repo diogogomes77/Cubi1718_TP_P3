@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
 
         contarFicheirosNovos();
 
-        /*
+
         ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
 
         try {
@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-*/
+
 
 
         simpleChronometer.setBase(SystemClock.elapsedRealtime());
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
 
         recolha.iniciar(modo);
 
-        /*
+
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -309,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
                 terminarRecolha();
             }
         }, Config.TRAINNING_TIME);
-*/
+
 
     }
 
