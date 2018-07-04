@@ -14,6 +14,10 @@ public final class Config {
 
     public static final String ACT1 = "LshakeH"; // abanar horizontal longo
     public static final String ACT2 = "LshakeV"; // abanar vertical longo
+    public static final String ACT1a = "Left"; // abanar horizontal longo
+    public static final String ACT2a = "Up"; // abanar vertical longo
+    public static final String ACT1b = "Right"; // abanar horizontal longo
+    public static final String ACT2b = "Down"; // abanar vertical longo
     public static final String ACT3 = "TwistH"; // girar horizontal
     public static final String ACT4 = "Sit"; // girar vertical
     public static final String ACT5 = "SshakeH"; // abanar horizontal curto

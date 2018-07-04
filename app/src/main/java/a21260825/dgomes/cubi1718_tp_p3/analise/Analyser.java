@@ -26,8 +26,8 @@ import weka.classifiers.trees.RandomForest;
 public class Analyser {
     //final int windowSize = 64;
     //final int overlapSize = 32;
-    final int windowSize = 32;
-    final int overlapSize = 16;
+    final int windowSize = 64;
+    final int overlapSize = 32;
 
     private ARSubSystemBuilder subSystemBuilder1,subSystemBuilder2;
     private ARSystemBuilder systemBuilder;
@@ -40,7 +40,7 @@ public class Analyser {
     }
     protected Analyser() {
         //SUBSYSTEM
-        subSystemBuilder1 = new ARSubSystemBuilder("LshakeH");
+        subSystemBuilder1 = new ARSubSystemBuilder(Config.ACT1);
         subSystemBuilder1
                 .featureExtractor("acc_x", RawNumericData.class).passDataDimension("acc", "x").done()
                 .featureExtractor("difPosMaxMin_acc_x", DifPosMaxMin.class).passDataDimension("acc", "x").done()
@@ -48,16 +48,16 @@ public class Analyser {
                 .featureExtractor("max_acc_x", Max.class).passDataDimension("acc", "x").done()
                 .featureExtractor("min_acc_x", Min.class).passDataDimension("acc", "x").done()
                 .featureSelector( new WekaFeatureSelector( new CfsSubsetEval() ) )
-                .classificationLabels("LEFT", "RIGHT")
+                .classificationLabels(Config.ACT1a, Config.ACT1b)
                 .classifier( new WekaClassifier( new RandomForest() ) );
-        subSystemBuilder2 = new ARSubSystemBuilder("LshakeV");
+        subSystemBuilder2 = new ARSubSystemBuilder(Config.ACT2);
         subSystemBuilder2
                 .featureExtractor("acc_y", RawNumericData.class).passDataDimension("acc", "y").done()
                 .featureExtractor("difPosMaxMin_acc_y", DifPosMaxMin.class).passDataDimension("acc", "y").done()
                 .featureExtractor("acc_y_quarterMean", QuarterMeans.class).passDataDimension("acc", "y").done()
                 .featureExtractor("max_acc_y", Max.class).passDataDimension("acc", "y").done()
                 .featureExtractor("min_acc_y", Min.class).passDataDimension("acc", "y").done()
-                .classificationLabels("UP", "DOWN")
+                .classificationLabels(Config.ACT2a, Config.ACT2b)
                 .classifier( new WekaClassifier( new RandomForest() ) );
 
         /*
@@ -133,9 +133,9 @@ public class Analyser {
                 //.classifier(new WekaClassifier(new J48()))
                 .classificationLabels(Config.ACT1, Config.ACT2, Config.ACT3, Config.ACT4, Config.ACT5,
                         Config.ACT6,Config.ACT7,Config.ACT8,Config.ACT9,Config.ACT10)
-                //.subSystem(subSystemBuilder1)
-                //.subSystem(subSystemBuilder2)
-                //.subLabelDelimiter("_")
+                .subSystem(subSystemBuilder1)
+                .subSystem(subSystemBuilder2)
+                .subLabelDelimiter("_")
                 .reuseSameInstance(false)
                 .createSystem();
        System.out.println(ars.toString());
