@@ -12,10 +12,11 @@ import java.util.TreeSet;
 
 import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.analise.Analyser;
+import a21260825.dgomes.cubi1718_tp_p3.preprocessamento.Calculadora;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.CubiSensor;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Ficheiro;
-import a21260825.dgomes.cubi1718_tp_p3.utils.PreProc;
+
 import arsystem.ARSystem;
 
 /**
@@ -32,41 +33,41 @@ public class Registo {
     private String atividade;
     private long lastUpdate;
     private boolean novo = true;
-    private TreeMap<String,Double> valoresRegistoPreProc;
-    private TreeMap<Integer,TreeMap<String,Double>> listRegistosPreProc;
+    private TreeMap<String,Double> valoresRegistoCalculadora;
+    private TreeMap<Integer,TreeMap<String,Double>> listRegistosCalculadora;
     private int preProcCounter;
 
     private List<String> keys,keysRemain;
     private ARSystem ars;
     private MainActivity activity;
-    private boolean novoPreProc= true;
-    private TreeMap<String,PreProc> forPreProc = new TreeMap<>();
-    private ArrayList<String> keysPreProc;
+    private boolean novoCalculadora= true;
+    private TreeMap<String,Calculadora> forCalculadora = new TreeMap<>();
+    private ArrayList<String> keysCalculadora;
     private double preProcValue;
-    private StringBuilder result,resultPreProc;
+    private StringBuilder result,resultCalculadora;
 
     protected Registo(List<CubiSensor> cubiSensores, Ficheiro ficheiro) {
         this.cubiSensores = cubiSensores;
         this.ficheiro = ficheiro;
         valoresRegisto = new TreeMap<>();
-        valoresRegistoPreProc = new TreeMap<>();
+        valoresRegistoCalculadora = new TreeMap<>();
         this.ars = Analyser.getInstance().getArs();
-        listRegistosPreProc = new TreeMap<>();
-        resultPreProc = new StringBuilder();
+        listRegistosCalculadora = new TreeMap<>();
+        resultCalculadora = new StringBuilder();
         result = new StringBuilder();
     }
 
     private void preProcInit(){
         Log.d("Registo","preProcInit");
-        valoresRegistoPreProc.clear();
-        listRegistosPreProc.clear();
+        valoresRegistoCalculadora.clear();
+        listRegistosCalculadora.clear();
         preProcCounter = Config.PREPROC_COUNTER;
     }
-    private void resetPreProcs(){
-        Log.d("Registo","resetPreProcs");
-        PreProc preProc;
+    private void resetCalculadoras(){
+        Log.d("Registo","resetCalculadoras");
+        Calculadora preProc;
         for (String key: keys) {
-            preProc = forPreProc.get(key);
+            preProc = forCalculadora.get(key);
             preProc.resetValues();
         }
     }
@@ -105,21 +106,21 @@ public class Registo {
         //Log.d("cardinalValores",Integer.toString(cardinalValores));
     }
 
-    private void addPreProc(){
+    private void addCalculadora(){
 
         for (String key: keys) {
             double value = valoresRegisto.get(key);
-            valoresRegistoPreProc.put(key,value);
-           // Log.d("valoresRegistoPreProc", "key:" + key + " put: " + Double.toString(value));
+            valoresRegistoCalculadora.put(key,value);
+           // Log.d("valoresRegistoCalculadora", "key:" + key + " put: " + Double.toString(value));
         }
         int index = Config.PREPROC_COUNTER-preProcCounter;
         //TreeMap<String,Double> registo = new TreeMap<>();
         TreeMap<String, Double> valorNovo = new TreeMap<>();
-        for (Map.Entry<String,Double> valor : valoresRegistoPreProc.entrySet()) {
+        for (Map.Entry<String,Double> valor : valoresRegistoCalculadora.entrySet()) {
             valorNovo.put(valor.getKey(),valor.getValue());
         }
-        listRegistosPreProc.put(index,valorNovo);
-        //listRegistosPreProc.put(index,valoresRegistoPreProc);
+        listRegistosCalculadora.put(index,valorNovo);
+        //listRegistosCalculadora.put(index,valoresRegistoCalculadora);
         preProcCounter--;
         if (preProcCounter ==0){
             preProcCalculate(); // <-- problem aqui
@@ -128,37 +129,37 @@ public class Registo {
     }
     private void preProcCalculate(){
        // Log.d("preProcCalculate", "start");
-        Log.d("preProcCalculate", "listRegistosPreProc: " + listRegistosPreProc.size());
-        for (Map.Entry<Integer,TreeMap<String,Double>> registo : listRegistosPreProc.entrySet()) {
+        Log.d("preProcCalculate", "listRegistosCalculadora: " + listRegistosCalculadora.size());
+        for (Map.Entry<Integer,TreeMap<String,Double>> registo : listRegistosCalculadora.entrySet()) {
             int c = registo.getKey();
             TreeMap<String,Double> reg = registo.getValue();
-            Log.d("listRegistosPreProc", "registo: " + Integer.toString(c));// + " reg:" + reg.toString());
+            Log.d("listRegistosCalculadora", "registo: " + Integer.toString(c));// + " reg:" + reg.toString());
             for (Map.Entry<String, Double> entry : reg.entrySet()) {
                 String key = entry.getKey();
 
-                if (!forPreProc.containsKey(key)){
-                    forPreProc.put(key,new PreProc());// cria o PreProc para começar a encher de dados
-                    Log.d("forPreProc", "put: " + key);
+                if (!forCalculadora.containsKey(key)){
+                    forCalculadora.put(key,new Calculadora());// cria o Calculadora para começar a encher de dados
+                    Log.d("forCalculadora", "put: " + key);
                 }
-                PreProc preProc = forPreProc.get(key);
+                Calculadora preProc = forCalculadora.get(key);
                 preProc.addValue(entry.getValue());
                 Log.d("preProc", "key:" + key + " addValue: " + Double.toString(entry.getValue()));
             }
         }
-        ficheiro.saveValoresPreProc(this);
-        resetPreProcs();
+        ficheiro.saveValoresCalculadora(this);
+        resetCalculadoras();
     }
-    public String toStringPreProc(){
-        if (novoPreProc){
-            String headerPreProc = headerPreProc();
-            Log.d("toStringPreProc", "header: " + headerPreProc);
-            return headerPreProc;
+    public String toStringCalculadora(){
+        if (novoCalculadora){
+            String headerCalculadora = headerCalculadora();
+            Log.d("toStringCalculadora", "header: " + headerCalculadora);
+            return headerCalculadora;
         }else {
-            //Log.d("toStringPreProc", "keysPreProc: " + keysPreProc.size());
-            PreProc preProc = null;
-            resultPreProc.setLength(0);
-            resultPreProc.append(atividade);
-            resultPreProc.append(",");
+            //Log.d("toStringCalculadora", "keysCalculadora: " + keysCalculadora.size());
+            Calculadora preProc = null;
+            resultCalculadora.setLength(0);
+            resultCalculadora.append(atividade);
+            resultCalculadora.append(",");
             String mean = "mean_";
             String median = "median_";
             String sd ="sd_";
@@ -170,33 +171,33 @@ public class Registo {
             remain.add(sd);
             remain.add(fft);
             preProcValue = 0.0;
-            for (String key: keysPreProc) {
-                // Log.d("toStringPreProc", "key: " + key);
+            for (String key: keysCalculadora) {
+                // Log.d("toStringCalculadora", "key: " + key);
 
                 if(key.contains(mean)){
                     del = mean;
                     //remain.remove(del);
                     String cleanKey = key.replace(del,"");
-                    preProc = forPreProc.get(cleanKey);
+                    preProc = forCalculadora.get(cleanKey);
                     if(preProc==null){
-                        Log.d("toStringPreProc", "preProc: null key:"+ cleanKey);
+                        Log.d("toStringCalculadora", "preProc: null key:"+ cleanKey);
                     }
-                    if (checkPreProc(preProc,cleanKey))
+                    if (checkCalculadora(preProc,cleanKey))
                         preProcValue = preProc.mean();
-                    else Log.d("checkPreProc", "false");
+                    else Log.d("checkCalculadora", "false");
                     //preProcValue = 22.22;
                 }
                 else if(key.contains(median)){
                     del = median;
                     //remain.remove(del);
                     String cleanKey = key.replace(del,"");
-                    preProc = forPreProc.get(cleanKey);
+                    preProc = forCalculadora.get(cleanKey);
                     if(preProc==null){
-                        Log.d("toStringPreProc", "preProc: null key:"+ cleanKey);
+                        Log.d("toStringCalculadora", "preProc: null key:"+ cleanKey);
                     }
-                    if (checkPreProc(preProc,cleanKey))
+                    if (checkCalculadora(preProc,cleanKey))
                         preProcValue = preProc.median();
-                    else Log.d("checkPreProc", "false");
+                    else Log.d("checkCalculadora", "false");
                     //preProcValue = 22.22;
                 }
                 else if(key.contains(sd)){
@@ -205,33 +206,33 @@ public class Registo {
                     //remain.remove(del);
                     String cleanKey = key.replace(del,"");
                     //Log.d("sd", cleanKey);
-                    preProc = forPreProc.get(cleanKey);
+                    preProc = forCalculadora.get(cleanKey);
                     if(preProc==null){
-                        Log.d("toStringPreProc", "preProc: null key:"+ cleanKey);
+                        Log.d("toStringCalculadora", "preProc: null key:"+ cleanKey);
                     }
-                    if (checkPreProc(preProc,cleanKey))
+                    if (checkCalculadora(preProc,cleanKey))
                         preProcValue = preProc.sd();
-                    else Log.d("checkPreProc", "false");
+                    else Log.d("checkCalculadora", "false");
                     //preProcValue = 22.22;
                 }
                 else if(key.contains(fft)){
                     del = fft;
                     //remain.remove(del);
                     String cleanKey = key.replace(del,"");
-                    preProc = forPreProc.get(cleanKey);
+                    preProc = forCalculadora.get(cleanKey);
                     if(preProc==null){
-                        Log.d("toStringPreProc", "preProc: null key:"+ cleanKey);
+                        Log.d("toStringCalculadora", "preProc: null key:"+ cleanKey);
                     }
-                    if (checkPreProc(preProc,cleanKey))
+                    if (checkCalculadora(preProc,cleanKey))
                         preProcValue = preProc.fft();
-                    else Log.d("checkPreProc", "false");
+                    else Log.d("checkCalculadora", "false");
                     //preProcValue = 22.22;
                 }else{
                     preProcValue = 10000.0;
                 }
 
                 if(preProc==null){
-                    Log.d("toStringPreProc", "preProc: null key:"+ key);
+                    Log.d("toStringCalculadora", "preProc: null key:"+ key);
                 }
                 /*else{
                     if (remain.size()==0){
@@ -244,33 +245,33 @@ public class Registo {
                 }*/
                 //preProcValue = 22.22;
                 String value = Double.toString(preProcValue);
-                resultPreProc.append(value);
-                resultPreProc.append(",");
+                resultCalculadora.append(value);
+                resultCalculadora.append(",");
                // Log.d("preProcValue: ", key + ": " + value);
             }
 
-            resultPreProc.append(timestamp());
-            return resultPreProc.toString();
+            resultCalculadora.append(timestamp());
+            return resultCalculadora.toString();
         }
     }
 
-    private Boolean checkPreProc(PreProc preProc, String key){
+    private Boolean checkCalculadora(Calculadora preProc, String key){
         int preProcSize = preProc.getValues().size();
         if (preProcSize<Config.PREPROC_COUNTER){
-            Log.d("checkPreProc", key + ": " + Integer.toString(preProcSize) + " <Config.PREPROC_COUNTER " + Integer.toString(Config.PREPROC_COUNTER));
+            Log.d("checkCalculadora", key + ": " + Integer.toString(preProcSize) + " <Config.PREPROC_COUNTER " + Integer.toString(Config.PREPROC_COUNTER));
             return false;
         }else {
-            //Log.d("checkPreProc", key + ": " + Integer.toString(preProcSize));
+            //Log.d("checkCalculadora", key + ": " + Integer.toString(preProcSize));
             return true;
         }
     }
-    private String headerPreProc() {
-        novoPreProc = false;
+    private String headerCalculadora() {
+        novoCalculadora = false;
         StringBuilder result = new StringBuilder();
         result.append("activity");
         result.append(",");
         //Iterator it = valoresRegisto.entrySet().iterator();
-        keysPreProc = new ArrayList<>();
+        keysCalculadora = new ArrayList<>();
         List<String> extras = new ArrayList<>();
         extras.add("mean");
         extras.add("median");
@@ -279,21 +280,21 @@ public class Registo {
         for(String extra : extras){
             Log.d("extras","added: " + extra);
         }
-        for (Map.Entry<String, PreProc> registo : forPreProc.entrySet()) {
-            //PreProc preProcCounter = registo.getValue();
+        for (Map.Entry<String, Calculadora> registo : forCalculadora.entrySet()) {
+            //Calculadora preProcCounter = registo.getValue();
 
             String key = registo.getKey();
-            Log.d("forPreProc","key: " + key);
+            Log.d("forCalculadora","key: " + key);
             for(String extra : extras){
                 String extraKey = extra + "_" + key;
                 result.append(extraKey);
                 result.append(",");
-                keysPreProc.add(extraKey);
+                keysCalculadora.add(extraKey);
             }
 
         }
-        for(String extraKey : keysPreProc){
-            Log.d("keysPreProc","added: " + extraKey);
+        for(String extraKey : keysCalculadora){
+            Log.d("keysCalculadora","added: " + extraKey);
         }
         result.append("timestamp");
         return result.toString();
@@ -390,7 +391,7 @@ public class Registo {
         }
         ficheiro.saveValores(this);
 
-       // addPreProc();
+       // addCalculadora();
         //iniciaRegisto()
     }
 
@@ -458,7 +459,7 @@ public class Registo {
         this.activity = activity;
     }
 
-    public void setNovoPreProc() {
-        this.novoPreProc=true;
+    public void setNovoCalculadora() {
+        this.novoCalculadora=true;
     }
 }

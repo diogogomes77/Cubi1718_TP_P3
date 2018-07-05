@@ -5,4 +5,6 @@ package a21260825.dgomes.cubi1718_tp_p3.preprocessamento;
  */
 
 public class PreProc {
+    public void setNovoPreProc() {
+    }
 }

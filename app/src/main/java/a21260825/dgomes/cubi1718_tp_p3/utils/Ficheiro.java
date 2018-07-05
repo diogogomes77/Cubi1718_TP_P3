@@ -20,6 +20,7 @@ import java.util.TreeMap;
 
 import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
+import a21260825.dgomes.cubi1718_tp_p3.preprocessamento.PreProc;
 
 /**
  * Created by diogo on 14-04-2018.
@@ -121,10 +122,10 @@ public class Ficheiro {
         return false;
     }
 
-    public boolean saveValoresPreProc(Registo registo) {
+    public boolean saveValoresCalculadora(PreProc registo) {
         if (savingPreProc){
             if (novoPreProc) registo.setNovoPreProc();
-            savePreProc.println(registo.toStringPreProc());
+            savePreProc.println(registo.toString());
            // Log.d("saveValoresPreProc",Boolean.toString(novoPreProc));
             //savePreProc.println(registo.toString());
             novoPreProc = false;

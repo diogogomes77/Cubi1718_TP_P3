@@ -11,10 +11,10 @@ import a21260825.dgomes.cubi1718_tp_p3.utils.FFT;
  * Created by diogo on 01-07-2018.
  */
 
-public class PreProc {
+public class Calculadora {
     private List<Double> values;
 
-    public PreProc() {
+    public Calculadora() {
         values= new ArrayList<>();
     }
 
