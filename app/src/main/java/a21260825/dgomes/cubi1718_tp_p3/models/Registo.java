@@ -11,7 +11,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
-import a21260825.dgomes.cubi1718_tp_p3.analise.Analyser;
 import a21260825.dgomes.cubi1718_tp_p3.arsystem.ArsLib;
 import a21260825.dgomes.cubi1718_tp_p3.preprocessamento.Calculadora;
 import a21260825.dgomes.cubi1718_tp_p3.preprocessamento.PreProc;
@@ -40,7 +39,7 @@ public class Registo {
     private boolean novo = true;
 
     private List<String> keys,keysRemain;
-    private ARSystem ars;
+
     private MainActivity activity;
     
     private StringBuilder result;
@@ -90,16 +89,16 @@ public class Registo {
             contador = cardinalValores;
         }
         preProc.setValores(valoresRegisto);
+        preProc.setKeys(keys);
         preProc.init();
         //Log.d("cardinalValores",Integer.toString(cardinalValores));
     }
 
-    private void addCalculadora(){
-        preProc.addCalculadora();
-    }
 
     public void setAtividade(String atividade) {
         this.atividade = atividade;
+        preProc.setAtividade(atividade);
+        arsLib.setAtividade(atividade);
     }
 
     public void addValores(TreeMap<String,Float> valores){
@@ -110,6 +109,7 @@ public class Registo {
             long curTime = System.currentTimeMillis();
             long passed = curTime - lastUpdate;
             if (passed > Config.REGISTO_INTERVALO){
+
                 for(Map.Entry<String,Float> valor : valores.entrySet()) {
                     String key = valor.getKey();
                     Float value = valor.getValue();
@@ -121,25 +121,15 @@ public class Registo {
                         terminaRegisto();
                     }
                 }
-                wekaAdd(valores);
+                arsLib.addValores(valoresRegisto);
             }
 
         }
     }
 
-    private void wekaAdd(TreeMap<String, Float> valores) {
-        arsLib.addValores(valores);
-    }
 
-    private String getData(double data){
-        return ", " + Double.toString(data);
-    }
-    /*
-        private void iniciaRegisto(){
-            carregaValores();
-            contador = cardinalValores;
-        }
-    */
+
+
     private void terminaRegisto(){
         lastUpdate = System.currentTimeMillis();
         //Log.d("Registo","terminaRegisto");
@@ -149,7 +139,7 @@ public class Registo {
         }
         ficheiro.saveValores(this);
 
-       // addCalculadora();
+        preProc.addCalculadora();
         //iniciaRegisto()
     }
 
@@ -180,9 +170,6 @@ public class Registo {
     }
 
 
-
-
-
     private String header() {
         novo = false;
         StringBuilder result = new StringBuilder();
@@ -195,16 +182,7 @@ public class Registo {
             result.append(key);
             result.append(",");
 
-        }/*
-        while (it.hasNext()) {
-            Map.Entry valor = (Map.Entry)it.next();
-            String key = (String)valor.getKey();
-            //String value = (String)valor.getValue();
-            result.append(key);
-            result.append(",");
-            keys.add(key);
-            it.remove();
-        }*/
+        }
         result.append("timestamp");
         return result.toString();
     }
@@ -215,6 +193,7 @@ public class Registo {
 
     public void setActivity(MainActivity activity) {
         this.activity = activity;
+        arsLib.setActivity(activity);
     }
 
     public void setNovoCalculadora() {

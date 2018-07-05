@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
-import a21260825.dgomes.cubi1718_tp_p3.analise.Analyser;
+import a21260825.dgomes.cubi1718_tp_p3.arsystem.Analyser;
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.Acelerometro;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.CubiSensor;
@@ -47,7 +47,7 @@ public class Recolha {
         registo = Registo.getInstance(cubiSensores,ficheiro);
         registo.setActivity(activity);
 
-        ars=Analyser.getInstance().getArs();
+        ars= Analyser.getInstance().getArs();
     }
 
     public static Recolha getInstance(MainActivity activity, Ficheiro ficheiro) {

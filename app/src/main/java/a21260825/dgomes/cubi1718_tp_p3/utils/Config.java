@@ -17,7 +17,7 @@ public final class Config {
     public static final String ACT1a = "Left"; // abanar horizontal longo
     public static final String ACT2a = "Up"; // abanar vertical longo
     public static final String ACT1b = "Right"; // abanar horizontal longo
-    public static final String ACT2b = "Down"; // abanar vertical longo
+    public static final String ACT2b = "-Down"; // abanar vertical longo
     public static final String ACT3 = "TwistH"; // girar horizontal
     public static final String ACT4 = "Sit"; // girar vertical
     public static final String ACT5 = "SshakeH"; // abanar horizontal curto
@@ -54,7 +54,7 @@ public final class Config {
 
     public static final int PREPROC_COUNTER = 64;
     public static final String FICHEIRO_PREPROC = FICHEIRO + "_preproc";
-    public static final long TRAINNING_TIME = 10000; // 10 segundos
+    public static final long TRAINNING_TIME = 60000; // 10 segundos
 
     public static final int REGISTO_INTERVALO = 5; // milliseconds
 }

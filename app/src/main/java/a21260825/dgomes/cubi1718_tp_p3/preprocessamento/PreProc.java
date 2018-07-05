@@ -42,7 +42,7 @@ public class PreProc {
     private String atividade;
     private List<String> keys;
     private MainActivity activity;
-    private boolean novoCalculadora= true;
+    private boolean novoPreProc = true;
     private TreeMap<String,Calculadora> forCalculadora = new TreeMap<>();
     private ArrayList<String> keysCalculadora;
     private double preProcValue;
@@ -63,7 +63,8 @@ public class PreProc {
             preProc.resetValues();
         }
     }
-    public void setNovoPreProc() {
+    public void setKeys(List<String> keys){
+        this.keys=keys;
     }
 
     public void addCalculadora() {
@@ -112,7 +113,7 @@ public class PreProc {
 
     @Override
     public String toString(){
-        if (novoCalculadora){
+        if (novoPreProc){
             String headerCalculadora = headerCalculadora();
             Log.d("toStringCalculadora", "header: " + headerCalculadora);
             return headerCalculadora;
@@ -227,7 +228,7 @@ public class PreProc {
         }
     }
     private String headerCalculadora() {
-        novoCalculadora = false;
+        novoPreProc = false;
         StringBuilder result = new StringBuilder();
         result.append("activity");
         result.append(",");
@@ -266,10 +267,18 @@ public class PreProc {
         return tsLong.toString();
     }
     public void setNovoCalculadora() {
-        this.novoCalculadora=true;
+        this.novoPreProc =true;
     }
 
     public void setValores(TreeMap<String,Float> valores) {
         this.valoresRegisto = valores;
+    }
+
+    public void setNovoPreProc() {
+        this.novoPreProc = true;
+    }
+
+    public void setAtividade(String atividade) {
+        this.atividade = atividade;
     }
 }

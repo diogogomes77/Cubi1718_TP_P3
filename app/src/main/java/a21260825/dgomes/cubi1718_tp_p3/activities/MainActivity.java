@@ -28,7 +28,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import a21260825.dgomes.cubi1718_tp_p3.R;
-import a21260825.dgomes.cubi1718_tp_p3.analise.Analyser;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Recolha;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Ficheiro;
