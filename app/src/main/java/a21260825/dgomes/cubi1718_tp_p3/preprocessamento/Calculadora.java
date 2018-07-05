@@ -1,9 +1,11 @@
-package a21260825.dgomes.cubi1718_tp_p3.utils;
+package a21260825.dgomes.cubi1718_tp_p3.preprocessamento;
 
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import a21260825.dgomes.cubi1718_tp_p3.utils.FFT;
 
 /**
  * Created by diogo on 01-07-2018.
