@@ -36,7 +36,7 @@ public class PreProc {
     }
 
     private TreeMap<String, Float> valoresRegisto;
-    private TreeMap<Integer,TreeMap<String,Double>> listRegistosCalculadora;
+    private TreeMap<Integer, TreeMap<String, Double>> listRegistosCalculadora;
     private TreeMap<String,Double> valoresRegistoCalculadora;
     private int preProcCounter;
     private String atividade;
