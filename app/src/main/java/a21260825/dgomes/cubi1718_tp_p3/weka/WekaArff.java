@@ -1,5 +1,6 @@
 package a21260825.dgomes.cubi1718_tp_p3.weka;
 
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,7 +33,8 @@ public class WekaArff {
     private int mFeatLen;
     private boolean done;
     private Ficheiro ficheiro;
-    
+    private OnNovosCalculadosTask calculadosTask;
+
     protected WekaArff(){
         atividades = new ArrayList<>();
         setAtividades();
@@ -40,7 +42,7 @@ public class WekaArff {
         done = false;
         ficheiro = Ficheiro.getInstance();
     }
-    
+
     public static WekaArff getInstance(){
         if(instance==null){
             instance=new WekaArff();
@@ -65,6 +67,8 @@ public class WekaArff {
             }
             mDataset = new Instances("extras", attributes,Config.PREPROC_COUNTER);
             done=true;
+        }else{
+            Log.d("setFeatures","pass");
         }
         // Adding the max feature
         //attributes.add(new Attribute(Globals.FEAT_MAX_LABEL));
@@ -74,24 +78,9 @@ public class WekaArff {
     }
 
     public void addInstance(TreeMap<String, Double> calculados){
-        Log.i("addInstance", calculados.toString());
-        Instance inst = new DenseInstance(attributes.size());
-        inst.setDataset(mDataset);
-        Double value = null;
-        for( Attribute a : attributes){
-            String extra = a.name();
-            Log.i("Attribute", a.name() + ": " + a.toString());
-            value = calculados.get(extra);
-            if (value!=null){
-                Log.i("createInstances", a.name() + " = " + Double.toString(value));
-                inst.setValue(a,value);
-            }
-        }
-        Log.i("Attribute", attributeAtividade.name() + ": " + attributeAtividade.toString());
-        Log.i("atividade", atividade);
-        inst.setValue(attributeAtividade, atividade);
-        mDataset.add(inst);
-        Log.i("new instance", mDataset.size() + "");
+        calculadosTask = new OnNovosCalculadosTask(calculados);
+        calculadosTask.execute();
+
 
     }
 
@@ -99,7 +88,7 @@ public class WekaArff {
         ArffSaver saver = new ArffSaver();
         // Set the data source of the file content
         saver.setInstances(mDataset);
-        Log.e("1234", mDataset.size()+"");
+        Log.e("WekaArff stop", mDataset.size()+"");
         try {
             // Set the destination of the file.
             File mFeatureFile = ficheiro.getWekaArff();
@@ -126,4 +115,39 @@ public class WekaArff {
         atividades.add(Config.ACT9);
         atividades.add(Config.ACT10);
     }
+
+    private class OnNovosCalculadosTask extends AsyncTask<Void, Void, Void> {
+
+        private final TreeMap<String, Double> calculados;
+
+        public OnNovosCalculadosTask(TreeMap<String, Double> calculados) {
+
+            this.calculados=calculados;
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+
+            Log.i("addInstance", calculados.toString());
+            Instance inst = new DenseInstance(attributes.size());
+            inst.setDataset(mDataset);
+            Double value = null;
+            for( Attribute a : attributes){
+                String extra = a.name();
+                //Log.i("Attribute", a.name() + ": " + a.toString());
+                value = calculados.get(extra);
+                if (value!=null){
+                   // Log.i("createInstances", a.name() + " = " + Double.toString(value));
+                    inst.setValue(a,value);
+                }
+            }
+           // Log.i("Attribute", attributeAtividade.name() + ": " + attributeAtividade.toString());
+          //  Log.i("atividade", atividade);
+            inst.setValue(attributeAtividade, atividade);
+            mDataset.add(inst);
+            Log.i("new instance", mDataset.size() + "");
+            return null;
+        }
+    }
 }
+

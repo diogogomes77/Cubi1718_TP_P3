@@ -119,7 +119,8 @@ public class PreProc {
                 //Log.d("preProc", "key:" + key + " addValue: " + Double.toString(entry.getValue()));
             }
         }
-        setKeysCalculadora();
+        if (keysCalculadora.size()==0)
+            setKeysCalculadora();
         calculados = calcular(keysCalculadora);
         Log.d("keysCalculadora-1",Integer.toString(keysCalculadora.size()));
         wekaArff.setFeatures(keysCalculadora);
