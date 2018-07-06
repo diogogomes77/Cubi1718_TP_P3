@@ -98,8 +98,8 @@ public class Registo {
     public void setAtividade(String atividade) {
         this.atividade = atividade;
         preProc.setAtividade(atividade);
-
-        arsLib.setAtividade(atividade);
+        if (Config.ARSLIB)
+            arsLib.setAtividade(atividade);
     }
 
     public void addValores(TreeMap<String,Float> valores){
@@ -122,7 +122,8 @@ public class Registo {
                         terminaRegisto();
                     }
                 }
-                arsLib.addValores(valoresRegisto);
+                if (Config.ARSLIB)
+                    arsLib.addValores(valoresRegisto);
             }
 
         }

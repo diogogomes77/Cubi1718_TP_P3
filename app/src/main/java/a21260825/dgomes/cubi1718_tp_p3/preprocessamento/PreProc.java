@@ -10,6 +10,7 @@ import java.util.TreeMap;
 import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Ficheiro;
+import a21260825.dgomes.cubi1718_tp_p3.weka.WekaArff;
 
 /**
  * Created by dgomes on 05-07-2018.
@@ -19,13 +20,26 @@ public class PreProc {
 
     private static PreProc instance;
     private final Ficheiro ficheiro;
-
+    private TreeMap<String, Double> calculados;
+    private WekaArff wekaArff;
+    private List<String> extras;
 
     protected PreProc(Ficheiro ficheiro){
         valoresRegistoCalculadora = new TreeMap<>();
         listRegistosCalculadora = new TreeMap<>();
         resultCalculadora = new StringBuilder();
         this.ficheiro=ficheiro;
+        wekaArff = WekaArff.getInstance();
+        keysCalculadora = new ArrayList<>();
+        extras = new ArrayList<>();
+        extras.add("mean");
+        extras.add("median");
+        extras.add("sd");
+        extras.add("fft");
+        //wekaArff.setFeatures(extras);
+        //for(String extra : extras){
+        //    Log.d("extras","added: " + extra);
+        //}
     }
 
     public static PreProc getInstance(Ficheiro ficheiro){
@@ -48,7 +62,6 @@ public class PreProc {
 
     private StringBuilder resultCalculadora;
 
-
     public void init(){
         Log.d("Registo","preProcInit");
         valoresRegistoCalculadora.clear();
@@ -66,7 +79,6 @@ public class PreProc {
     public void setKeys(List<String> keys){
         this.keys=keys;
     }
-
     public void addCalculadora() {
 
         for (String key: keys) {
@@ -94,19 +106,26 @@ public class PreProc {
         for (Map.Entry<Integer,TreeMap<String,Double>> registo : listRegistosCalculadora.entrySet()) {
             int c = registo.getKey();
             TreeMap<String,Double> reg = registo.getValue();
-            Log.d("listRegistosCalculadora", "registo: " + Integer.toString(c));// + " reg:" + reg.toString());
+            //Log.d("listRegistosCalculadora", "registo: " + Integer.toString(c));// + " reg:" + reg.toString());
             for (Map.Entry<String, Double> entry : reg.entrySet()) {
                 String key = entry.getKey();
 
                 if (!forCalculadora.containsKey(key)){
                     forCalculadora.put(key,new Calculadora());// cria o Calculadora para começar a encher de dados
-                    Log.d("forCalculadora", "put: " + key);
+                    //Log.d("forCalculadora", "put: " + key);
                 }
                 Calculadora preProc = forCalculadora.get(key);
                 preProc.addValue(entry.getValue());
-                Log.d("preProc", "key:" + key + " addValue: " + Double.toString(entry.getValue()));
+                //Log.d("preProc", "key:" + key + " addValue: " + Double.toString(entry.getValue()));
             }
         }
+        setKeysCalculadora();
+        calculados = calcular(keysCalculadora);
+        Log.d("keysCalculadora-1",Integer.toString(keysCalculadora.size()));
+        wekaArff.setFeatures(keysCalculadora);
+       // wekaArff.setAtividade(atividade);
+
+        wekaArff.addInstance(calculados);
         ficheiro.saveValoresCalculadora(this);
         resetCalculadoras();
     }
@@ -124,6 +143,12 @@ public class PreProc {
             resultCalculadora.append(atividade);
             resultCalculadora.append(",");
 
+            for(Map.Entry<String,Double> calculado : calculados.entrySet()) {
+                //String key = calculado.getKey();
+                resultCalculadora.append(calculado.getValue());
+                resultCalculadora.append(",");
+            }
+            /*
             for (String key: keysCalculadora) {
                 // Log.d("toStringCalculadora", "key: " + key);
 
@@ -131,14 +156,12 @@ public class PreProc {
                 resultCalculadora.append(value);
                 resultCalculadora.append(",");
 
-            }
+            }*/
 
             resultCalculadora.append(timestamp());
             return resultCalculadora.toString();
         }
     }
-
-
 
     private Boolean checkCalculadora(Calculadora preProc, String key){
         int preProcSize = preProc.getValues().size();
@@ -150,21 +173,24 @@ public class PreProc {
             return true;
         }
     }
+
     private String headerCalculadora() {
         novoPreProc = false;
         StringBuilder result = new StringBuilder();
         result.append("activity");
         result.append(",");
         //Iterator it = valoresRegisto.entrySet().iterator();
-        keysCalculadora = new ArrayList<>();
-        List<String> extras = new ArrayList<>();
-        extras.add("mean");
-        extras.add("median");
-        extras.add("sd");
-        extras.add("fft");
-        for(String extra : extras){
-            Log.d("extras","added: " + extra);
+
+        for(String extraKey : keysCalculadora){
+            Log.d("keysCalculadora","added: " + extraKey);
+            result.append(extraKey);
+            result.append(",");
         }
+        result.append("timestamp");
+        return result.toString();
+    }
+
+    private void setKeysCalculadora(){
         for (Map.Entry<String, Calculadora> registo : forCalculadora.entrySet()) {
             //Calculadora preProcCounter = registo.getValue();
 
@@ -172,17 +198,10 @@ public class PreProc {
             Log.d("forCalculadora","key: " + key);
             for(String extra : extras){
                 String extraKey = extra + "_" + key;
-                result.append(extraKey);
-                result.append(",");
                 keysCalculadora.add(extraKey);
+                Log.d("setKeysCalculadora","extraKey: " + extraKey);
             }
-
         }
-        for(String extraKey : keysCalculadora){
-            Log.d("keysCalculadora","added: " + extraKey);
-        }
-        result.append("timestamp");
-        return result.toString();
     }
 
     private String timestamp(){
@@ -190,8 +209,16 @@ public class PreProc {
         return tsLong.toString();
     }
 
-    private double getCalculado(String key) {
+    private TreeMap<String,Double> calcular(List<String> keys){
+        TreeMap<String,Double> calculados = new TreeMap<>();
+        for (String key: keys) {
+            calculados.put(key,getCalculado(key));
+        }
+        return calculados;
+    }
 
+    private double getCalculado(String key) {
+        /*
         String mean = "mean";
         String median = "median";
         String sd ="sd";
@@ -202,10 +229,12 @@ public class PreProc {
         remain.add(median);
         remain.add(sd);
         remain.add(fft);
+        */
+        String del ="";
         double preProcValue=0.0;
         Calculadora preProc = null;
 
-        for (String calc:remain){
+        for (String calc:extras){
             if(key.contains(calc)){
                 del=calc+"_";
                 String cleanKey = key.replace(del,"");
@@ -235,5 +264,6 @@ public class PreProc {
 
     public void setAtividade(String atividade) {
         this.atividade = atividade;
+        wekaArff.setAtividade(atividade);
     }
 }

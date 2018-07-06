@@ -276,18 +276,20 @@ public class MainActivity extends AppCompatActivity {
 
         contarFicheirosNovos();
 
+        if(Config.SOUND){
+            ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
 
-        ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+            try {
+                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+                Thread.sleep(500);
+                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+                Thread.sleep(500);
+                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 500);
 
-        try {
-            toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
-            Thread.sleep(500);
-            toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
-            Thread.sleep(500);
-            toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
 
@@ -302,9 +304,10 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
-                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
-
+                if(Config.SOUND) {
+                    ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+                    toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+                }
                 terminarRecolha();
             }
         }, Config.TRAINNING_TIME);
