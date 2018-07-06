@@ -45,7 +45,7 @@ public class PreProc {
     private boolean novoPreProc = true;
     private TreeMap<String,Calculadora> forCalculadora = new TreeMap<>();
     private ArrayList<String> keysCalculadora;
-    private double preProcValue;
+
     private StringBuilder resultCalculadora;
 
 
@@ -119,104 +119,27 @@ public class PreProc {
             return headerCalculadora;
         }else {
             //Log.d("toStringCalculadora", "keysCalculadora: " + keysCalculadora.size());
-            Calculadora preProc = null;
+
             resultCalculadora.setLength(0);
             resultCalculadora.append(atividade);
             resultCalculadora.append(",");
-            String mean = "mean_";
-            String median = "median_";
-            String sd ="sd_";
-            String fft ="fft_";
-            String del ="";
-            List<String> remain = new ArrayList<>();
-            remain.add(mean);
-            remain.add(median);
-            remain.add(sd);
-            remain.add(fft);
-            preProcValue = 0.0;
+
             for (String key: keysCalculadora) {
                 // Log.d("toStringCalculadora", "key: " + key);
 
-                if(key.contains(mean)){
-                    del = mean;
-                    //remain.remove(del);
-                    String cleanKey = key.replace(del,"");
-                    preProc = forCalculadora.get(cleanKey);
-                    if(preProc==null){
-                        Log.d("toStringCalculadora", "preProc: null key:"+ cleanKey);
-                    }
-                    if (checkCalculadora(preProc,cleanKey))
-                        preProcValue = preProc.mean();
-                    else Log.d("checkCalculadora", "false");
-                    //preProcValue = 22.22;
-                }
-                else if(key.contains(median)){
-                    del = median;
-                    //remain.remove(del);
-                    String cleanKey = key.replace(del,"");
-                    preProc = forCalculadora.get(cleanKey);
-                    if(preProc==null){
-                        Log.d("toStringCalculadora", "preProc: null key:"+ cleanKey);
-                    }
-                    if (checkCalculadora(preProc,cleanKey))
-                        preProcValue = preProc.median();
-                    else Log.d("checkCalculadora", "false");
-                    //preProcValue = 22.22;
-                }
-                else if(key.contains(sd)){
-
-                    del = sd;
-                    //remain.remove(del);
-                    String cleanKey = key.replace(del,"");
-                    //Log.d("sd", cleanKey);
-                    preProc = forCalculadora.get(cleanKey);
-                    if(preProc==null){
-                        Log.d("toStringCalculadora", "preProc: null key:"+ cleanKey);
-                    }
-                    if (checkCalculadora(preProc,cleanKey))
-                        preProcValue = preProc.sd();
-                    else Log.d("checkCalculadora", "false");
-                    //preProcValue = 22.22;
-                }
-                else if(key.contains(fft)){
-                    del = fft;
-                    //remain.remove(del);
-                    String cleanKey = key.replace(del,"");
-                    preProc = forCalculadora.get(cleanKey);
-                    if(preProc==null){
-                        Log.d("toStringCalculadora", "preProc: null key:"+ cleanKey);
-                    }
-                    if (checkCalculadora(preProc,cleanKey))
-                        preProcValue = preProc.fft();
-                    else Log.d("checkCalculadora", "false");
-                    //preProcValue = 22.22;
-                }else{
-                    preProcValue = 10000.0;
-                }
-
-                if(preProc==null){
-                    Log.d("toStringCalculadora", "preProc: null key:"+ key);
-                }
-                /*else{
-                    if (remain.size()==0){
-                        preProc.resetValues();
-                        Log.d("preProc", "resetValues");
-                    }else{
-                        Log.d("preProc", "remain.size()="+Integer.toString(remain.size()));
-                    }
-
-                }*/
-                //preProcValue = 22.22;
-                String value = Double.toString(preProcValue);
+                String value = Double.toString(getCalculado(key));
                 resultCalculadora.append(value);
                 resultCalculadora.append(",");
-                // Log.d("preProcValue: ", key + ": " + value);
+
             }
 
             resultCalculadora.append(timestamp());
             return resultCalculadora.toString();
         }
     }
+
+
+
     private Boolean checkCalculadora(Calculadora preProc, String key){
         int preProcSize = preProc.getValues().size();
         if (preProcSize<Config.PREPROC_COUNTER){
@@ -265,6 +188,38 @@ public class PreProc {
     private String timestamp(){
         Long tsLong = System.currentTimeMillis();
         return tsLong.toString();
+    }
+
+    private double getCalculado(String key) {
+
+        String mean = "mean";
+        String median = "median";
+        String sd ="sd";
+        String fft ="fft";
+        String del ="";
+        List<String> remain = new ArrayList<>();
+        remain.add(mean);
+        remain.add(median);
+        remain.add(sd);
+        remain.add(fft);
+        double preProcValue=0.0;
+        Calculadora preProc = null;
+
+        for (String calc:remain){
+            if(key.contains(calc)){
+                del=calc+"_";
+                String cleanKey = key.replace(del,"");
+                preProc = forCalculadora.get(cleanKey);
+                if (checkCalculadora(preProc,cleanKey))
+                    preProcValue = preProc.getCalculated(calc);
+                else Log.d("checkCalculadora", "false");
+            }
+        }
+
+        if(preProc==null){
+            Log.d("toStringCalculadora", "preProc: null key:"+ key);
+        }
+        return preProcValue;
     }
     public void setNovoCalculadora() {
         this.novoPreProc =true;

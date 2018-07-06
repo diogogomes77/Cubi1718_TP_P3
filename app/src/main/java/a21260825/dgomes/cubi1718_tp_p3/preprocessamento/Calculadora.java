@@ -26,6 +26,7 @@ public class Calculadora {
         values.clear();
     }
 
+
     private double sum(){
         if (values.size() > 0) {
             double sum = 0.0;
@@ -103,5 +104,21 @@ public class Calculadora {
         //    System.out.print(((int)(im[i]*1000)/1000.0) + " ");
 
 
+    }
+
+    public Double getCalculated(String calc) {
+        String mean = "mean";
+        String median = "median";
+        String sd ="sd";
+        String fft ="fft";
+        if(calc.contains(mean))
+            return mean();
+        else if(calc.contains(median))
+            return median();
+        else if(calc.contains(sd))
+            return sd();
+        else if(calc.contains(fft))
+            return fft();
+        return null;
     }
 }
