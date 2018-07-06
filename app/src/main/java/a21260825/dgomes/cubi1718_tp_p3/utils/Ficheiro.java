@@ -21,6 +21,7 @@ import java.util.TreeMap;
 import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
 import a21260825.dgomes.cubi1718_tp_p3.preprocessamento.PreProc;
+import a21260825.dgomes.cubi1718_tp_p3.weka.WekaArff;
 
 /**
  * Created by diogo on 14-04-2018.
@@ -58,7 +59,9 @@ public class Ficheiro {
         }
         return instance;
     }
-
+    public static Ficheiro getInstance(){
+        return instance;
+    }
     public File getFicheiro() {
         return ficheiro;
     }
@@ -161,6 +164,7 @@ public class Ficheiro {
                 e.printStackTrace();
                 addLog("Problema na interrupcao de registo em ficheiro\n");
             }
+            /*
             try {
                 bwPreProc.close();
                 savingPreProc = false;
@@ -169,7 +173,7 @@ public class Ficheiro {
             } catch (IOException e) {
                 e.printStackTrace();
                 addLog("Problema na interrupcao de registo preproc em ficheiro\n");
-            }
+            }*/
             ok= true;
         }
         if(savingPreProc){
@@ -184,6 +188,7 @@ public class Ficheiro {
             }
             ok2 = true;
         }
+        WekaArff.getInstance().stop();
         return ok && ok2;
     }
     public boolean criarPasta() {
@@ -288,5 +293,8 @@ public class Ficheiro {
         return ficheirosTransferencia;
     }
 
+    public File getWekaArff(){
+        return new File(pasta, Config.FICHEIRO+"_" + timestamp() +Config.EXTENCAO_ARFF);
+    }
 
 }

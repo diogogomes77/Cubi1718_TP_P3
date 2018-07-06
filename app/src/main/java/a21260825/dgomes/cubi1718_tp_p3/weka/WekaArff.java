@@ -1,17 +1,22 @@
 package a21260825.dgomes.cubi1718_tp_p3.weka;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
+import a21260825.dgomes.cubi1718_tp_p3.utils.Ficheiro;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.converters.ArffSaver;
 
 /**
  * Created by dgomes on 06-07-2018.
@@ -26,12 +31,14 @@ public class WekaArff {
     private List<String> atividades;
     private int mFeatLen;
     private boolean done;
+    private Ficheiro ficheiro;
     
     protected WekaArff(){
         atividades = new ArrayList<>();
         setAtividades();
         attributes = new ArrayList<Attribute>();
         done = false;
+        ficheiro = Ficheiro.getInstance();
     }
     
     public static WekaArff getInstance(){
@@ -80,13 +87,6 @@ public class WekaArff {
                 inst.setValue(a,value);
             }
         }
-
-        /*
-        int i=0;
-        for(Map.Entry<String,Double> calculado : calculados.entrySet()) {
-            inst.setValue(i, calculado.getValue());
-            i++;
-        }*/
         Log.i("Attribute", attributeAtividade.name() + ": " + attributeAtividade.toString());
         Log.i("atividade", atividade);
         inst.setValue(attributeAtividade, atividade);
@@ -94,6 +94,25 @@ public class WekaArff {
         Log.i("new instance", mDataset.size() + "");
 
     }
+
+    public void stop(){
+        ArffSaver saver = new ArffSaver();
+        // Set the data source of the file content
+        saver.setInstances(mDataset);
+        Log.e("1234", mDataset.size()+"");
+        try {
+            // Set the destination of the file.
+            File mFeatureFile = ficheiro.getWekaArff();
+            saver.setFile(mFeatureFile);
+            // Write into the file
+            saver.writeBatch();
+            Log.i("batch","write batch here");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void setAtividades(){
         atividades.add(Config.ACT1);

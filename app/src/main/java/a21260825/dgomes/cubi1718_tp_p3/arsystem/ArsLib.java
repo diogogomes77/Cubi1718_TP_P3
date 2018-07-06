@@ -50,8 +50,6 @@ public class ArsLib {
                 //  Log.d("lastLabel","label=" + lastLabel);
                 //  ars.clearInstances();
             }
-
-
         } else {
             // if (ars.getMode() == ARSystem.MODE_TRAINING) {
             double acc_x, acc_y, acc_z, mag_mag, mag_x, mag_y, mag_z;

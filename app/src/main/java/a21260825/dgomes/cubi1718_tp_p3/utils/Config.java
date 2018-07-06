@@ -57,6 +57,8 @@ public final class Config {
     public static final long TRAINNING_TIME = 60000; // 10 segundos
 
     public static final int REGISTO_INTERVALO = 5; // milliseconds
+    public static final String EXTENCAO_ARFF = ".arff" ;
+
 
     public static boolean SOUND = false;
 
