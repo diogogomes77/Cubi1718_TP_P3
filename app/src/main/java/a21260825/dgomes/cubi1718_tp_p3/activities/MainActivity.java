@@ -308,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
                     ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
                     toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
                 }
-                terminarRecolha();
+                pausarRecolha();
             }
         }, Config.TRAINNING_TIME);
 
@@ -328,11 +328,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void pausarRecolha(){
-            recolhaPausada = true;
-            addLog("Recolha pausada\n");
-            recolha.pausar();
-            timeWhenStopped = simpleChronometer.getBase() - SystemClock.elapsedRealtime();
-            simpleChronometer.stop();
+        if (!ttRecolhaPausa.isChecked())
+            ttRecolhaPausa.setChecked(true);
+        recolhaPausada = true;
+        addLog("Recolha pausada\n");
+        recolha.pausar();
+        timeWhenStopped = simpleChronometer.getBase() - SystemClock.elapsedRealtime();
+        simpleChronometer.stop();
     }
 
     private void continuarRecolha(){
@@ -341,6 +343,18 @@ public class MainActivity extends AppCompatActivity {
             recolha.continuar();
             simpleChronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
             simpleChronometer.start();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(Config.SOUND) {
+                    ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+                    toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+                }
+                pausarRecolha();
+            }
+        }, Config.TRAINNING_TIME);
     }
 
     public void contarFicheirosNovos(){
