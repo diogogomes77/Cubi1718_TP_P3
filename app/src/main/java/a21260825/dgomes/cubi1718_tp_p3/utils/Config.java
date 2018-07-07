@@ -58,6 +58,8 @@ public final class Config {
 
     public static final int REGISTO_INTERVALO = 5; // milliseconds
     public static final String EXTENCAO_ARFF = ".arff" ;
+    public static final String FICHEIRO_TEST = "test";
+    public static final String FICHEIRO_TRAIN = "train";
 
 
     public static boolean SOUND = false;
