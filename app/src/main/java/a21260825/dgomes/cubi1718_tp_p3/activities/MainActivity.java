@@ -292,13 +292,10 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
-
         simpleChronometer.setBase(SystemClock.elapsedRealtime());
         simpleChronometer.start();
 
         recolha.iniciar(modo);
-
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

@@ -43,6 +43,7 @@ public class Registo {
     private MainActivity activity;
     
     private StringBuilder result;
+    private String modo;
 
     protected Registo(List<CubiSensor> cubiSensores, Ficheiro ficheiro) {
         this.cubiSensores = cubiSensores;
@@ -183,7 +184,6 @@ public class Registo {
             String key = entry.getKey();
             result.append(key);
             result.append(",");
-
         }
         result.append("timestamp");
         return result.toString();
@@ -200,5 +200,11 @@ public class Registo {
 
     public void setNovoCalculadora() {
         preProc.setNovoCalculadora();
+    }
+
+    public void setMode(String mode) {
+        this.modo = mode;
+        preProc.setMode(mode);
+
     }
 }

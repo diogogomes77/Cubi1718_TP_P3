@@ -17,7 +17,7 @@ import weka.core.converters.ConverterUtils.*;
 
 public class WekaTest {
 
-    public static String labelFeature = "atividade";
+    public static String labelFeature = "activity";
 
     public Instances readTrain() throws Exception {
         String path = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + Config.PASTA_FICHEIRO_LOCAL;

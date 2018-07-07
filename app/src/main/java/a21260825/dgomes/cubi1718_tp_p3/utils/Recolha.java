@@ -101,6 +101,7 @@ public class Recolha {
 
     public void iniciar(String mode) {
         this.mode=mode;
+        this.registo.setMode(mode);
         switch (mode){
             case Config.TRAIN:
                 modeTrain();
@@ -115,34 +116,21 @@ public class Recolha {
     }
 
     private void modeTrain(){
-
-        ars.setMode(ARSystem.MODE_TRAINING);
-
-        for (CubiSensor sensor :cubiSensores) {
+        if (Config.ARSLIB)
+            ars.setMode(ARSystem.MODE_TRAINING);
+        for (CubiSensor sensor : cubiSensores) {
             sensor.iniciar();
             activity.addLog(sensor.toString() + " treino iniciado\n");
         }
-
     }
 
     private void modeSave(){
-        switch (mode){
-            case Config.TRAIN:
-                modeTrain();
-                break;
-            case Config.SAVE:
-                if(ficheiro.startSave()){
-                    for (CubiSensor sensor :cubiSensores) {
-                        sensor.iniciar();
-                        activity.addLog(sensor.toString() + " iniciado\n");
-                    }
-                }
-                break;
-            case Config.AUTO:
-                modeAuto();
-                break;
+        if(ficheiro.startSave()){
+            for (CubiSensor sensor :cubiSensores) {
+                sensor.iniciar();
+                activity.addLog(sensor.toString() + " iniciado\n");
+            }
         }
-
     }
 
     private void modeAuto(){

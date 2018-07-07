@@ -23,6 +23,7 @@ public class PreProc {
     private TreeMap<String, Double> calculados;
     private WekaArff wekaArff;
     private List<String> extras;
+    private String mode;
 
     protected PreProc(Ficheiro ficheiro){
         valoresRegistoCalculadora = new TreeMap<>();
@@ -125,7 +126,6 @@ public class PreProc {
         Log.d("keysCalculadora-1",Integer.toString(keysCalculadora.size()));
         wekaArff.setFeatures(keysCalculadora);
        // wekaArff.setAtividade(atividade);
-
         wekaArff.addInstance(calculados);
         ficheiro.saveValoresCalculadora(this);
         resetCalculadoras();
@@ -266,5 +266,10 @@ public class PreProc {
     public void setAtividade(String atividade) {
         this.atividade = atividade;
         wekaArff.setAtividade(atividade);
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+        wekaArff.setMode(mode);
     }
 }

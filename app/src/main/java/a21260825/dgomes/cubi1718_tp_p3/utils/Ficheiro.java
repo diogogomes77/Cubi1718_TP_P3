@@ -46,6 +46,7 @@ public class Ficheiro {
     private File ficheiroPreProc;
     private BufferedWriter bwPreProc;
     private boolean savingPreProc;
+    private File ficheiroTrain;
 
     protected Ficheiro(MainActivity activity) {
         this.activity = activity;
@@ -297,4 +298,8 @@ public class Ficheiro {
         return new File(pasta, Config.FICHEIRO+"_" + timestamp() +Config.EXTENCAO_ARFF);
     }
 
+    public File getWekaArffTrain() {
+        return new File(pasta, Config.FICHEIRO+"_" + Config.FICHEIRO_TRAIN + "_" + Config.EXTENCAO_ARFF);
+
+    }
 }

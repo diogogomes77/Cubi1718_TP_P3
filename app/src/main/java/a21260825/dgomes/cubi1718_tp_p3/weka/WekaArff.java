@@ -34,6 +34,7 @@ public class WekaArff {
     private boolean done;
     private Ficheiro ficheiro;
     private OnNovosCalculadosTask calculadosTask;
+    protected String modo;
 
     protected WekaArff(){
         atividades = new ArrayList<>();
@@ -90,12 +91,22 @@ public class WekaArff {
         saver.setInstances(mDataset);
         Log.e("WekaArff stop", mDataset.size()+"");
         try {
-            // Set the destination of the file.
-            File mFeatureFile = ficheiro.getWekaArff();
+            File mFeatureFile;
+            if (modo==null){
+                mFeatureFile = ficheiro.getWekaArff();
+            }else{
+                if (modo.contentEquals(Config.SAVE) || modo.contentEquals(Config.SAVE))
+                    mFeatureFile = ficheiro.getWekaArff();
+                else //if (modo.contentEquals(Config.TRAIN))
+                    mFeatureFile = ficheiro.getWekaArffTrain();
+               // else if (modo.contentEquals(Config.AUTO))
+
+            }
+
             saver.setFile(mFeatureFile);
             // Write into the file
             saver.writeBatch();
-            Log.i("batch","write batch here");
+            Log.d("ArffSaver",modo);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -116,13 +127,18 @@ public class WekaArff {
         atividades.add(Config.ACT10);
     }
 
+    public void setMode(String mode) {
+        this.modo = mode;
+    }
+
     private class OnNovosCalculadosTask extends AsyncTask<Void, Void, Void> {
 
         private final TreeMap<String, Double> calculados;
 
-        public OnNovosCalculadosTask(TreeMap<String, Double> calculados) {
 
+        public OnNovosCalculadosTask(TreeMap<String, Double> calculados) {
             this.calculados=calculados;
+
         }
 
         @Override
@@ -143,7 +159,13 @@ public class WekaArff {
             }
            // Log.i("Attribute", attributeAtividade.name() + ": " + attributeAtividade.toString());
           //  Log.i("atividade", atividade);
-            inst.setValue(attributeAtividade, atividade);
+            if(modo!=null)
+                if (modo.contentEquals(Config.TRAIN) || modo.contentEquals(Config.SAVE))
+                    inst.setValue(attributeAtividade, atividade);
+                else
+                    inst.setValue(attributeAtividade, "?");
+            else
+                inst.setValue(attributeAtividade, atividade);
             mDataset.add(inst);
             Log.i("new instance", mDataset.size() + "");
             return null;
