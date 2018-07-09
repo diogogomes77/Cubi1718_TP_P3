@@ -166,11 +166,7 @@ public class WekaArff {
                     inst.setValue(attributeAtividade, atividade);
                 else {
                     //inst.setValue(attributeAtividade, "?");
-
-                        WekaTest.getInstance().test(inst);
-
-
-
+                    wekaTest.test(inst);
                 }
             }
             else

@@ -17,6 +17,8 @@ import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.Acelerometro;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.CubiSensor;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.Magnetometro;
+import a21260825.dgomes.cubi1718_tp_p3.weka.WekaArff;
+import a21260825.dgomes.cubi1718_tp_p3.weka.WekaTest;
 import arsystem.ARSystem;
 
 /**
@@ -118,6 +120,7 @@ public class Recolha {
     private void modeTrain(){
         if (Config.ARSLIB)
             ars.setMode(ARSystem.MODE_TRAINING);
+        WekaTest.getInstance().reset();
         modeSave(Config.MODE_TRAIN);
     }
 
@@ -136,7 +139,9 @@ public class Recolha {
     }
 
     private void modeAuto(){
-        ars.setMode(ARSystem.MODE_TESTING);
+        if (Config.ARSLIB)
+            ars.setMode(ARSystem.MODE_TESTING);
+        WekaTest.getInstance().reset();
         for (CubiSensor sensor :cubiSensores) {
             sensor.iniciar();
             activity.addLog(sensor.toString() + " reconhecimentos iniciado\n");

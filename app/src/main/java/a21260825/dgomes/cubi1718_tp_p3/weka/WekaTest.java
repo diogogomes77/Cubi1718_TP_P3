@@ -52,6 +52,10 @@ public class WekaTest {
         return instance;
     }
 
+    public void reset(){
+        instance = null;
+        instance = new WekaTest();
+    }
     private Instances readTrain() throws Exception {
         Log.d("WekaTest","readTrain: " + ficheiroTrain.getAbsolutePath());
        // DataSource source = new DataSource(arff_train);
@@ -84,45 +88,7 @@ public class WekaTest {
         return correctPreds / testData.numInstances();
     }
 
-    private boolean train2(){
-        if (trainDone)
-            return true;
-        else {
-            try {
-                trainData = null;
-                trainData = readTrain();
-                if (trainData == null) {
-                    Log.d("WekaTest", "data null!");
-                    trainDone = false;
 
-                } else {
-                    Log.d("WekaTest", "data size: " + trainData.numAttributes() + "x" + trainData.numInstances());
-                    // Set label
-                    trainData.setClass(trainData.attribute(labelFeature));
-                    Log.d("WekaTest", "label: " + trainData.classAttribute().name() + " --- index: " + trainData.classIndex());
-                    Classifier tree = new RandomTree();
-                    tree.buildClassifier(trainData);
-                    double acc = accuracy(tree, trainData);
-                    Log.d("WekaTest", "Accuracy tree= " + acc);
-                    Log.d("WekaTest", "tree(SimpleCart): " + tree);
-                    newTree = (RandomTree) tree;
-
-                    /*
-                    weka.core.SerializationHelper.write("tree.model", tree);
-                    newTree = null;
-                    newTree = (RandomTree) weka.core.SerializationHelper.read("tree.model");
-                    acc = accuracy(newTree, trainData);
-                    Log.d("WekaTest", "Accuracy newTree= " + acc);
-                    */
-                    trainDone = true;
-                    return true;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
 
     private void test( Instances data,Classifier newTree) throws Exception {
         if (train()){
@@ -154,82 +120,7 @@ public class WekaTest {
 
     }
 
-    public void trainAndTest() throws Exception {
-        Instances data = null;
-        data = readTrain();
 
-        if (data == null) {
-            Log.d("WekaTest","data null!");
-        }
-        else {
-            Log.d("WekaTest","data size: " + data.numAttributes() + "x" + data.numInstances());
-        }
-
-        // Set label
-        data.setClass(data.attribute(labelFeature));
-        Log.d("WekaTest","label: " + data.classAttribute().name() + " --- index: " + data.classIndex());
-
-        Classifier tree = new RandomTree() ;
-        tree.buildClassifier(data);
-        double acc = accuracy(tree, data);
-
-        Log.d("WekaTest","Accuracy tree= " + acc);
-        Log.d("WekaTest","tree(SimpleCart): " + tree);
-
-        weka.core.SerializationHelper.write("tree.model", tree);
-
-        RandomTree newTree = null;
-        newTree = (RandomTree) weka.core.SerializationHelper.read("tree.model");
-
-        acc = accuracy(newTree, data);
-
-        Log.d("WekaTest","Accuracy newTree= " + acc);
-
-        Instances test = null;
-        test = readTest();
-        test.setClass(test.attribute(labelFeature));
-        Log.d("WekaTest",test.attribute(labelFeature).toString());
-        double newPred = -1.0;
-        for (int i=0; i<test.numInstances(); i++) {
-            newPred = newTree.classifyInstance(test.instance(i));
-            Log.d("WekaTest",test.instance(i).toString());
-            String label = data.classAttribute().value((int) newPred);
-            Log.d("WekaTest","Index: " + newPred + " Prediction = " + label);
-            newPred = -1.0;
-        }
-        Log.d("WekaTest","-----------------------------");
-        System.out.println("-----------------------------");
-        for (int i=0; i<data.numInstances(); i++) {
-            newPred = newTree.classifyInstance(data.instance(i));
-            Log.d("WekaTest",data.instance(i).toString());
-            String label = data.classAttribute().value((int) newPred);
-            Log.d("WekaTest","Index: " + newPred + " Prediction = " + label);
-            newPred = -1.0;
-        }
-    }
-
-
-    public void test2(Instance inst) {
-        boolean ok = false;
-        if (trainDone){
-            ok = true;
-        }else{
-            train2();
-        }
-        if (trainDone) {
-            double newPred = -1.0;
-            Log.d("WekaTest", "inst: " + inst.toString());
-            try {
-                newPred = newTree.classifyInstance(inst);
-                String label = trainData.classAttribute().value((int) newPred);
-                Log.d("WekaTest", "Index: " + newPred + " Prediction = " + label);
-                newPred = -1.0;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
     public void test(Instance inst) {
         boolean ok = false;
         if (trainDone){
@@ -257,6 +148,7 @@ public class WekaTest {
                     unlabeled.add(0,inst);
                 else
                     unlabeled.set(0,inst);
+
                 unlabeled.setClassIndex(unlabeled.numAttributes() - 1);
               //  Log.d("WekaTest", "unlabeled: " + unlabeled.toString());
                 Instance i = unlabeled.instance(0);
@@ -264,7 +156,8 @@ public class WekaTest {
                 clsLabel = newTree.classifyInstance(i);
                 i.setClassValue(clsLabel);
                 String label = unlabeled.classAttribute().value((int) clsLabel);
-                Log.d("WekaTest", "Index: " + clsLabel + " Prediction = " + label);
+                Double ac = accuracy(newTree,unlabeled);
+                Log.d("WekaTest", "Index: " + clsLabel + " Prediction = " + label+" ac:"+Double.toString(ac));
                 clsLabel = -1.0;
                 /*
                 newPred = newTree.classifyInstance(inst);
