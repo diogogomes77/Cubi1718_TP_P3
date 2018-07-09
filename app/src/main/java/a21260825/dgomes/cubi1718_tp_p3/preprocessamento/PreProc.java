@@ -25,12 +25,16 @@ public class PreProc {
     private List<String> extras;
     private String mode;
 
-    protected PreProc(Ficheiro ficheiro){
+    protected PreProc(Ficheiro ficheiro) {
         valoresRegistoCalculadora = new TreeMap<>();
         listRegistosCalculadora = new TreeMap<>();
         resultCalculadora = new StringBuilder();
         this.ficheiro=ficheiro;
-        wekaArff = WekaArff.getInstance();
+        try {
+            wekaArff = WekaArff.getInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         keysCalculadora = new ArrayList<>();
         extras = new ArrayList<>();
         extras.add("mean");
@@ -178,7 +182,7 @@ public class PreProc {
     private String headerCalculadora() {
         novoPreProc = false;
         StringBuilder result = new StringBuilder();
-        result.append("activity");
+        result.append(Config.CLASS_LABEL);
         result.append(",");
         //Iterator it = valoresRegisto.entrySet().iterator();
 

@@ -103,13 +103,13 @@ public class Recolha {
         this.mode=mode;
         this.registo.setMode(mode);
         switch (mode){
-            case Config.TRAIN:
+            case Config.MODE_TRAIN:
                 modeTrain();
                 break;
-            case Config.SAVE:
-                modeSave();
+            case Config.MODE_SAVE:
+                modeSave(Config.MODE_SAVE);
                 break;
-            case Config.AUTO:
+            case Config.MODE_AUTO:
                 modeAuto();
                 break;
         }
@@ -118,17 +118,19 @@ public class Recolha {
     private void modeTrain(){
         if (Config.ARSLIB)
             ars.setMode(ARSystem.MODE_TRAINING);
-        for (CubiSensor sensor : cubiSensores) {
-            sensor.iniciar();
-            activity.addLog(sensor.toString() + " treino iniciado\n");
-        }
+        modeSave(Config.MODE_TRAIN);
     }
 
-    private void modeSave(){
-        if(ficheiro.startSave()){
+    private void modeSave(String mode){
+        if(ficheiro.startSave(mode)){
             for (CubiSensor sensor :cubiSensores) {
                 sensor.iniciar();
-                activity.addLog(sensor.toString() + " iniciado\n");
+                if (mode.contentEquals(Config.MODE_TRAIN)){
+                    activity.addLog(sensor.toString() + " treino iniciado\n");
+                }else{
+                    activity.addLog(sensor.toString() + " iniciado\n");
+                }
+
             }
         }
     }
@@ -145,38 +147,45 @@ public class Recolha {
 
         this.mode=mode;
         switch (mode){
-            case Config.TRAIN:
+            case Config.MODE_TRAIN:
                 for (CubiSensor sensor :cubiSensores) {
                     sensor.terminar();
                     activity.addLog(sensor.toString() + " treino terminado\n");
                 }
-                ars.trainClassifier();
-                Log.d("terminar","ars.toString()");
-                System.out.println(ars.toString());
+                ficheiro.stopSaving();
+                if (Config.ARSLIB){
+                    ars.trainClassifier();
+                    Log.d("terminar","ars.toString()");
+                    System.out.println(ars.toString());
+                }
+
                 break;
-            case Config.SAVE:
+            case Config.MODE_SAVE:
                 for (CubiSensor sensor :cubiSensores) {
                     sensor.terminar();
                     activity.addLog(sensor.toString() + " terminado\n");
                 }
                 ficheiro.stopSaving();
                 break;
-            case Config.AUTO:
+            case Config.MODE_AUTO:
                 for (CubiSensor sensor :cubiSensores) {
                     sensor.terminar();
                     activity.addLog(sensor.toString() + " reconhecimento terminado\n");
                 }
-                if (ars.isFull()){
-                    String label = ars.classify(); //
-                    activity.addLog(" ---> Classification: " + label + "\n");
-                    //String last_label = ars.getLastClassifiedLabel();
-                    //Log.d("last_label",last_label);
-                }else{
-                    activity.addLog(" ---> Classification: " + "not full yet...\n");
+                if (Config.ARSLIB){
+                    if (ars.isFull()){
+                        String label = ars.classify(); //
+                        activity.addLog(" ---> Classification: " + label + "\n");
+                        //String last_label = ars.getLastClassifiedLabel();
+                        //Log.d("last_label",last_label);
+                    }else{
+                        activity.addLog(" ---> Classification: " + "not full yet...\n");
 
+                    }
+                    Log.d("terminar","ars.toString()");
+                    System.out.println(ars.toString());
                 }
-                Log.d("terminar","ars.toString()");
-                System.out.println(ars.toString());
+
                 break;
         }
 

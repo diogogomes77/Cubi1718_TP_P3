@@ -71,7 +71,7 @@ public class Ficheiro {
         Long tsLong = System.currentTimeMillis()/1000;
         return tsLong.toString();
     }
-    public boolean startSave(){
+    public boolean startSave(String mode){
         if (pastaCriada && transferido) {
             ficheiro = new File(pasta, Config.FICHEIRO+"_" + timestamp() +Config.EXTENCAO);
             if (saveFicheiro(ficheiro)){
@@ -189,7 +189,12 @@ public class Ficheiro {
             }
             ok2 = true;
         }
-        WekaArff.getInstance().stop();
+
+        try {
+            WekaArff.getInstance().stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return ok && ok2;
     }
     public boolean criarPasta() {

@@ -24,8 +24,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import a21260825.dgomes.cubi1718_tp_p3.R;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Recolha;
@@ -33,7 +31,6 @@ import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Ficheiro;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Permissoes;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Transferencia;
-import arsystem.ARSystem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -139,11 +136,11 @@ public class MainActivity extends AppCompatActivity {
         rbAct10.setText(Config.ACT10);
 
         modeLearn = findViewById(R.id.modeLearn);
-        modeLearn.setText(Config.TRAIN);
+        modeLearn.setText(Config.MODE_TRAIN);
         modeAuto = findViewById(R.id.modeAuto);
-        modeAuto.setText(Config.AUTO);
+        modeAuto.setText(Config.MODE_AUTO);
         modeSave = findViewById(R.id.modeSave);
-        modeSave.setText(Config.SAVE);
+        modeSave.setText(Config.MODE_SAVE);
     }
     private void setButtonListenners(){
         atividades1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()

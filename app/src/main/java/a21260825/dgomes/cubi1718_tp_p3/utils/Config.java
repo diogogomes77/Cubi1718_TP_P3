@@ -48,18 +48,19 @@ public final class Config {
 
     public static final String BATERIA = "Battery";
 
-    public static final String TRAIN = "TRAIN";
-    public static final String SAVE = "SAVE";
-    public static final String AUTO = "AUTO";
+    public static final String MODE_TRAIN = "MODE_TRAIN";
+    public static final String MODE_SAVE = "MODE_SAVE";
+    public static final String MODE_AUTO = "MODE_AUTO";
 
-    public static final int PREPROC_COUNTER = 64;
+    public static final int PREPROC_COUNTER = 256;
     public static final String FICHEIRO_PREPROC = FICHEIRO + "_preproc";
-    public static final long TRAINNING_TIME = 60000; // 10 segundos
+    public static final long TRAINNING_TIME = 30000; // 10 segundos
 
     public static final int REGISTO_INTERVALO = 5; // milliseconds
     public static final String EXTENCAO_ARFF = ".arff" ;
     public static final String FICHEIRO_TEST = "test";
     public static final String FICHEIRO_TRAIN = "train";
+    public static final String CLASS_LABEL = "activity";
 
 
     public static boolean SOUND = false;

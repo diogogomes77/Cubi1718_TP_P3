@@ -2,13 +2,11 @@ package a21260825.dgomes.cubi1718_tp_p3.weka;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
@@ -25,6 +23,7 @@ import weka.core.converters.ArffSaver;
 
 public class WekaArff {
     private final ArrayList<Attribute> attributes;
+    private final WekaTest wekaTest;
     private String atividade;
     private Instances mDataset;
     private Attribute attributeAtividade;
@@ -36,15 +35,16 @@ public class WekaArff {
     private OnNovosCalculadosTask calculadosTask;
     protected String modo;
 
-    protected WekaArff(){
+    protected WekaArff() throws Exception {
         atividades = new ArrayList<>();
         setAtividades();
         attributes = new ArrayList<Attribute>();
         done = false;
         ficheiro = Ficheiro.getInstance();
+        wekaTest = WekaTest.getInstance();
     }
 
-    public static WekaArff getInstance(){
+    public static WekaArff getInstance() throws Exception {
         if(instance==null){
             instance=new WekaArff();
         }
@@ -58,14 +58,15 @@ public class WekaArff {
     public void setFeatures(List<String> keysCalculadora){
         Log.d("keysCalculadora-2",Integer.toString(keysCalculadora.size()));
         if (!done){
-            attributeAtividade = new Attribute("atividades", atividades);
-            attributes.add(attributeAtividade);
+
             for (String key : keysCalculadora) {
                 Attribute a = new Attribute(key);
                 attributes.add(a);
                 Log.d("setFeatures","extra: " + key + " = " + a.toString());
                // Log.d("setFeatures","Attribute: " + a.name());
             }
+            attributeAtividade = new Attribute(Config.CLASS_LABEL, atividades);
+            attributes.add(attributeAtividade);
             mDataset = new Instances("extras", attributes,Config.PREPROC_COUNTER);
             done=true;
         }else{
@@ -81,8 +82,6 @@ public class WekaArff {
     public void addInstance(TreeMap<String, Double> calculados){
         calculadosTask = new OnNovosCalculadosTask(calculados);
         calculadosTask.execute();
-
-
     }
 
     public void stop(){
@@ -93,13 +92,15 @@ public class WekaArff {
         try {
             File mFeatureFile;
             if (modo==null){
+                Log.d("WekaArff stop", "modo null");
                 mFeatureFile = ficheiro.getWekaArff();
             }else{
-                if (modo.contentEquals(Config.SAVE) || modo.contentEquals(Config.SAVE))
+                Log.d("WekaArff stop", "modo: " + modo);
+                if (modo.contentEquals(Config.MODE_SAVE) || modo.contentEquals(Config.MODE_SAVE))
                     mFeatureFile = ficheiro.getWekaArff();
-                else //if (modo.contentEquals(Config.TRAIN))
+                else //if (modo.contentEquals(Config.MODE_TRAIN))
                     mFeatureFile = ficheiro.getWekaArffTrain();
-               // else if (modo.contentEquals(Config.AUTO))
+               // else if (modo.contentEquals(Config.MODE_AUTO))
 
             }
 
@@ -144,7 +145,7 @@ public class WekaArff {
         @Override
         protected Void doInBackground(Void... arg0) {
 
-            Log.i("addInstance", calculados.toString());
+            Log.d("addInstance", calculados.toString());
             Instance inst = new DenseInstance(attributes.size());
             inst.setDataset(mDataset);
             Double value = null;
@@ -159,11 +160,19 @@ public class WekaArff {
             }
            // Log.i("Attribute", attributeAtividade.name() + ": " + attributeAtividade.toString());
           //  Log.i("atividade", atividade);
-            if(modo!=null)
-                if (modo.contentEquals(Config.TRAIN) || modo.contentEquals(Config.SAVE))
+            if(modo!=null) {
+                Log.d("WekaArff", "modo:" + modo + " atividade:" + atividade);
+                if (modo.contentEquals(Config.MODE_TRAIN) || modo.contentEquals(Config.MODE_SAVE))
                     inst.setValue(attributeAtividade, atividade);
-                else
-                    inst.setValue(attributeAtividade, "?");
+                else {
+                    //inst.setValue(attributeAtividade, "?");
+
+                        WekaTest.getInstance().test(inst);
+
+
+
+                }
+            }
             else
                 inst.setValue(attributeAtividade, atividade);
             mDataset.add(inst);

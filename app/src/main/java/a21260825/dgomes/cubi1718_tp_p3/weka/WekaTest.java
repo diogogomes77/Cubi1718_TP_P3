@@ -4,11 +4,17 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.io.IOException;
 
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 import weka.classifiers.Classifier;
+import weka.classifiers.Evaluation;
+import weka.classifiers.bayes.NaiveBayesUpdateable;
+import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomTree;
+import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.converters.ArffLoader;
 import weka.core.converters.ConverterUtils.*;
 
 /**
@@ -16,32 +22,52 @@ import weka.core.converters.ConverterUtils.*;
  */
 
 public class WekaTest {
+    private static WekaTest instance;
+    private static String labelFeature = Config.CLASS_LABEL;
+    private final File ficheiroTrain;
+    private String path;
+    private String arff_train;
+    private String arff_test;
+    private Instances trainData;
+    private Classifier newTree;
+    private boolean trainDone;
+    private Instances unlabeled;
 
-    public static String labelFeature = "activity";
+    protected WekaTest()  {
+       // path = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + Config.PASTA_FICHEIRO_LOCAL;
+        path = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + Config.PASTA_FICHEIRO_LOCAL;
+        arff_train = Config.FICHEIRO + "_" + Config.FICHEIRO_TRAIN + "_" + Config.EXTENCAO_ARFF;
+        arff_test =path + Config.FICHEIRO + "_" + Config.FICHEIRO_TEST + "_" + Config.EXTENCAO_ARFF;
+        File pasta = new File(path);
+        ficheiroTrain = new File(pasta, arff_train);
 
-    public Instances readTrain() throws Exception {
-        String path = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + Config.PASTA_FICHEIRO_LOCAL;
+        trainDone = false;
+        train();
+    }
 
-        String arff =path + Config.FICHEIRO + "_" + Config.FICHEIRO_TRAIN + "_" + Config.EXTENCAO_ARFF;
+    public static WekaTest getInstance()  {
+        if(instance==null){
+            instance = new WekaTest();
+        }
+        return instance;
+    }
 
-        DataSource source = new DataSource(arff);
+    private Instances readTrain() throws Exception {
+        Log.d("WekaTest","readTrain: " + ficheiroTrain.getAbsolutePath());
+       // DataSource source = new DataSource(arff_train);
+        DataSource source = new DataSource(ficheiroTrain.getAbsolutePath());
         Instances data = source.getDataSet();
         return data;
     }
-    public Instances readTest() throws Exception {
-        String path = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + Config.PASTA_FICHEIRO_LOCAL;
 
-        String arff =path + Config.FICHEIRO + "_" + Config.FICHEIRO_TEST + "_" + Config.EXTENCAO_ARFF;
-
-        DataSource source = new DataSource(arff);
+    private Instances readTest() throws Exception {
+        DataSource source = new DataSource(arff_test);
         Instances data = source.getDataSet();
         return data;
     }
 
-    public double accuracy(Classifier myClass, Instances testData) {
-
+    private double accuracy(Classifier myClass, Instances testData) {
         float correctPreds = 0;
-
         for (int i = 0; i < testData.numInstances(); i++){
             String actual = testData.instance(i).stringValue(testData.classAttribute());
             String label = null;
@@ -58,8 +84,77 @@ public class WekaTest {
         return correctPreds / testData.numInstances();
     }
 
-    public void main(String[] args) throws Exception {
+    private boolean train2(){
+        if (trainDone)
+            return true;
+        else {
+            try {
+                trainData = null;
+                trainData = readTrain();
+                if (trainData == null) {
+                    Log.d("WekaTest", "data null!");
+                    trainDone = false;
 
+                } else {
+                    Log.d("WekaTest", "data size: " + trainData.numAttributes() + "x" + trainData.numInstances());
+                    // Set label
+                    trainData.setClass(trainData.attribute(labelFeature));
+                    Log.d("WekaTest", "label: " + trainData.classAttribute().name() + " --- index: " + trainData.classIndex());
+                    Classifier tree = new RandomTree();
+                    tree.buildClassifier(trainData);
+                    double acc = accuracy(tree, trainData);
+                    Log.d("WekaTest", "Accuracy tree= " + acc);
+                    Log.d("WekaTest", "tree(SimpleCart): " + tree);
+                    newTree = (RandomTree) tree;
+
+                    /*
+                    weka.core.SerializationHelper.write("tree.model", tree);
+                    newTree = null;
+                    newTree = (RandomTree) weka.core.SerializationHelper.read("tree.model");
+                    acc = accuracy(newTree, trainData);
+                    Log.d("WekaTest", "Accuracy newTree= " + acc);
+                    */
+                    trainDone = true;
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    private void test( Instances data,Classifier newTree) throws Exception {
+        if (train()){
+            Log.d("WekaTest","train done, lets test...");
+            Instances test = null;
+            test = readTest();
+            test.setClass(test.attribute(labelFeature));
+            Log.d("WekaTest",test.attribute(labelFeature).toString());
+            double newPred = -1.0;
+            for (int i=0; i<test.numInstances(); i++) {
+                newPred = newTree.classifyInstance(test.instance(i));
+                Log.d("WekaTest",test.instance(i).toString());
+                String label = data.classAttribute().value((int) newPred);
+                Log.d("WekaTest","Index: " + newPred + " Prediction = " + label);
+                newPred = -1.0;
+            }
+            Log.d("WekaTest","-----------------------------");
+            System.out.println("-----------------------------");
+            for (int i=0; i<data.numInstances(); i++) {
+                newPred = newTree.classifyInstance(data.instance(i));
+                Log.d("WekaTest",data.instance(i).toString());
+                String label = data.classAttribute().value((int) newPred);
+                Log.d("WekaTest","Index: " + newPred + " Prediction = " + label);
+                newPred = -1.0;
+            }
+        }else{
+            Log.d("WekaTest","train not done. impossible to test");
+        }
+
+    }
+
+    public void trainAndTest() throws Exception {
         Instances data = null;
         data = readTrain();
 
@@ -72,17 +167,13 @@ public class WekaTest {
 
         // Set label
         data.setClass(data.attribute(labelFeature));
+        Log.d("WekaTest","label: " + data.classAttribute().name() + " --- index: " + data.classIndex());
 
-        System.out.println("label: " + data.classAttribute().name() + " --- index: " + data.classIndex());
-
-
-        // Try SimpleCart decision tree/classifier
-       // SimpleCart tree = new SimpleCart();
         Classifier tree = new RandomTree() ;
         tree.buildClassifier(data);
-
         double acc = accuracy(tree, data);
-        Log.d("WekaTest","Accuracy = " + acc);
+
+        Log.d("WekaTest","Accuracy tree= " + acc);
         Log.d("WekaTest","tree(SimpleCart): " + tree);
 
         weka.core.SerializationHelper.write("tree.model", tree);
@@ -91,14 +182,13 @@ public class WekaTest {
         newTree = (RandomTree) weka.core.SerializationHelper.read("tree.model");
 
         acc = accuracy(newTree, data);
-        Log.d("WekaTest","Accuracy = " + acc);
+
+        Log.d("WekaTest","Accuracy newTree= " + acc);
 
         Instances test = null;
-
         test = readTest();
         test.setClass(test.attribute(labelFeature));
         Log.d("WekaTest",test.attribute(labelFeature).toString());
-
         double newPred = -1.0;
         for (int i=0; i<test.numInstances(); i++) {
             newPred = newTree.classifyInstance(test.instance(i));
@@ -111,10 +201,120 @@ public class WekaTest {
         System.out.println("-----------------------------");
         for (int i=0; i<data.numInstances(); i++) {
             newPred = newTree.classifyInstance(data.instance(i));
-            System.out.println(data.instance(i));
+            Log.d("WekaTest",data.instance(i).toString());
             String label = data.classAttribute().value((int) newPred);
-            System.out.println("Index: " + newPred + " Prediction = " + label);
+            Log.d("WekaTest","Index: " + newPred + " Prediction = " + label);
             newPred = -1.0;
         }
+    }
+
+
+    public void test2(Instance inst) {
+        boolean ok = false;
+        if (trainDone){
+            ok = true;
+        }else{
+            train2();
+        }
+        if (trainDone) {
+            double newPred = -1.0;
+            Log.d("WekaTest", "inst: " + inst.toString());
+            try {
+                newPred = newTree.classifyInstance(inst);
+                String label = trainData.classAttribute().value((int) newPred);
+                Log.d("WekaTest", "Index: " + newPred + " Prediction = " + label);
+                newPred = -1.0;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+    public void test(Instance inst) {
+        boolean ok = false;
+        if (trainDone){
+            ok = true;
+        }else{
+            train();
+        }
+        if (train()) {
+            double newPred = -1.0;
+            Log.d("WekaTest", "inst: " + inst.toString());
+            try {
+                if (unlabeled==null){
+                    unlabeled = new Instances(inst.dataset());
+                    Log.d("WekaTest", "unlabeled: " + unlabeled.toString());
+                }
+                /*
+                newPred = newTree.classifyInstance(inst);
+                String label = trainData.classAttribute().value((int) newPred);
+                Log.d("WekaTest", "Index: " + newPred + " Prediction = " + label);
+                newPred = -1.0;
+                */
+
+                double clsLabel = -1.0;
+                if(unlabeled.size()==0)
+                    unlabeled.add(0,inst);
+                else
+                    unlabeled.set(0,inst);
+                unlabeled.setClassIndex(unlabeled.numAttributes() - 1);
+              //  Log.d("WekaTest", "unlabeled: " + unlabeled.toString());
+                Instance i = unlabeled.instance(0);
+
+                clsLabel = newTree.classifyInstance(i);
+                i.setClassValue(clsLabel);
+                String label = unlabeled.classAttribute().value((int) clsLabel);
+                Log.d("WekaTest", "Index: " + clsLabel + " Prediction = " + label);
+                clsLabel = -1.0;
+                /*
+                newPred = newTree.classifyInstance(inst);
+                String label = trainData.classAttribute().value((int) newPred);
+                Log.d("WekaTest", "Index: " + newPred + " Prediction = " + label);
+                newPred = -1.0;
+                */
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+    private boolean train(){
+        if (trainDone)
+            return true;
+        else {
+            try {
+                trainData = null;
+                trainData = readTrain();
+                if (trainData == null) {
+                    Log.d("WekaTest", "data null!");
+                    trainDone = false;
+
+                } else {
+
+                    trainData.setClassIndex(trainData.numAttributes() - 1);
+                    String[] options = new String[1];
+                    options[0] = "-U";            // unpruned tree
+                    J48 tree = new J48();         // new instance of tree
+                    tree.setOptions(options);     // set the options
+                    tree.buildClassifier(trainData);   // build classifier
+                    newTree = tree;
+                    Log.d("WekaTest","train newtree: " + newTree.toString());
+                    /*
+                     Classifier cls = new J48();
+                    cls.buildClassifier(trainData);
+                    // evaluate classifier and print some statistics
+                    Evaluation eval = new Evaluation(trainData);
+                    eval.evaluateModel(cls, test);
+                    System.out.println(eval.toSummaryString("\nResults\n======\n", false));
+                     */
+
+                    trainDone = true;
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 }
