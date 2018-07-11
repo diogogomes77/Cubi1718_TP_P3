@@ -12,6 +12,7 @@ import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.classifiers.trees.J48;
+import weka.classifiers.trees.RandomForest;
 import weka.classifiers.trees.RandomTree;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -165,7 +166,8 @@ public class WekaTest {
                     J48 tree = new J48();         // new instance of tree
                     tree.setOptions(options);     // set the options
                     */
-                    RandomTree tree = new RandomTree();
+                    //RandomTree tree = new RandomTree();
+                    RandomForest tree = new RandomForest();
                     tree.buildClassifier(trainData);   // build classifier
                     newTree = tree;
                     Log.d("WekaTest","train newtree: " + newTree.toString());
