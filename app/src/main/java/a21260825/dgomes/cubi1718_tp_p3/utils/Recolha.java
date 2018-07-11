@@ -28,10 +28,12 @@ import arsystem.ARSystem;
 public class Recolha {
 
     private static Recolha instance;
+    private WekaArff wekaArff;
     private MainActivity activity;
     private Ficheiro ficheiro;
     private Registo registo;
     private  ARSystem ars;
+    private WekaTest wekaTest;
 
     // Acquire a reference to the system Location Manager
     private LocationManager locationManager;
@@ -50,6 +52,15 @@ public class Recolha {
         registo.setActivity(activity);
 
         ars= Analyser.getInstance().getArs();
+        wekaTest = WekaTest.getInstance();
+        wekaTest.setActivity(activity);
+        try {
+            wekaArff = WekaArff.getInstance();
+            wekaArff.setActivity(activity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static Recolha getInstance(MainActivity activity, Ficheiro ficheiro) {
@@ -75,7 +86,7 @@ public class Recolha {
         addSensor(Acelerometro.getInstance(mSensorManager));
         //addSensor(Luminometro.getInstance(mSensorManager));
        // addSensor(Localizacao.getInstance(this.activity));
-        addSensor(Magnetometro.getInstance(mSensorManager));
+      //  addSensor(Magnetometro.getInstance(mSensorManager));
       //  addSensor(Bateria.getInstance(this.activity));
 
     }
@@ -120,7 +131,7 @@ public class Recolha {
     private void modeTrain(){
         if (Config.ARSLIB)
             ars.setMode(ARSystem.MODE_TRAINING);
-        WekaTest.getInstance().reset();
+       wekaTest.reset();
         modeSave(Config.MODE_TRAIN);
     }
 
@@ -141,7 +152,7 @@ public class Recolha {
     private void modeAuto(){
         if (Config.ARSLIB)
             ars.setMode(ARSystem.MODE_TESTING);
-        WekaTest.getInstance().reset();
+        wekaTest.reset();
         for (CubiSensor sensor :cubiSensores) {
             sensor.iniciar();
             activity.addLog(sensor.toString() + " reconhecimentos iniciado\n");

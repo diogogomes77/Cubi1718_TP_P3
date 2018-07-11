@@ -12,20 +12,20 @@ public final class Config {
     public static final String FICHEIRO = "cubi21260825";
     public static final String EXTENCAO = ".csv";
 
-    public static final String ACT1 = "LshakeH"; // abanar horizontal longo
-    public static final String ACT2 = "LshakeV"; // abanar vertical longo
-    public static final String ACT1a = "Left"; // abanar horizontal longo
-    public static final String ACT2a = "Up"; // abanar vertical longo
-    public static final String ACT1b = "Right"; // abanar horizontal longo
-    public static final String ACT2b = "-Down"; // abanar vertical longo
-    public static final String ACT3 = "TwistH"; // girar horizontal
-    public static final String ACT4 = "Sit"; // girar vertical
-    public static final String ACT5 = "SshakeH"; // abanar horizontal curto
-    public static final String ACT6 = "SshakeV"; // abanar vertical curto
+    public static final String ACT1 = "Left"; // abanar horizontal longo
+    public static final String ACT2 = "Right"; // abanar vertical longo
+    public static final String ACT1a = ""; // abanar horizontal longo
+    public static final String ACT2a = ""; // abanar vertical longo
+    public static final String ACT1b = ""; // abanar horizontal longo
+    public static final String ACT2b = ""; // abanar vertical longo
+    public static final String ACT3 = "ShakeHor"; // girar horizontal
+    public static final String ACT4 = "ShakeVer"; // girar vertical
+    public static final String ACT5 = "SitDown"; // abanar horizontal curto
+    public static final String ACT6 = "SitUp"; // abanar vertical curto
     public static final String ACT7 = "Walk";
-    public static final String ACT8 = "PushP";
-    public static final String ACT9 = "GirarE";
-    public static final String ACT10 = "GirarD";
+    public static final String ACT8 = "Jump";
+    public static final String ACT9 = "Sit";
+    public static final String ACT10 = "Table";
 
     public static final String HOST = "urbysense.dei.uc.pt";
     public static final String USER = "cubistudent";
@@ -52,11 +52,12 @@ public final class Config {
     public static final String MODE_SAVE = "MODE_SAVE";
     public static final String MODE_AUTO = "MODE_AUTO";
 
-    public static final int PREPROC_COUNTER = 128;
+    public static final int PREPROC_COUNTER = 64;
     public static final String FICHEIRO_PREPROC = FICHEIRO + "_preproc";
-    public static final long TRAINNING_TIME = 20000; // 10 segundos
 
-    public static final int REGISTO_INTERVALO = 5; // milliseconds
+    public static final long TRAINNING_TIME = 0; // 10 segundos
+
+    public static final int REGISTO_INTERVALO = 2; // milliseconds
     public static final String EXTENCAO_ARFF = ".arff" ;
     public static final String FICHEIRO_TEST = "test";
     public static final String FICHEIRO_TRAIN = "train";

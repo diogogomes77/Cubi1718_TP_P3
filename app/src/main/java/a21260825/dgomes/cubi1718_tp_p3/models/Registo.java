@@ -130,9 +130,6 @@ public class Registo {
         }
     }
 
-
-
-
     private void terminaRegisto(){
         lastUpdate = System.currentTimeMillis();
         //Log.d("Registo","terminaRegisto");

@@ -270,6 +270,7 @@ public class PreProc {
     public void setAtividade(String atividade) {
         this.atividade = atividade;
         wekaArff.setAtividade(atividade);
+        init();
     }
 
     public void setMode(String mode) {

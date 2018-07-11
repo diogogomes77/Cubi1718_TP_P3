@@ -6,6 +6,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 
+import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
@@ -32,6 +33,7 @@ public class WekaTest {
     private Classifier newTree;
     private boolean trainDone;
     private Instances unlabeled;
+    private MainActivity activity;
 
     protected WekaTest()  {
        // path = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + Config.PASTA_FICHEIRO_LOCAL;
@@ -51,7 +53,9 @@ public class WekaTest {
         }
         return instance;
     }
-
+    public void setActivity(MainActivity activity){
+        this.activity=activity;
+    }
     public void reset(){
         instance = null;
         instance = new WekaTest();
@@ -87,41 +91,9 @@ public class WekaTest {
         }
         return correctPreds / testData.numInstances();
     }
+    
 
-
-
-    private void test( Instances data,Classifier newTree) throws Exception {
-        if (train()){
-            Log.d("WekaTest","train done, lets test...");
-            Instances test = null;
-            test = readTest();
-            test.setClass(test.attribute(labelFeature));
-            Log.d("WekaTest",test.attribute(labelFeature).toString());
-            double newPred = -1.0;
-            for (int i=0; i<test.numInstances(); i++) {
-                newPred = newTree.classifyInstance(test.instance(i));
-                Log.d("WekaTest",test.instance(i).toString());
-                String label = data.classAttribute().value((int) newPred);
-                Log.d("WekaTest","Index: " + newPred + " Prediction = " + label);
-                newPred = -1.0;
-            }
-            Log.d("WekaTest","-----------------------------");
-            System.out.println("-----------------------------");
-            for (int i=0; i<data.numInstances(); i++) {
-                newPred = newTree.classifyInstance(data.instance(i));
-                Log.d("WekaTest",data.instance(i).toString());
-                String label = data.classAttribute().value((int) newPred);
-                Log.d("WekaTest","Index: " + newPred + " Prediction = " + label);
-                newPred = -1.0;
-            }
-        }else{
-            Log.d("WekaTest","train not done. impossible to test");
-        }
-
-    }
-
-
-    public void test(Instance inst) {
+    public String test(Instance inst) {
         boolean ok = false;
         if (trainDone){
             ok = true;
@@ -159,6 +131,7 @@ public class WekaTest {
                 Double ac = accuracy(newTree,unlabeled);
                 Log.d("WekaTest", "Index: " + clsLabel + " Prediction = " + label+" ac:"+Double.toString(ac));
                 clsLabel = -1.0;
+                return label;
                 /*
                 newPred = newTree.classifyInstance(inst);
                 String label = trainData.classAttribute().value((int) newPred);
@@ -170,6 +143,7 @@ public class WekaTest {
             }
 
         }
+        return "";
     }
     private boolean train(){
         if (trainDone)
@@ -185,10 +159,13 @@ public class WekaTest {
                 } else {
 
                     trainData.setClassIndex(trainData.numAttributes() - 1);
+                    /*
                     String[] options = new String[1];
                     options[0] = "-U";            // unpruned tree
                     J48 tree = new J48();         // new instance of tree
                     tree.setOptions(options);     // set the options
+                    */
+                    RandomTree tree = new RandomTree();
                     tree.buildClassifier(trainData);   // build classifier
                     newTree = tree;
                     Log.d("WekaTest","train newtree: " + newTree.toString());

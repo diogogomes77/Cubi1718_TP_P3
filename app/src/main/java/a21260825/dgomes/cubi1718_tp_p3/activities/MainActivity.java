@@ -294,17 +294,7 @@ public class MainActivity extends AppCompatActivity {
 
         recolha.iniciar(modo);
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(Config.SOUND) {
-                    ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
-                    toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
-                }
-                pausarRecolha();
-            }
-        }, Config.TRAINNING_TIME);
+        train_time();
 
 
     }
@@ -320,8 +310,23 @@ public class MainActivity extends AppCompatActivity {
         simpleChronometer.stop();
         contarFicheirosNovos();
     }
+    private void train_time(){
+        if(Config.TRAINNING_TIME>0){
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    pausarRecolha();
+                }
+            }, Config.TRAINNING_TIME);
+        }
 
+    }
     private void pausarRecolha(){
+        if(Config.SOUND) {
+            ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+            toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+        }
         if (!ttRecolhaPausa.isChecked())
             ttRecolhaPausa.setChecked(true);
         recolhaPausada = true;
@@ -332,23 +337,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void continuarRecolha(){
-            recolhaPausada = false;
-            addLog("Recolha continuada\n");
-            recolha.continuar();
-            simpleChronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
-            simpleChronometer.start();
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(Config.SOUND) {
-                    ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
-                    toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
-                }
-                pausarRecolha();
-            }
-        }, Config.TRAINNING_TIME);
+        recolhaPausada = false;
+        addLog("Recolha continuada\n");
+        recolha.continuar();
+        simpleChronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
+        simpleChronometer.start();
+        train_time();
     }
 
     public void contarFicheirosNovos(){

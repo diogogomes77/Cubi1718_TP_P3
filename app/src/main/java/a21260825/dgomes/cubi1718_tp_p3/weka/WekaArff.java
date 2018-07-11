@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Ficheiro;
 import weka.core.Attribute;
@@ -34,6 +35,7 @@ public class WekaArff {
     private Ficheiro ficheiro;
     private OnNovosCalculadosTask calculadosTask;
     protected String modo;
+    private MainActivity activity;
 
     protected WekaArff() throws Exception {
         atividades = new ArrayList<>();
@@ -132,10 +134,14 @@ public class WekaArff {
         this.modo = mode;
     }
 
-    private class OnNovosCalculadosTask extends AsyncTask<Void, Void, Void> {
+    public void setActivity(MainActivity activity) {
+        this.activity = activity;
+    }
+
+    private class OnNovosCalculadosTask extends AsyncTask<Void, Void, String> {
 
         private final TreeMap<String, Double> calculados;
-
+        private String prediction="";
 
         public OnNovosCalculadosTask(TreeMap<String, Double> calculados) {
             this.calculados=calculados;
@@ -143,7 +149,7 @@ public class WekaArff {
         }
 
         @Override
-        protected Void doInBackground(Void... arg0) {
+        protected String doInBackground(Void... arg0) {
 
             Log.d("addInstance", calculados.toString());
             Instance inst = new DenseInstance(attributes.size());
@@ -166,15 +172,24 @@ public class WekaArff {
                     inst.setValue(attributeAtividade, atividade);
                 else {
                     //inst.setValue(attributeAtividade, "?");
-                    wekaTest.test(inst);
+                    prediction = wekaTest.test(inst);
                 }
             }
             else
                 inst.setValue(attributeAtividade, atividade);
             mDataset.add(inst);
             Log.i("new instance", mDataset.size() + "");
-            return null;
+            return prediction;
         }
+        @Override
+        protected void onPostExecute(String result) {
+
+
+            if (result!=null) {
+                activity.addLog("Prediction = " + result + "\n");
+            }
+        }
+
     }
 }
 
