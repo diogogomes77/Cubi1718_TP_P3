@@ -50,6 +50,7 @@ public class Registo {
         this.ficheiro = ficheiro;
         valoresRegisto = new TreeMap<>();
         preProc = PreProc.getInstance(ficheiro);
+
         //this.ars = Analyser.getInstance().getArs();
        
         result = new StringBuilder();
@@ -193,6 +194,7 @@ public class Registo {
     public void setActivity(MainActivity activity) {
         this.activity = activity;
         arsLib.setActivity(activity);
+        preProc.setActivity(activity);
     }
 
     public void setNovoCalculadora() {

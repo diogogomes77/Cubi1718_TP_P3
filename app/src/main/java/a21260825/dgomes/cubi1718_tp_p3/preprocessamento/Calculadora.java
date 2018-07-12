@@ -3,6 +3,7 @@ package a21260825.dgomes.cubi1718_tp_p3.preprocessamento;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import a21260825.dgomes.cubi1718_tp_p3.utils.FFT;
@@ -39,14 +40,14 @@ public class Calculadora {
         return 0.0;
     }
 
-    public double mean (){
+    private double mean (){
         double sum = sum();
         double mean = 0.0;
         mean = sum / (values.size() * 1.0);
         return mean;
     }
 
-    public double median (){
+    private double median (){
         int middle = values.size()/2;
 
         if (values.size() % 2 == 1) {
@@ -56,7 +57,7 @@ public class Calculadora {
         }
     }
 
-    public double sd (){
+    private double sd (){
         double sum = 0.0;
         double mean = mean();
         double result;
@@ -77,7 +78,7 @@ public class Calculadora {
         return values;
     }
 
-    public double fft() {
+    private double fft() {
         //int N = Config.PREPROC_COUNTER;
         int N = values.size();
         FFT fft = new FFT(N);
@@ -106,11 +107,28 @@ public class Calculadora {
 
     }
 
+    private Double max(){
+        Double max=0.0;
+        for (Double i : values){
+            if (i>max)
+                max=i;
+        }
+        return max;
+    }
+    private Double min(){
+        Double min = values.get(0);
+        for (int i = 1; i < values.size(); i++) {
+            min = Math.min(min, values.get(i));
+        }
+        return min;
+    }
     public Double getCalculated(String calc) {
         String mean = "mean";
         String median = "median";
         String sd ="sd";
         String fft ="fft";
+        String max ="max";
+        String min ="min";
         if(calc.contains(mean))
             return mean();
         else if(calc.contains(median))
@@ -119,6 +137,10 @@ public class Calculadora {
             return sd();
         else if(calc.contains(fft))
             return fft();
+        else if(calc.contains(max))
+            return max();
+        else if(calc.contains(min))
+            return min();
         return null;
     }
 }

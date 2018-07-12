@@ -57,7 +57,7 @@ public final class Config {
 
     public static final long TRAINNING_TIME = 0; // 10 segundos
 
-    public static final int REGISTO_INTERVALO = 2; // milliseconds
+    public static final int REGISTO_INTERVALO = 1; // milliseconds
     public static final String EXTENCAO_ARFF = ".arff" ;
     public static final String FICHEIRO_TEST = "test";
     public static final String FICHEIRO_TRAIN = "train";
@@ -67,4 +67,6 @@ public final class Config {
     public static boolean SOUND = true;
 
     public static boolean ARSLIB = false;
+
+    public static boolean STACK = false;
 }

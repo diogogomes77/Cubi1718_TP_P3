@@ -1,10 +1,15 @@
 package a21260825.dgomes.cubi1718_tp_p3.preprocessamento;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.TreeMap;
 
 import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
@@ -24,10 +29,26 @@ public class PreProc {
     private WekaArff wekaArff;
     private List<String> extras;
     private String mode;
+    private TreeMap<String, Float> valoresRegisto;
+    private TreeMap<Integer, TreeMap<String, Double>> listRegistosCalculadora;
+    private TreeMap<Integer, TreeMap<String, Double>> listRegistosCalculadoraFifo;
+    private TreeMap<String,Double> valoresRegistoCalculadora;
+    private int preProcCounter;
+    private String atividade;
+    private List<String> keys;
+    private MainActivity activity;
+    private boolean novoPreProc = true;
+    private TreeMap<String,Calculadora> forCalculadora = new TreeMap<>();
+    private ArrayList<String> keysCalculadora;
+    //private Queue<TreeMap<String, Double>> listRegistosCalculadoraFifo;
+
+    private StringBuilder resultCalculadora;
+    private boolean firstDone;
 
     protected PreProc(Ficheiro ficheiro) {
         valoresRegistoCalculadora = new TreeMap<>();
         listRegistosCalculadora = new TreeMap<>();
+        listRegistosCalculadoraFifo = new TreeMap<>();
         resultCalculadora = new StringBuilder();
         this.ficheiro=ficheiro;
         try {
@@ -41,6 +62,10 @@ public class PreProc {
         extras.add("median");
         extras.add("sd");
         extras.add("fft");
+        extras.add("min");
+        extras.add("max");
+
+        firstDone = false;
         //wekaArff.setFeatures(extras);
         //for(String extra : extras){
         //    Log.d("extras","added: " + extra);
@@ -54,18 +79,7 @@ public class PreProc {
         return instance;
     }
 
-    private TreeMap<String, Float> valoresRegisto;
-    private TreeMap<Integer, TreeMap<String, Double>> listRegistosCalculadora;
-    private TreeMap<String,Double> valoresRegistoCalculadora;
-    private int preProcCounter;
-    private String atividade;
-    private List<String> keys;
-    private MainActivity activity;
-    private boolean novoPreProc = true;
-    private TreeMap<String,Calculadora> forCalculadora = new TreeMap<>();
-    private ArrayList<String> keysCalculadora;
 
-    private StringBuilder resultCalculadora;
 
     public void init(){
         Log.d("Registo","preProcInit");
@@ -81,30 +95,76 @@ public class PreProc {
             preProc.resetValues();
         }
     }
+    public void setActivity(MainActivity activity){
+        this.activity=activity;
+    }
     public void setKeys(List<String> keys){
         this.keys=keys;
     }
-    public void addCalculadora() {
 
-        for (String key: keys) {
-            double value = valoresRegisto.get(key);
-            valoresRegistoCalculadora.put(key,value);
-            // Log.d("valoresRegistoCalculadora", "key:" + key + " put: " + Double.toString(value));
+    public void addCalculadora_stack() {
+        if (Config.STACK){
+            for (String key: keys) {
+                double value = valoresRegisto.get(key);
+                valoresRegistoCalculadora.put(key, value);
+                // Log.d("valoresRegistoCalculadora", "key:" + key + " put: " + Double.toString(value));
+            }
+
+            TreeMap<String, Double> valorNovo = new TreeMap<>();
+
+            for (Map.Entry<String,Double> valor : valoresRegistoCalculadora.entrySet()) {
+                valorNovo.put(valor.getKey(),valor.getValue());
+            }
+            TreeMap<String, Double> temp;
+            for (int i = listRegistosCalculadora.size()-1; i>0 ; i--){
+
+                temp = listRegistosCalculadora.get(i-1);
+                //  Log.d("listRegistosCalculadora","i=" + Integer.toString(i)+" tempo=" + temp.toString());
+                listRegistosCalculadora.put(i,temp);
+            }
+            listRegistosCalculadora.put(0,valorNovo);
+            preProcCalculate();
+
+        }else {
+            firstDone=false;
         }
-        int index = Config.PREPROC_COUNTER-preProcCounter;
-        //TreeMap<String,Double> registo = new TreeMap<>();
-        TreeMap<String, Double> valorNovo = new TreeMap<>();
-        for (Map.Entry<String,Double> valor : valoresRegistoCalculadora.entrySet()) {
-            valorNovo.put(valor.getKey(),valor.getValue());
-        }
-        listRegistosCalculadora.put(index,valorNovo);
-        //listRegistosCalculadora.put(index,valoresRegistoCalculadora);
-        preProcCounter--;
-        if (preProcCounter ==0){
-            preProcCalculate(); // <-- problem aqui
-            init();
-        }
+
     }
+    public void addCalculadora() {
+        if (!firstDone){
+            for (String key: keys) {
+                double value = valoresRegisto.get(key);
+                valoresRegistoCalculadora.put(key,value);
+                // Log.d("valoresRegistoCalculadora", "key:" + key + " put: " + Double.toString(value));
+            }
+            int index = Config.PREPROC_COUNTER-preProcCounter;
+
+            TreeMap<String, Double> valorNovo = new TreeMap<>();
+
+            for (Map.Entry<String,Double> valor : valoresRegistoCalculadora.entrySet()) {
+                valorNovo.put(valor.getKey(),valor.getValue());
+            }
+            listRegistosCalculadora.put(index,valorNovo);
+
+            preProcCounter--;
+            if (preProcCounter ==0){
+                if (Config.STACK){
+                    firstDone =true;
+                    preProcCalculate();
+                    addCalculadora_stack();// <-- stack aqui
+                }
+                else{
+                    preProcCalculate();
+                    init();
+                }
+
+            }
+        }else{
+            addCalculadora_stack();
+        }
+
+    }
+
     private void preProcCalculate(){
         // Log.d("preProcCalculate", "start");
         Log.d("preProcCalculate", "listRegistosCalculadora: " + listRegistosCalculadora.size());
@@ -128,6 +188,7 @@ public class PreProc {
             setKeysCalculadora();
         calculados = calcular(keysCalculadora);
         Log.d("keysCalculadora-1",Integer.toString(keysCalculadora.size()));
+        //activity.beep();
         wekaArff.setFeatures(keysCalculadora);
        // wekaArff.setAtividade(atividade);
         wekaArff.addInstance(calculados);
@@ -223,18 +284,7 @@ public class PreProc {
     }
 
     private double getCalculado(String key) {
-        /*
-        String mean = "mean";
-        String median = "median";
-        String sd ="sd";
-        String fft ="fft";
-        String del ="";
-        List<String> remain = new ArrayList<>();
-        remain.add(mean);
-        remain.add(median);
-        remain.add(sd);
-        remain.add(fft);
-        */
+
         String del ="";
         double preProcValue=0.0;
         Calculadora preProc = null;

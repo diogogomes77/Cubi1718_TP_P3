@@ -4,6 +4,7 @@ package a21260825.dgomes.cubi1718_tp_p3.activities;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.media.SoundPool;
 import android.media.ToneGenerator;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -52,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
     private long timeWhenStopped = 0;
     private boolean recolhaPausada = false;
     private CheckBox autoMode;
+    private  ToneGenerator toneG;
+
+    BeepThread beepSound;
 
 
     private RadioButton rbAct1,rbAct2,rbAct3,rbAct4,rbAct5,rbAct6,rbAct7,rbAct8,rbAct9,rbAct10;
@@ -110,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
 
         setActividadesLabels();
         setButtonListenners();
+        beepSound = new BeepThread();
+        toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
 
 
     }
@@ -274,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
         contarFicheirosNovos();
 
         if(Config.SOUND){
-            ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+           // ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
 
             try {
                 toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
@@ -324,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void pausarRecolha(){
         if(Config.SOUND) {
-            ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+            //ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
             toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
         }
         if (!ttRecolhaPausa.isChecked())
@@ -383,5 +389,23 @@ public class MainActivity extends AppCompatActivity {
     public void addLog(String s){
         tvLog.append(s);
         mScrollView.fullScroll(View.FOCUS_DOWN);
+    }
+
+    public void beep() {
+        if(Config.SOUND) {
+            beepSound.run();
+
+        }
+    }
+
+    public class BeepThread extends Thread {
+        @Override
+        /**
+         * Wait for sounds to play
+         */
+        public void run() {
+
+            toneG.startTone(ToneGenerator.TONE_CDMA_ABBR_INTERCEPT, 200);
+        }
     }
 }
