@@ -15,7 +15,9 @@ import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.arsystem.Analyser;
 import a21260825.dgomes.cubi1718_tp_p3.models.Registo;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.Acelerometro;
+import a21260825.dgomes.cubi1718_tp_p3.sensors.Bateria;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.CubiSensor;
+import a21260825.dgomes.cubi1718_tp_p3.sensors.Luminometro;
 import a21260825.dgomes.cubi1718_tp_p3.sensors.Magnetometro;
 import a21260825.dgomes.cubi1718_tp_p3.weka.WekaArff;
 import a21260825.dgomes.cubi1718_tp_p3.weka.WekaTest;
@@ -51,7 +53,8 @@ public class Recolha {
         registo = Registo.getInstance(cubiSensores,ficheiro);
         registo.setActivity(activity);
 
-        ars= Analyser.getInstance().getArs();
+        if (Config.ARSLIB)
+            ars= Analyser.getInstance().getArs();
         wekaTest = WekaTest.getInstance();
         wekaTest.setActivity(activity);
         try {
@@ -84,10 +87,10 @@ public class Recolha {
         //addSensor(LocalizacaoFused.getInstance(this.activity));
         //addSensor(Gyroscopio.getInstance(mSensorManager));
         addSensor(Acelerometro.getInstance(mSensorManager));
-        //addSensor(Luminometro.getInstance(mSensorManager));
+      //  addSensor(Luminometro.getInstance(mSensorManager));
        // addSensor(Localizacao.getInstance(this.activity));
-      //  addSensor(Magnetometro.getInstance(mSensorManager));
-      //  addSensor(Bateria.getInstance(this.activity));
+        addSensor(Magnetometro.getInstance(mSensorManager));
+     //   addSensor(Bateria.getInstance(this.activity));
 
     }
 

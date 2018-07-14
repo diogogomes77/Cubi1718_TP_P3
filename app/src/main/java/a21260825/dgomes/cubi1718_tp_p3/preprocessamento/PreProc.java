@@ -151,7 +151,7 @@ public class PreProc {
                 if (Config.STACK){
                     firstDone =true;
                     preProcCalculate();
-                    addCalculadora_stack();// <-- stack aqui
+                    addCalculadora_stack();// <-- envia para stack aqui
                 }
                 else{
                     preProcCalculate();

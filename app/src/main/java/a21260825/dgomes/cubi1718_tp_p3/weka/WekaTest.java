@@ -142,7 +142,7 @@ public class WekaTest {
         }
         return "Training...";
     }
-    private void train(){
+    public void train(){
         if (!trainning) {
             try {
                 trainData = null;
@@ -167,7 +167,7 @@ public class WekaTest {
         }
 
     }
-    
+
     private class Train extends AsyncTask<Void, Void, String> {
 
         @Override

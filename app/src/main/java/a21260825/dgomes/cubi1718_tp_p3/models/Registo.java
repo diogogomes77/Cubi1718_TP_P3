@@ -100,6 +100,7 @@ public class Registo {
     public void setAtividade(String atividade) {
         this.atividade = atividade;
         preProc.setAtividade(atividade);
+
         if (Config.ARSLIB)
             arsLib.setAtividade(atividade);
     }

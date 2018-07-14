@@ -2,6 +2,8 @@
 package a21260825.dgomes.cubi1718_tp_p3.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -11,11 +13,14 @@ import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -25,6 +30,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import a21260825.dgomes.cubi1718_tp_p3.R;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Recolha;
@@ -32,6 +38,7 @@ import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Ficheiro;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Permissoes;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Transferencia;
+import a21260825.dgomes.cubi1718_tp_p3.weka.WekaArff;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
     private RadioButton rbAct1,rbAct2,rbAct3,rbAct4,rbAct5,rbAct6,rbAct7,rbAct8,rbAct9,rbAct10;
     private RadioGroup mode;
     private RadioButton modeLearn,modeAuto,modeSave;
+    private Button btEditar;
+    private ArrayList<RadioButton> buttonsAtividadeList;
 
     public LinearLayout getSensorTvs() {
         return sensorTvs;
@@ -83,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
 
         ficheiro = Ficheiro.getInstance(this);
         permissoes = Permissoes.getInstance(this,tvLog);
+        buttonsAtividadeList = new ArrayList<RadioButton>();
+        setActividadesLabels();
         recolha = Recolha.getInstance(this, ficheiro);
 
         simpleChronometer = (Chronometer) findViewById(R.id.chrono);
@@ -102,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
             addLog("temPermissoes = false\n");
             btRecolha.setEnabled(false);
         }
+        btEditar = (Button) findViewById(R.id.btEdit);
 
 
         ttRecolhaPausa.setEnabled(false);
@@ -112,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        setActividadesLabels();
         setButtonListenners();
         beepSound = new BeepThread();
         toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
@@ -122,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
     private void setActividadesLabels(){
         rbAct1 = findViewById(R.id.rbAct1);
         rbAct1.setText(Config.ACT1);
+
         rbAct2 = findViewById(R.id.rbAct2);
         rbAct2.setText(Config.ACT2);
         rbAct3 = findViewById(R.id.rbAct3);
@@ -140,6 +152,16 @@ public class MainActivity extends AppCompatActivity {
         rbAct9.setText(Config.ACT9);
         rbAct10 = findViewById(R.id.rbAct10);
         rbAct10.setText(Config.ACT10);
+        buttonsAtividadeList.add(rbAct1);
+        buttonsAtividadeList.add(rbAct2);
+        buttonsAtividadeList.add(rbAct3);
+        buttonsAtividadeList.add(rbAct4);
+        buttonsAtividadeList.add(rbAct5);
+        buttonsAtividadeList.add(rbAct6);
+        buttonsAtividadeList.add(rbAct7);
+        buttonsAtividadeList.add(rbAct8);
+        buttonsAtividadeList.add(rbAct9);
+        buttonsAtividadeList.add(rbAct10);
 
         modeLearn = findViewById(R.id.modeLearn);
         modeLearn.setText(Config.MODE_TRAIN);
@@ -148,34 +170,45 @@ public class MainActivity extends AppCompatActivity {
         modeSave = findViewById(R.id.modeSave);
         modeSave.setText(Config.MODE_SAVE);
     }
-    private void setButtonListenners(){
-        atividades1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+    private RadioButton findButtonAtividade(String atividade){
+        for(RadioButton b:buttonsAtividadeList){
+            String t = ""+ b.getText();
+            if (t.compareTo(atividade)==0)
+                return b;
+        }
+        return null;
+
+    }
+
+    public ArrayList<RadioButton> getButtonsAtividadeList() {
+        return buttonsAtividadeList;
+    }
+
+    private void setButtonListenners() {
+        atividades1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 setAtividades2();
                 atividade = escolherAtividade(checkedId);
                 recolha.getRegisto().setAtividade(atividade);
             }
         });
-        atividades2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        atividades2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 setAtividades1();
                 atividade = escolherAtividade(checkedId);
                 recolha.getRegisto().setAtividade(atividade);
             }
         });
-        mode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        mode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 modo = escolherModo(checkedId);
             }
         });
         btRecolha.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (atividade==null){
+                if (atividade == null) {
                     Toast.makeText(MainActivity.this, "Escolha uma atividade!", Toast.LENGTH_LONG).show();
-                }else if (modo==null){
+                } else if (modo == null) {
                     Toast.makeText(MainActivity.this, "Escolha um modo!", Toast.LENGTH_LONG).show();
                 } else {
                     if (recolhaIniciada) {
@@ -208,7 +241,72 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        btEditar.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                if(atividade == null){
+                    addLog("selecione uma atividade a editar\n");
+                }else{
+                    //String a=""+atividade;
+                    final RadioButton atButton = findButtonAtividade(atividade);
+                    if (atButton==null){
+                        addLog("problema a editar a atividade\n");
+                    }else{
+                        // get prompts.xml view
+                        LayoutInflater li = LayoutInflater.from(MainActivity.this);
+                        View promptsView = li.inflate(R.layout.popup, null);
+
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                MainActivity.this);
+
+                        // set prompts.xml to alertdialog builder
+                        alertDialogBuilder.setView(promptsView);
+
+                        final EditText userInput = (EditText) promptsView
+                                .findViewById(R.id.editTextDialogUserInput);
+                        userInput.setText(atButton.getText());
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setCancelable(false)
+                                .setPositiveButton("OK",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                // get user input and set it to result
+                                                // edit text
+                                                //  result.setText(userInput.getText());
+                                                String novaA= userInput.getText().toString();
+                                                atButton.setText(novaA);
+                                                atividade=novaA;
+                                                recolha.getRegisto().setAtividade(atividade);
+                                                try {
+                                                    WekaArff.getInstance().setAtividades();
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        })
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+
+                        // show it
+                        alertDialog.show();
+                    }
+
+                }
+            }
+
+        });
     }
+
     private void transferirFicheirosNovos(){
         File[] list = ficheiro.getPasta().listFiles();
         ficheiro.addFicheirosTransferencia(list);
@@ -265,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
         RadioButton rb = (RadioButton) findViewById(checkedId);
         String atividade = rb.getText().toString();
         addLog("Atividade: " + atividade+"\n");
+        Log.d("escolherAtividade",atividade);
         return atividade;
     }
 

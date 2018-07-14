@@ -13,18 +13,18 @@ public final class Config {
     public static final String EXTENCAO = ".csv";
 
     public static final String ACT1 = "Left"; // abanar horizontal longo
-    public static final String ACT2 = "Right"; // abanar vertical longo
+    public static final String ACT2 = "ShakeVer"; // abanar vertical longo
     public static final String ACT1a = ""; // abanar horizontal longo
     public static final String ACT2a = ""; // abanar vertical longo
     public static final String ACT1b = ""; // abanar horizontal longo
     public static final String ACT2b = ""; // abanar vertical longo
     public static final String ACT3 = "ShakeHor"; // girar horizontal
-    public static final String ACT4 = "ShakeVer"; // girar vertical
+    public static final String ACT4 = "SitUp"; // girar vertical
     public static final String ACT5 = "SitDown"; // abanar horizontal curto
-    public static final String ACT6 = "SitUp"; // abanar vertical curto
+    public static final String ACT6 = "Sit"; // abanar vertical curto
     public static final String ACT7 = "Walk";
     public static final String ACT8 = "Jump";
-    public static final String ACT9 = "Sit";
+    public static final String ACT9 = "Right";
     public static final String ACT10 = "Table";
 
     public static final String HOST = "urbysense.dei.uc.pt";

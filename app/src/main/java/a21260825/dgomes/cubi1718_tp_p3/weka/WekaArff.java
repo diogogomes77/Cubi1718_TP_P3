@@ -1,7 +1,10 @@
 package a21260825.dgomes.cubi1718_tp_p3.weka;
 
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Chronometer;
+import android.widget.RadioButton;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,10 +39,14 @@ public class WekaArff {
     private OnNovosCalculadosTask calculadosTask;
     protected String modo;
     private MainActivity activity;
+    private String atividadeAferidaAtual;
+    private Chronometer simpleChronometer;
+    private long timeAtividadeAferida;
+
 
     protected WekaArff() throws Exception {
         atividades = new ArrayList<>();
-        setAtividades();
+
         attributes = new ArrayList<Attribute>();
         done = false;
         ficheiro = Ficheiro.getInstance();
@@ -98,10 +105,23 @@ public class WekaArff {
                 mFeatureFile = ficheiro.getWekaArff();
             }else{
                 Log.d("WekaArff stop", "modo: " + modo);
-                if (modo.contentEquals(Config.MODE_SAVE) || modo.contentEquals(Config.MODE_SAVE))
+                if (modo.contentEquals(Config.MODE_AUTO) || modo.contentEquals(Config.MODE_SAVE)){
                     mFeatureFile = ficheiro.getWekaArff();
-                else //if (modo.contentEquals(Config.MODE_TRAIN))
+                    if (modo.contentEquals(Config.MODE_AUTO)){
+                        long now = System.currentTimeMillis();
+                        double duracao = (now- timeAtividadeAferida)/1000.0;
+                        activity.addLog(" durante " + Double.toString(duracao) + " seg. \n");
+                    }
+
+
+                }
+
+                else {
+                    //if (modo.contentEquals(Config.MODE_TRAIN))
                     mFeatureFile = ficheiro.getWekaArffTrain();
+
+                }
+                atividadeAferidaAtual=null;
                // else if (modo.contentEquals(Config.MODE_AUTO))
 
             }
@@ -110,14 +130,23 @@ public class WekaArff {
             // Write into the file
             saver.writeBatch();
             Log.d("ArffSaver",modo);
+            wekaTest.train();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public void setAtividades(){
+        atividades.clear();
+        for(RadioButton r: activity.getButtonsAtividadeList()){
+            String a = ""+r.getText();
+            atividades.add(a);
+        }
+        attributes.set(attributes.size()-1,new Attribute(Config.CLASS_LABEL, atividades));
+    }
 
-    private void setAtividades(){
+    private void setAtividades_(){
         atividades.add(Config.ACT1);
         atividades.add(Config.ACT2);
         atividades.add(Config.ACT3);
@@ -128,20 +157,23 @@ public class WekaArff {
         atividades.add(Config.ACT8);
         atividades.add(Config.ACT9);
         atividades.add(Config.ACT10);
-    }
 
+    }
     public void setMode(String mode) {
         this.modo = mode;
     }
 
     public void setActivity(MainActivity activity) {
         this.activity = activity;
+        setAtividades();
+
     }
 
     private class OnNovosCalculadosTask extends AsyncTask<Void, Void, String> {
 
         private final TreeMap<String, Double> calculados;
         private String prediction="";
+
 
         public OnNovosCalculadosTask(TreeMap<String, Double> calculados) {
             this.calculados=calculados;
@@ -168,8 +200,10 @@ public class WekaArff {
           //  Log.i("atividade", atividade);
             if(modo!=null) {
                 Log.d("WekaArff", "modo:" + modo + " atividade:" + atividade);
-                if (modo.contentEquals(Config.MODE_TRAIN) || modo.contentEquals(Config.MODE_SAVE))
+                if (modo.contentEquals(Config.MODE_TRAIN) || modo.contentEquals(Config.MODE_SAVE)){
                     inst.setValue(attributeAtividade, atividade);
+                    prediction = atividade;
+                }
                 else {
                     //inst.setValue(attributeAtividade, "?");
                     prediction = wekaTest.test(inst);
@@ -183,10 +217,30 @@ public class WekaArff {
         }
         @Override
         protected void onPostExecute(String result) {
-
+            String textomodo ="";
+            if (modo.contentEquals(Config.MODE_TRAIN) || modo.contentEquals(Config.MODE_SAVE)){
+                textomodo = "Atividade treinada = ";
+            }else{
+                textomodo = "Atividade reconhecida = ";
+            }
 
             if (result!=null) {
-                activity.addLog("Prediction = " + result + "\n");
+                if (atividadeAferidaAtual ==null){
+                    timeAtividadeAferida = System.currentTimeMillis();
+                    atividadeAferidaAtual =result;
+                    activity.addLog(textomodo + atividadeAferidaAtual);
+                }
+
+                else
+                    if (atividadeAferidaAtual.compareTo(result)!=0){
+                        long now = System.currentTimeMillis();
+                        double duracao = (now- timeAtividadeAferida)/1000.0;
+                        atividadeAferidaAtual =result;
+                        activity.addLog(" durante " + Double.toString(duracao) + " seg. \n");
+                        activity.addLog(textomodo + atividadeAferidaAtual );
+                        timeAtividadeAferida = System.currentTimeMillis();
+                    }
+
             }
         }
 
