@@ -138,7 +138,7 @@ public class Analyser {
                 .subLabelDelimiter("_")
                 .reuseSameInstance(false)
                 .createSystem();
-       System.out.println(ars.toString());
+      // System.out.println(ars.toString());
        //Log.d("init",ars.toString());
 
         // ---------------------

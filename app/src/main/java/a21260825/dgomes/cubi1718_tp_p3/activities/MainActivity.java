@@ -497,6 +497,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void setAtividades(ArrayList<String> atividades) {
+        int i=0;
+        for(RadioButton r:buttonsAtividadeList){
+            String at = atividades.get(i);
+            Log.d("setAtividades",at);
+            r.setText(at);
+            i++;
+        }
+    }
+
     public class BeepThread extends Thread {
         @Override
         /**

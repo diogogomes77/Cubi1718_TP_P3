@@ -89,7 +89,7 @@ public class Recolha {
         addSensor(Acelerometro.getInstance(mSensorManager));
       //  addSensor(Luminometro.getInstance(mSensorManager));
        // addSensor(Localizacao.getInstance(this.activity));
-        addSensor(Magnetometro.getInstance(mSensorManager));
+     //   addSensor(Magnetometro.getInstance(mSensorManager));
      //   addSensor(Bateria.getInstance(this.activity));
 
     }

@@ -5,12 +5,15 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.TreeMap;
 
 import a21260825.dgomes.cubi1718_tp_p3.activities.MainActivity;
 import a21260825.dgomes.cubi1718_tp_p3.utils.Config;
 import weka.classifiers.Classifier;
 import weka.classifiers.trees.RandomForest;
+import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.*;
@@ -65,14 +68,28 @@ public class WekaTest {
        // DataSource source = new DataSource(arff_train);
         DataSource source = new DataSource(ficheiroTrain.getAbsolutePath());
         Instances data = source.getDataSet();
+        Instances extras = source.getStructure();
+       // Log.d("readtTraine xtras",extras.toString());
+        Attribute a = extras.attribute("activity");
+        Enumeration<Object> ak = a.enumerateValues();
+        ArrayList<String> atividades= new ArrayList<>();
+        while(ak.hasMoreElements()){
+            String at = (String) ak.nextElement();
+            atividades.add(at);
+            Log.d("readtTrain at",at.toString());
+        }
+        WekaArff.getInstance().setAtividades(atividades);
+       // activity.setAtividades(atividades);
+        /*
+        Enumeration<Attribute> ok= extras.enumerateAttributes();
+        while(ok.hasMoreElements()){
+            Attribute at = ok.nextElement();
+            Log.d("readtTrain at",at.toString());
+        }*/
+
         return data;
     }
 
-    private Instances readTest() throws Exception {
-        DataSource source = new DataSource(arff_test);
-        Instances data = source.getDataSet();
-        return data;
-    }
 
     private double accuracy(Classifier myClass, Instances testData) {
         float correctPreds = 0;

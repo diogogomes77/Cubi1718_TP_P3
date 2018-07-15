@@ -74,18 +74,17 @@ public class WekaArff {
                 Log.d("setFeatures","extra: " + key + " = " + a.toString());
                // Log.d("setFeatures","Attribute: " + a.name());
             }
+
             attributeAtividade = new Attribute(Config.CLASS_LABEL, atividades);
             attributes.add(attributeAtividade);
             mDataset = new Instances("extras", attributes,Config.PREPROC_COUNTER);
+
             done=true;
         }else{
             Log.d("setFeatures","pass");
         }
-        // Adding the max feature
-        //attributes.add(new Attribute(Globals.FEAT_MAX_LABEL));
-        // Set the last column/attributeAtividade (standing/walking/running) as the class
-        // index for classification
-        // mDataset.setClassIndex(mDataset.numAttributes() - 1);
+
+         mDataset.setClassIndex(mDataset.numAttributes() - 1);
     }
 
     public void addInstance(TreeMap<String, Double> calculados){
@@ -143,9 +142,32 @@ public class WekaArff {
             String a = ""+r.getText();
             atividades.add(a);
         }
-        attributes.set(attributes.size()-1,new Attribute(Config.CLASS_LABEL, atividades));
+        attributeAtividade = new Attribute(Config.CLASS_LABEL, atividades);
+        for (Attribute a : attributes){
+            if (a.isNominal()){
+                a=attributeAtividade;
+            }
+        }
+        mDataset = new Instances("extras", attributes,Config.PREPROC_COUNTER);
+        /*
+        Attribute a = mDataset.attribute("activity");
+        a = new Attribute(Config.CLASS_LABEL, atividades);
+        mDataset = new Instances("extras", attributes,Config.PREPROC_COUNTER);
+*/
+        //   attributes.set(attributes.size()-1,new Attribute(Config.CLASS_LABEL, atividades));
     }
 
+    public void setAtividades(ArrayList<String> ativs){
+
+        atividades.clear();
+        for(String a:ativs){
+            atividades.add(a);
+        }
+        attributeAtividade = new Attribute(Config.CLASS_LABEL, atividades);
+        attributes.set(attributes.size()-1,attributeAtividade);
+        mDataset = new Instances("extras", attributes,Config.PREPROC_COUNTER);
+        Log.d("setAtividades",mDataset.toString());
+    }
     private void setAtividades_(){
         atividades.add(Config.ACT1);
         atividades.add(Config.ACT2);
