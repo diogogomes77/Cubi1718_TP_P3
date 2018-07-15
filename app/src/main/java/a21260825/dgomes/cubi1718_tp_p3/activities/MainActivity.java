@@ -507,6 +507,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void chooseAtividade(String atividadeAferidaAtual) {
+
+        for(RadioButton r:buttonsAtividadeList){
+            String rText = r.getText().toString();
+            Log.d("chooseAtividade",rText+ " - " + atividadeAferidaAtual);
+            if (rText.contentEquals(atividadeAferidaAtual)){
+                Log.d("contentEquals",rText+ " - " + atividadeAferidaAtual);
+                r.setChecked(true);
+            }else {
+                r.setChecked(false);
+            }
+        }
+    }
+
     public class BeepThread extends Thread {
         @Override
         /**

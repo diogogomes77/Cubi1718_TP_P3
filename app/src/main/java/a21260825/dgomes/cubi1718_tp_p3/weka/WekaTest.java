@@ -72,13 +72,21 @@ public class WekaTest {
        // Log.d("readtTraine xtras",extras.toString());
         Attribute a = extras.attribute("activity");
         Enumeration<Object> ak = a.enumerateValues();
-        ArrayList<String> atividades= new ArrayList<>();
+        final ArrayList<String> atividades= new ArrayList<>();
         while(ak.hasMoreElements()){
             String at = (String) ak.nextElement();
             atividades.add(at);
             Log.d("readtTrain at",at.toString());
         }
         WekaArff.getInstance().setAtividades(atividades);
+        activity.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.setAtividades(atividades);
+                    }
+                });
+
        // activity.setAtividades(atividades);
         /*
         Enumeration<Attribute> ok= extras.enumerateAttributes();

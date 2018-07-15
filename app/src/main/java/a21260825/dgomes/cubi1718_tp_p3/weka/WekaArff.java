@@ -262,6 +262,7 @@ public class WekaArff {
                         activity.addLog(textomodo + atividadeAferidaAtual );
                         timeAtividadeAferida = System.currentTimeMillis();
                     }
+                activity.chooseAtividade(atividadeAferidaAtual);
 
             }
         }
